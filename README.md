@@ -472,11 +472,6 @@ Implemented firmware architecture includes:
 - [x] Charge-complete state
 - [x] Cooperative periodic scheduler
 
-## License
-
-No license has been selected yet.
-
-If this repository is intended to be open source, add a suitable `LICENSE` file before allowing reuse or redistribution.
 
 ## Author
 
