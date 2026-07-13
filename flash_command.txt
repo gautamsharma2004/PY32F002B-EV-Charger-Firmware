@@ -1,0 +1,5 @@
+"C:\Users\Gautam\Downloads\Xelec\puya\OpenOCD\openocd-0.12.0\bin\openocd.exe" ^
+-s "C:\Users\Gautam\Downloads\Xelec\puya\OpenOCD\openocd-0.12.0\scripts" ^
+-f interface/stlink.cfg ^
+-f target/py32f002b.cfg ^
+-c "program \"C:/Users/Gautam/Downloads/Xelec/puya/EV_charger/EV_charger_v2/EIDE/Project/Project.elf\" verify reset exit"

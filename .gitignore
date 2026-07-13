@@ -1,15 +1,14 @@
-# dot files
-# /.vscode/launch.json
-/.settings
-/.eide/log
-/.eide.usr.ctx.json
+# Build outputs
+EIDE/Project/
 
-# project out
-/build
-/bin
-/obj
-/out
+# IDE user-specific files
+.vscode/
+EIDE/.eide.usr.ctx.json
 
-# eide template
-*.ept
-*.eide-template
+# Keil / IAR generated files
+MDK-ARM/
+EWARM/
+
+# OS files
+Thumbs.db
+.DS_Store
