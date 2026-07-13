@@ -134,6 +134,7 @@ Supported CSET range:
 
 ```text
 0.0 A to 6.2 A
+```
 
 ### `tm1637`
 Provides the display driver, including functions for:
