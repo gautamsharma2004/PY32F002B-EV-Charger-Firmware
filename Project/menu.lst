@@ -1,0 +1,1006 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"menu.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../Src/menu.c"
+  18              		.section	.text.MenuVsetToMv,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MenuVsetToMv:
+  25              	.LVL0:
+  26              	.LFB37:
+   1:../Src/menu.c **** #include "menu.h"
+   2:../Src/menu.c **** #include "tm1637.h"
+   3:../Src/menu.c **** #include "charger_sm.h"
+   4:../Src/menu.c **** #include "battery.h"
+   5:../Src/menu.c **** #include "soc.h"
+   6:../Src/menu.c **** 
+   7:../Src/menu.c **** typedef struct
+   8:../Src/menu.c **** {
+   9:../Src/menu.c ****     uint16_t value;
+  10:../Src/menu.c **** } VSET_t;
+  11:../Src/menu.c **** 
+  12:../Src/menu.c **** typedef struct
+  13:../Src/menu.c **** {
+  14:../Src/menu.c ****     uint16_t value;
+  15:../Src/menu.c **** } CSET_t;
+  16:../Src/menu.c **** 
+  17:../Src/menu.c **** /*---------------- VSET TABLE ----------------*/
+  18:../Src/menu.c **** 
+  19:../Src/menu.c **** static const VSET_t VsetTable[] =
+  20:../Src/menu.c **** {
+  21:../Src/menu.c ****     {5460},
+  22:../Src/menu.c ****     {5475},
+  23:../Src/menu.c ****     {5840},
+  24:../Src/menu.c ****     {5880},
+  25:../Src/menu.c ****     {6735},
+  26:../Src/menu.c ****     {6935},
+  27:../Src/menu.c ****     {7140},
+  28:../Src/menu.c ****     {7300},
+  29:../Src/menu.c ****     {8395},
+  30:../Src/menu.c ****     {8400},
+  31:../Src/menu.c ****     {8760}
+  32:../Src/menu.c **** };
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 2
+
+
+  33:../Src/menu.c **** 
+  34:../Src/menu.c **** /*---------------- CSET TABLE ----------------*/
+  35:../Src/menu.c **** 
+  36:../Src/menu.c **** static const CSET_t CsetTable[] =
+  37:../Src/menu.c **** {
+  38:../Src/menu.c ****     {62},
+  39:../Src/menu.c ****     {72},
+  40:../Src/menu.c ****     {82},
+  41:../Src/menu.c ****     {92},
+  42:../Src/menu.c ****     {102}
+  43:../Src/menu.c **** };
+  44:../Src/menu.c **** 
+  45:../Src/menu.c **** #define VSET_COUNT (sizeof(VsetTable)/sizeof(VSET_t))
+  46:../Src/menu.c **** #define CSET_COUNT (sizeof(CsetTable)/sizeof(CSET_t))
+  47:../Src/menu.c **** 
+  48:../Src/menu.c **** // 8 seconds = 8000ms. If Task runs every 10ms, timeout is 800.
+  49:../Src/menu.c **** #define MENU_TIMEOUT_TICKS 800 
+  50:../Src/menu.c **** 
+  51:../Src/menu.c **** static MenuMode_t CurrentMode = MODE_VSET;
+  52:../Src/menu.c **** static uint8_t VsetIndex = 4;      //67.35V
+  53:../Src/menu.c **** static uint8_t CsetIndex = 0;      //6.2A
+  54:../Src/menu.c **** static bool MenuActive = false;
+  55:../Src/menu.c **** static uint16_t MenuIdleTimer = 0;
+  56:../Src/menu.c **** static uint8_t SaveSequenceStep = 0;
+  57:../Src/menu.c **** 
+  58:../Src/menu.c **** static uint32_t MenuVsetToMv(uint16_t value)
+  59:../Src/menu.c **** {
+  27              		.loc 1 59 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  60:../Src/menu.c ****     return (uint32_t)value * 10U;
+  32              		.loc 1 60 5 view .LVU1
+  33              		.loc 1 60 28 is_stmt 0 view .LVU2
+  34 0000 8300     		lsls	r3, r0, #2
+  35 0002 1818     		adds	r0, r3, r0
+  36              	.LVL1:
+  37              		.loc 1 60 28 view .LVU3
+  38 0004 4000     		lsls	r0, r0, #1
+  61:../Src/menu.c **** }
+  39              		.loc 1 61 1 view .LVU4
+  40              		@ sp needed
+  41 0006 7047     		bx	lr
+  42              		.cfi_endproc
+  43              	.LFE37:
+  45              		.section	.text.Menu_ApplySelection,"ax",%progbits
+  46              		.align	1
+  47              		.syntax unified
+  48              		.code	16
+  49              		.thumb_func
+  51              	Menu_ApplySelection:
+  52              	.LFB38:
+  62:../Src/menu.c **** 
+  63:../Src/menu.c **** static void Menu_ApplySelection(void)
+  64:../Src/menu.c **** {
+  53              		.loc 1 64 1 is_stmt 1 view -0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 3
+
+
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57 0000 70B5     		push	{r4, r5, r6, lr}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 16
+  60              		.cfi_offset 4, -16
+  61              		.cfi_offset 5, -12
+  62              		.cfi_offset 6, -8
+  63              		.cfi_offset 14, -4
+  65:../Src/menu.c ****     uint32_t vset_mv = MenuVsetToMv(VsetTable[VsetIndex].value);
+  64              		.loc 1 65 5 view .LVU6
+  65              		.loc 1 65 24 is_stmt 0 view .LVU7
+  66 0002 0E4B     		ldr	r3, .L3
+  67 0004 1A78     		ldrb	r2, [r3]
+  68              		.loc 1 65 57 view .LVU8
+  69 0006 0E4B     		ldr	r3, .L3+4
+  70 0008 5200     		lsls	r2, r2, #1
+  71 000a D05A     		ldrh	r0, [r2, r3]
+  72              		.loc 1 65 24 view .LVU9
+  73 000c FFF7FEFF 		bl	MenuVsetToMv
+  74              	.LVL2:
+  75 0010 0400     		movs	r4, r0
+  76              	.LVL3:
+  66:../Src/menu.c ****     uint16_t cset_ma = (uint16_t)CsetTable[CsetIndex].value * 100U;
+  77              		.loc 1 66 5 is_stmt 1 view .LVU10
+  78              		.loc 1 66 54 is_stmt 0 view .LVU11
+  79 0012 0C4B     		ldr	r3, .L3+8
+  80 0014 0C4A     		ldr	r2, .L3+12
+  81 0016 1278     		ldrb	r2, [r2]
+  82 0018 5200     		lsls	r2, r2, #1
+  83 001a D35A     		ldrh	r3, [r2, r3]
+  84              		.loc 1 66 14 view .LVU12
+  85 001c 6425     		movs	r5, #100
+  86 001e 5D43     		muls	r5, r3
+  87 0020 ADB2     		uxth	r5, r5
+  88              	.LVL4:
+  67:../Src/menu.c **** 
+  68:../Src/menu.c ****     ChargerSM_SetVset(vset_mv);
+  89              		.loc 1 68 5 is_stmt 1 view .LVU13
+  90 0022 FFF7FEFF 		bl	ChargerSM_SetVset
+  91              	.LVL5:
+  69:../Src/menu.c ****     ChargerSM_SetCset(cset_ma);
+  92              		.loc 1 69 5 view .LVU14
+  93 0026 2800     		movs	r0, r5
+  94 0028 FFF7FEFF 		bl	ChargerSM_SetCset
+  95              	.LVL6:
+  70:../Src/menu.c ****     Battery_SetVset(vset_mv);
+  96              		.loc 1 70 5 view .LVU15
+  97 002c 2000     		movs	r0, r4
+  98 002e FFF7FEFF 		bl	Battery_SetVset
+  99              	.LVL7:
+  71:../Src/menu.c ****     SOC_SetVset(vset_mv);
+ 100              		.loc 1 71 5 view .LVU16
+ 101 0032 2000     		movs	r0, r4
+ 102 0034 FFF7FEFF 		bl	SOC_SetVset
+ 103              	.LVL8:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 4
+
+
+  72:../Src/menu.c **** }
+ 104              		.loc 1 72 1 is_stmt 0 view .LVU17
+ 105              		@ sp needed
+ 106              	.LVL9:
+ 107              	.LVL10:
+ 108              		.loc 1 72 1 view .LVU18
+ 109 0038 70BD     		pop	{r4, r5, r6, pc}
+ 110              	.L4:
+ 111 003a C046     		.align	2
+ 112              	.L3:
+ 113 003c 00000000 		.word	VsetIndex
+ 114 0040 00000000 		.word	VsetTable
+ 115 0044 00000000 		.word	CsetTable
+ 116 0048 00000000 		.word	CsetIndex
+ 117              		.cfi_endproc
+ 118              	.LFE38:
+ 120              		.section	.text.Menu_Init,"ax",%progbits
+ 121              		.align	1
+ 122              		.global	Menu_Init
+ 123              		.syntax unified
+ 124              		.code	16
+ 125              		.thumb_func
+ 127              	Menu_Init:
+ 128              	.LFB39:
+  73:../Src/menu.c **** 
+  74:../Src/menu.c **** void Menu_Init(void)
+  75:../Src/menu.c **** {
+ 129              		.loc 1 75 1 is_stmt 1 view -0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133              		@ link register save eliminated.
+  76:../Src/menu.c ****     CurrentMode = MODE_VSET;
+ 134              		.loc 1 76 5 view .LVU20
+ 135              		.loc 1 76 17 is_stmt 0 view .LVU21
+ 136 0000 074A     		ldr	r2, .L6
+ 137 0002 0023     		movs	r3, #0
+ 138 0004 1370     		strb	r3, [r2]
+  77:../Src/menu.c ****     VsetIndex = 4;
+ 139              		.loc 1 77 5 is_stmt 1 view .LVU22
+ 140              		.loc 1 77 15 is_stmt 0 view .LVU23
+ 141 0006 074A     		ldr	r2, .L6+4
+ 142 0008 0421     		movs	r1, #4
+ 143 000a 1170     		strb	r1, [r2]
+  78:../Src/menu.c ****     CsetIndex = 0;
+ 144              		.loc 1 78 5 is_stmt 1 view .LVU24
+ 145              		.loc 1 78 15 is_stmt 0 view .LVU25
+ 146 000c 064A     		ldr	r2, .L6+8
+ 147 000e 1370     		strb	r3, [r2]
+  79:../Src/menu.c ****     MenuActive = false;
+ 148              		.loc 1 79 5 is_stmt 1 view .LVU26
+ 149              		.loc 1 79 16 is_stmt 0 view .LVU27
+ 150 0010 064A     		ldr	r2, .L6+12
+ 151 0012 1370     		strb	r3, [r2]
+  80:../Src/menu.c ****     MenuIdleTimer = 0;
+ 152              		.loc 1 80 5 is_stmt 1 view .LVU28
+ 153              		.loc 1 80 19 is_stmt 0 view .LVU29
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 5
+
+
+ 154 0014 064A     		ldr	r2, .L6+16
+ 155 0016 1380     		strh	r3, [r2]
+  81:../Src/menu.c ****     SaveSequenceStep = 0;
+ 156              		.loc 1 81 5 is_stmt 1 view .LVU30
+ 157              		.loc 1 81 22 is_stmt 0 view .LVU31
+ 158 0018 064B     		ldr	r3, .L6+20
+ 159 001a 0022     		movs	r2, #0
+ 160 001c 1A70     		strb	r2, [r3]
+  82:../Src/menu.c **** }
+ 161              		.loc 1 82 1 view .LVU32
+ 162              		@ sp needed
+ 163 001e 7047     		bx	lr
+ 164              	.L7:
+ 165              		.align	2
+ 166              	.L6:
+ 167 0020 00000000 		.word	CurrentMode
+ 168 0024 00000000 		.word	VsetIndex
+ 169 0028 00000000 		.word	CsetIndex
+ 170 002c 00000000 		.word	MenuActive
+ 171 0030 00000000 		.word	MenuIdleTimer
+ 172 0034 00000000 		.word	SaveSequenceStep
+ 173              		.cfi_endproc
+ 174              	.LFE39:
+ 176              		.section	.text.Menu_Task,"ax",%progbits
+ 177              		.align	1
+ 178              		.global	Menu_Task
+ 179              		.syntax unified
+ 180              		.code	16
+ 181              		.thumb_func
+ 183              	Menu_Task:
+ 184              	.LFB40:
+  83:../Src/menu.c **** 
+  84:../Src/menu.c **** void Menu_Task(void)
+  85:../Src/menu.c **** {
+ 185              		.loc 1 85 1 is_stmt 1 view -0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189 0000 10B5     		push	{r4, lr}
+ 190              	.LCFI1:
+ 191              		.cfi_def_cfa_offset 8
+ 192              		.cfi_offset 4, -8
+ 193              		.cfi_offset 14, -4
+  86:../Src/menu.c ****     if (!MenuActive) return;
+ 194              		.loc 1 86 5 view .LVU34
+ 195              		.loc 1 86 9 is_stmt 0 view .LVU35
+ 196 0002 1B4B     		ldr	r3, .L15
+ 197 0004 1B78     		ldrb	r3, [r3]
+ 198              		.loc 1 86 8 view .LVU36
+ 199 0006 002B     		cmp	r3, #0
+ 200 0008 11D0     		beq	.L8
+  87:../Src/menu.c **** 
+  88:../Src/menu.c ****     MenuIdleTimer++;
+ 201              		.loc 1 88 5 is_stmt 1 view .LVU37
+ 202              		.loc 1 88 18 is_stmt 0 view .LVU38
+ 203 000a 1A4A     		ldr	r2, .L15+4
+ 204 000c 1388     		ldrh	r3, [r2]
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 6
+
+
+ 205 000e 0133     		adds	r3, r3, #1
+ 206 0010 9BB2     		uxth	r3, r3
+ 207 0012 1380     		strh	r3, [r2]
+  89:../Src/menu.c ****     
+  90:../Src/menu.c ****     // 8 seconds of inactivity triggers auto-save sequence
+  91:../Src/menu.c ****     if (MenuIdleTimer >= MENU_TIMEOUT_TICKS) {
+ 208              		.loc 1 91 5 is_stmt 1 view .LVU39
+ 209              		.loc 1 91 8 is_stmt 0 view .LVU40
+ 210 0014 C822     		movs	r2, #200
+ 211 0016 9200     		lsls	r2, r2, #2
+ 212 0018 9342     		cmp	r3, r2
+ 213 001a 08D3     		bcc	.L8
+  92:../Src/menu.c ****         
+  93:../Src/menu.c ****         // Sequence: Display VSET (2s) -> Display CSET (2s) -> Exit
+  94:../Src/menu.c ****         if (MenuIdleTimer == MENU_TIMEOUT_TICKS) {
+ 214              		.loc 1 94 9 is_stmt 1 view .LVU41
+ 215              		.loc 1 94 12 is_stmt 0 view .LVU42
+ 216 001c 08D0     		beq	.L12
+  95:../Src/menu.c ****             SaveSequenceStep = 1;
+  96:../Src/menu.c ****             TM1637_DisplayVoltage(VsetTable[VsetIndex].value);
+  97:../Src/menu.c ****         }
+  98:../Src/menu.c ****         else if (MenuIdleTimer == MENU_TIMEOUT_TICKS + 200) { // +2 seconds
+ 217              		.loc 1 98 14 is_stmt 1 view .LVU43
+ 218              		.loc 1 98 17 is_stmt 0 view .LVU44
+ 219 001e FA22     		movs	r2, #250
+ 220 0020 9200     		lsls	r2, r2, #2
+ 221 0022 9342     		cmp	r3, r2
+ 222 0024 0FD0     		beq	.L13
+  99:../Src/menu.c ****             SaveSequenceStep = 2;
+ 100:../Src/menu.c ****             TM1637_DisplayCurrent(CsetTable[CsetIndex].value);
+ 101:../Src/menu.c ****         }
+ 102:../Src/menu.c ****         else if (MenuIdleTimer >= MENU_TIMEOUT_TICKS + 400) { // +4 seconds total
+ 223              		.loc 1 102 14 is_stmt 1 view .LVU45
+ 224              		.loc 1 102 17 is_stmt 0 view .LVU46
+ 225 0026 9622     		movs	r2, #150
+ 226 0028 D200     		lsls	r2, r2, #3
+ 227 002a 9342     		cmp	r3, r2
+ 228 002c 16D2     		bcs	.L14
+ 229              	.L8:
+ 103:../Src/menu.c ****             Menu_ApplySelection();
+ 104:../Src/menu.c ****             // TODO: Add Flash/EEPROM write here to make non-volatile across power cycles
+ 105:../Src/menu.c ****             MenuActive = false;
+ 106:../Src/menu.c ****             SaveSequenceStep = 0;
+ 107:../Src/menu.c ****             MenuIdleTimer = 0;
+ 108:../Src/menu.c ****         }
+ 109:../Src/menu.c ****     }
+ 110:../Src/menu.c **** }
+ 230              		.loc 1 110 1 view .LVU47
+ 231              		@ sp needed
+ 232 002e 10BD     		pop	{r4, pc}
+ 233              	.L12:
+  95:../Src/menu.c ****             TM1637_DisplayVoltage(VsetTable[VsetIndex].value);
+ 234              		.loc 1 95 13 is_stmt 1 view .LVU48
+  95:../Src/menu.c ****             TM1637_DisplayVoltage(VsetTable[VsetIndex].value);
+ 235              		.loc 1 95 30 is_stmt 0 view .LVU49
+ 236 0030 114B     		ldr	r3, .L15+8
+ 237 0032 0122     		movs	r2, #1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 7
+
+
+ 238 0034 1A70     		strb	r2, [r3]
+  96:../Src/menu.c ****         }
+ 239              		.loc 1 96 13 is_stmt 1 view .LVU50
+ 240 0036 114B     		ldr	r3, .L15+12
+ 241 0038 1A78     		ldrb	r2, [r3]
+  96:../Src/menu.c ****         }
+ 242              		.loc 1 96 55 is_stmt 0 view .LVU51
+ 243 003a 114B     		ldr	r3, .L15+16
+ 244 003c 5200     		lsls	r2, r2, #1
+ 245 003e D05A     		ldrh	r0, [r2, r3]
+  96:../Src/menu.c ****         }
+ 246              		.loc 1 96 13 view .LVU52
+ 247 0040 FFF7FEFF 		bl	TM1637_DisplayVoltage
+ 248              	.LVL11:
+ 249 0044 F3E7     		b	.L8
+ 250              	.L13:
+  99:../Src/menu.c ****             TM1637_DisplayCurrent(CsetTable[CsetIndex].value);
+ 251              		.loc 1 99 13 is_stmt 1 view .LVU53
+  99:../Src/menu.c ****             TM1637_DisplayCurrent(CsetTable[CsetIndex].value);
+ 252              		.loc 1 99 30 is_stmt 0 view .LVU54
+ 253 0046 0C4B     		ldr	r3, .L15+8
+ 254 0048 0222     		movs	r2, #2
+ 255 004a 1A70     		strb	r2, [r3]
+ 100:../Src/menu.c ****         }
+ 256              		.loc 1 100 13 is_stmt 1 view .LVU55
+ 257 004c 0D4B     		ldr	r3, .L15+20
+ 258 004e 1A78     		ldrb	r2, [r3]
+ 100:../Src/menu.c ****         }
+ 259              		.loc 1 100 55 is_stmt 0 view .LVU56
+ 260 0050 0D4B     		ldr	r3, .L15+24
+ 261 0052 5200     		lsls	r2, r2, #1
+ 262 0054 D05A     		ldrh	r0, [r2, r3]
+ 100:../Src/menu.c ****         }
+ 263              		.loc 1 100 13 view .LVU57
+ 264 0056 FFF7FEFF 		bl	TM1637_DisplayCurrent
+ 265              	.LVL12:
+ 266 005a E8E7     		b	.L8
+ 267              	.L14:
+ 103:../Src/menu.c ****             // TODO: Add Flash/EEPROM write here to make non-volatile across power cycles
+ 268              		.loc 1 103 13 is_stmt 1 view .LVU58
+ 269 005c FFF7FEFF 		bl	Menu_ApplySelection
+ 270              	.LVL13:
+ 105:../Src/menu.c ****             SaveSequenceStep = 0;
+ 271              		.loc 1 105 13 view .LVU59
+ 105:../Src/menu.c ****             SaveSequenceStep = 0;
+ 272              		.loc 1 105 24 is_stmt 0 view .LVU60
+ 273 0060 034A     		ldr	r2, .L15
+ 274 0062 0023     		movs	r3, #0
+ 275 0064 1370     		strb	r3, [r2]
+ 106:../Src/menu.c ****             MenuIdleTimer = 0;
+ 276              		.loc 1 106 13 is_stmt 1 view .LVU61
+ 106:../Src/menu.c ****             MenuIdleTimer = 0;
+ 277              		.loc 1 106 30 is_stmt 0 view .LVU62
+ 278 0066 044A     		ldr	r2, .L15+8
+ 279 0068 1370     		strb	r3, [r2]
+ 107:../Src/menu.c ****         }
+ 280              		.loc 1 107 13 is_stmt 1 view .LVU63
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 8
+
+
+ 107:../Src/menu.c ****         }
+ 281              		.loc 1 107 27 is_stmt 0 view .LVU64
+ 282 006a 024A     		ldr	r2, .L15+4
+ 283 006c 1380     		strh	r3, [r2]
+ 284 006e DEE7     		b	.L8
+ 285              	.L16:
+ 286              		.align	2
+ 287              	.L15:
+ 288 0070 00000000 		.word	MenuActive
+ 289 0074 00000000 		.word	MenuIdleTimer
+ 290 0078 00000000 		.word	SaveSequenceStep
+ 291 007c 00000000 		.word	VsetIndex
+ 292 0080 00000000 		.word	VsetTable
+ 293 0084 00000000 		.word	CsetIndex
+ 294 0088 00000000 		.word	CsetTable
+ 295              		.cfi_endproc
+ 296              	.LFE40:
+ 298              		.section	.text.Menu_UpdateDisplay,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	Menu_UpdateDisplay
+ 301              		.syntax unified
+ 302              		.code	16
+ 303              		.thumb_func
+ 305              	Menu_UpdateDisplay:
+ 306              	.LFB41:
+ 111:../Src/menu.c **** 
+ 112:../Src/menu.c **** void Menu_UpdateDisplay(void)
+ 113:../Src/menu.c **** {
+ 307              		.loc 1 113 1 is_stmt 1 view -0
+ 308              		.cfi_startproc
+ 309              		@ args = 0, pretend = 0, frame = 0
+ 310              		@ frame_needed = 0, uses_anonymous_args = 0
+ 311 0000 10B5     		push	{r4, lr}
+ 312              	.LCFI2:
+ 313              		.cfi_def_cfa_offset 8
+ 314              		.cfi_offset 4, -8
+ 315              		.cfi_offset 14, -4
+ 114:../Src/menu.c ****     if(CurrentMode == MODE_VSET)
+ 316              		.loc 1 114 5 view .LVU66
+ 317              		.loc 1 114 20 is_stmt 0 view .LVU67
+ 318 0002 0A4B     		ldr	r3, .L20
+ 319 0004 1B78     		ldrb	r3, [r3]
+ 320              		.loc 1 114 7 view .LVU68
+ 321 0006 002B     		cmp	r3, #0
+ 322 0008 07D1     		bne	.L18
+ 115:../Src/menu.c ****     {
+ 116:../Src/menu.c ****         TM1637_DisplayVoltage(VsetTable[VsetIndex].value);
+ 323              		.loc 1 116 9 is_stmt 1 view .LVU69
+ 324 000a 094B     		ldr	r3, .L20+4
+ 325 000c 1A78     		ldrb	r2, [r3]
+ 326              		.loc 1 116 51 is_stmt 0 view .LVU70
+ 327 000e 094B     		ldr	r3, .L20+8
+ 328 0010 5200     		lsls	r2, r2, #1
+ 329 0012 D05A     		ldrh	r0, [r2, r3]
+ 330              		.loc 1 116 9 view .LVU71
+ 331 0014 FFF7FEFF 		bl	TM1637_DisplayVoltage
+ 332              	.LVL14:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 9
+
+
+ 333              	.L17:
+ 117:../Src/menu.c ****     }
+ 118:../Src/menu.c ****     else
+ 119:../Src/menu.c ****     {
+ 120:../Src/menu.c ****         TM1637_DisplayCurrent(CsetTable[CsetIndex].value);
+ 121:../Src/menu.c ****     }
+ 122:../Src/menu.c **** }
+ 334              		.loc 1 122 1 view .LVU72
+ 335              		@ sp needed
+ 336 0018 10BD     		pop	{r4, pc}
+ 337              	.L18:
+ 120:../Src/menu.c ****     }
+ 338              		.loc 1 120 9 is_stmt 1 view .LVU73
+ 339 001a 074B     		ldr	r3, .L20+12
+ 340 001c 1A78     		ldrb	r2, [r3]
+ 120:../Src/menu.c ****     }
+ 341              		.loc 1 120 51 is_stmt 0 view .LVU74
+ 342 001e 074B     		ldr	r3, .L20+16
+ 343 0020 5200     		lsls	r2, r2, #1
+ 344 0022 D05A     		ldrh	r0, [r2, r3]
+ 120:../Src/menu.c ****     }
+ 345              		.loc 1 120 9 view .LVU75
+ 346 0024 FFF7FEFF 		bl	TM1637_DisplayCurrent
+ 347              	.LVL15:
+ 348              		.loc 1 122 1 view .LVU76
+ 349 0028 F6E7     		b	.L17
+ 350              	.L21:
+ 351 002a C046     		.align	2
+ 352              	.L20:
+ 353 002c 00000000 		.word	CurrentMode
+ 354 0030 00000000 		.word	VsetIndex
+ 355 0034 00000000 		.word	VsetTable
+ 356 0038 00000000 		.word	CsetIndex
+ 357 003c 00000000 		.word	CsetTable
+ 358              		.cfi_endproc
+ 359              	.LFE41:
+ 361              		.section	.text.Menu_NextItem,"ax",%progbits
+ 362              		.align	1
+ 363              		.global	Menu_NextItem
+ 364              		.syntax unified
+ 365              		.code	16
+ 366              		.thumb_func
+ 368              	Menu_NextItem:
+ 369              	.LFB42:
+ 123:../Src/menu.c **** 
+ 124:../Src/menu.c **** void Menu_NextItem(void)
+ 125:../Src/menu.c **** {
+ 370              		.loc 1 125 1 is_stmt 1 view -0
+ 371              		.cfi_startproc
+ 372              		@ args = 0, pretend = 0, frame = 0
+ 373              		@ frame_needed = 0, uses_anonymous_args = 0
+ 374 0000 10B5     		push	{r4, lr}
+ 375              	.LCFI3:
+ 376              		.cfi_def_cfa_offset 8
+ 377              		.cfi_offset 4, -8
+ 378              		.cfi_offset 14, -4
+ 126:../Src/menu.c ****     if (SaveSequenceStep > 0) return; // Block input during save sequence
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 10
+
+
+ 379              		.loc 1 126 5 view .LVU78
+ 380              		.loc 1 126 26 is_stmt 0 view .LVU79
+ 381 0002 134B     		ldr	r3, .L26
+ 382 0004 1B78     		ldrb	r3, [r3]
+ 383              		.loc 1 126 8 view .LVU80
+ 384 0006 002B     		cmp	r3, #0
+ 385 0008 15D1     		bne	.L22
+ 127:../Src/menu.c ****     
+ 128:../Src/menu.c ****     MenuActive = true;
+ 386              		.loc 1 128 5 is_stmt 1 view .LVU81
+ 387              		.loc 1 128 16 is_stmt 0 view .LVU82
+ 388 000a 124B     		ldr	r3, .L26+4
+ 389 000c 0122     		movs	r2, #1
+ 390 000e 1A70     		strb	r2, [r3]
+ 129:../Src/menu.c ****     MenuIdleTimer = 0; // Reset 8-second timer
+ 391              		.loc 1 129 5 is_stmt 1 view .LVU83
+ 392              		.loc 1 129 19 is_stmt 0 view .LVU84
+ 393 0010 114B     		ldr	r3, .L26+8
+ 394 0012 0022     		movs	r2, #0
+ 395 0014 1A80     		strh	r2, [r3]
+ 130:../Src/menu.c ****     
+ 131:../Src/menu.c ****     if(CurrentMode == MODE_VSET)
+ 396              		.loc 1 131 5 is_stmt 1 view .LVU85
+ 397              		.loc 1 131 20 is_stmt 0 view .LVU86
+ 398 0016 114B     		ldr	r3, .L26+12
+ 399 0018 1B78     		ldrb	r3, [r3]
+ 400              		.loc 1 131 7 view .LVU87
+ 401 001a 002B     		cmp	r3, #0
+ 402 001c 0CD1     		bne	.L24
+ 132:../Src/menu.c ****     {
+ 133:../Src/menu.c ****         VsetIndex++;
+ 403              		.loc 1 133 9 is_stmt 1 view .LVU88
+ 404              		.loc 1 133 18 is_stmt 0 view .LVU89
+ 405 001e 104A     		ldr	r2, .L26+16
+ 406 0020 1378     		ldrb	r3, [r2]
+ 407 0022 0133     		adds	r3, r3, #1
+ 408 0024 DBB2     		uxtb	r3, r3
+ 409 0026 1370     		strb	r3, [r2]
+ 134:../Src/menu.c ****         if(VsetIndex >= VSET_COUNT)
+ 410              		.loc 1 134 9 is_stmt 1 view .LVU90
+ 411              		.loc 1 134 11 is_stmt 0 view .LVU91
+ 412 0028 0A2B     		cmp	r3, #10
+ 413 002a 02D9     		bls	.L25
+ 135:../Src/menu.c ****             VsetIndex = 0;
+ 414              		.loc 1 135 13 is_stmt 1 view .LVU92
+ 415              		.loc 1 135 23 is_stmt 0 view .LVU93
+ 416 002c 1300     		movs	r3, r2
+ 417 002e 0022     		movs	r2, #0
+ 418 0030 1A70     		strb	r2, [r3]
+ 419              	.L25:
+ 136:../Src/menu.c ****     }
+ 137:../Src/menu.c ****     else
+ 138:../Src/menu.c ****     {
+ 139:../Src/menu.c ****         CsetIndex++;
+ 140:../Src/menu.c ****         if(CsetIndex >= CSET_COUNT)
+ 141:../Src/menu.c ****             CsetIndex = 0;
+ 142:../Src/menu.c ****     }
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 11
+
+
+ 143:../Src/menu.c **** 
+ 144:../Src/menu.c ****     Menu_UpdateDisplay();
+ 420              		.loc 1 144 5 is_stmt 1 view .LVU94
+ 421 0032 FFF7FEFF 		bl	Menu_UpdateDisplay
+ 422              	.LVL16:
+ 423              	.L22:
+ 145:../Src/menu.c **** }
+ 424              		.loc 1 145 1 is_stmt 0 view .LVU95
+ 425              		@ sp needed
+ 426 0036 10BD     		pop	{r4, pc}
+ 427              	.L24:
+ 139:../Src/menu.c ****         if(CsetIndex >= CSET_COUNT)
+ 428              		.loc 1 139 9 is_stmt 1 view .LVU96
+ 139:../Src/menu.c ****         if(CsetIndex >= CSET_COUNT)
+ 429              		.loc 1 139 18 is_stmt 0 view .LVU97
+ 430 0038 0A4A     		ldr	r2, .L26+20
+ 431 003a 1378     		ldrb	r3, [r2]
+ 432 003c 0133     		adds	r3, r3, #1
+ 433 003e DBB2     		uxtb	r3, r3
+ 434 0040 1370     		strb	r3, [r2]
+ 140:../Src/menu.c ****             CsetIndex = 0;
+ 435              		.loc 1 140 9 is_stmt 1 view .LVU98
+ 140:../Src/menu.c ****             CsetIndex = 0;
+ 436              		.loc 1 140 11 is_stmt 0 view .LVU99
+ 437 0042 042B     		cmp	r3, #4
+ 438 0044 F5D9     		bls	.L25
+ 141:../Src/menu.c ****     }
+ 439              		.loc 1 141 13 is_stmt 1 view .LVU100
+ 141:../Src/menu.c ****     }
+ 440              		.loc 1 141 23 is_stmt 0 view .LVU101
+ 441 0046 1300     		movs	r3, r2
+ 442 0048 0022     		movs	r2, #0
+ 443 004a 1A70     		strb	r2, [r3]
+ 444 004c F1E7     		b	.L25
+ 445              	.L27:
+ 446 004e C046     		.align	2
+ 447              	.L26:
+ 448 0050 00000000 		.word	SaveSequenceStep
+ 449 0054 00000000 		.word	MenuActive
+ 450 0058 00000000 		.word	MenuIdleTimer
+ 451 005c 00000000 		.word	CurrentMode
+ 452 0060 00000000 		.word	VsetIndex
+ 453 0064 00000000 		.word	CsetIndex
+ 454              		.cfi_endproc
+ 455              	.LFE42:
+ 457              		.section	.text.Menu_ToggleMode,"ax",%progbits
+ 458              		.align	1
+ 459              		.global	Menu_ToggleMode
+ 460              		.syntax unified
+ 461              		.code	16
+ 462              		.thumb_func
+ 464              	Menu_ToggleMode:
+ 465              	.LFB43:
+ 146:../Src/menu.c **** 
+ 147:../Src/menu.c **** void Menu_ToggleMode(void)
+ 148:../Src/menu.c **** {
+ 466              		.loc 1 148 1 is_stmt 1 view -0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 12
+
+
+ 467              		.cfi_startproc
+ 468              		@ args = 0, pretend = 0, frame = 0
+ 469              		@ frame_needed = 0, uses_anonymous_args = 0
+ 470 0000 10B5     		push	{r4, lr}
+ 471              	.LCFI4:
+ 472              		.cfi_def_cfa_offset 8
+ 473              		.cfi_offset 4, -8
+ 474              		.cfi_offset 14, -4
+ 149:../Src/menu.c ****     if (SaveSequenceStep > 0) return; // Block input during save sequence
+ 475              		.loc 1 149 5 view .LVU103
+ 476              		.loc 1 149 26 is_stmt 0 view .LVU104
+ 477 0002 0C4B     		ldr	r3, .L32
+ 478 0004 1B78     		ldrb	r3, [r3]
+ 479              		.loc 1 149 8 view .LVU105
+ 480 0006 002B     		cmp	r3, #0
+ 481 0008 0ED1     		bne	.L28
+ 150:../Src/menu.c ****     
+ 151:../Src/menu.c ****     MenuActive = true;
+ 482              		.loc 1 151 5 is_stmt 1 view .LVU106
+ 483              		.loc 1 151 16 is_stmt 0 view .LVU107
+ 484 000a 0B4B     		ldr	r3, .L32+4
+ 485 000c 0122     		movs	r2, #1
+ 486 000e 1A70     		strb	r2, [r3]
+ 152:../Src/menu.c ****     MenuIdleTimer = 0;
+ 487              		.loc 1 152 5 is_stmt 1 view .LVU108
+ 488              		.loc 1 152 19 is_stmt 0 view .LVU109
+ 489 0010 0A4B     		ldr	r3, .L32+8
+ 490 0012 0022     		movs	r2, #0
+ 491 0014 1A80     		strh	r2, [r3]
+ 153:../Src/menu.c **** 
+ 154:../Src/menu.c ****     if(CurrentMode == MODE_VSET)
+ 492              		.loc 1 154 5 is_stmt 1 view .LVU110
+ 493              		.loc 1 154 20 is_stmt 0 view .LVU111
+ 494 0016 0A4B     		ldr	r3, .L32+12
+ 495 0018 1B78     		ldrb	r3, [r3]
+ 496              		.loc 1 154 7 view .LVU112
+ 497 001a 002B     		cmp	r3, #0
+ 498 001c 05D1     		bne	.L30
+ 155:../Src/menu.c ****         CurrentMode = MODE_CSET;
+ 499              		.loc 1 155 9 is_stmt 1 view .LVU113
+ 500              		.loc 1 155 21 is_stmt 0 view .LVU114
+ 501 001e 084B     		ldr	r3, .L32+12
+ 502 0020 0132     		adds	r2, r2, #1
+ 503 0022 1A70     		strb	r2, [r3]
+ 504              	.L31:
+ 156:../Src/menu.c ****     else
+ 157:../Src/menu.c ****         CurrentMode = MODE_VSET;
+ 158:../Src/menu.c **** 
+ 159:../Src/menu.c ****     Menu_UpdateDisplay();
+ 505              		.loc 1 159 5 is_stmt 1 view .LVU115
+ 506 0024 FFF7FEFF 		bl	Menu_UpdateDisplay
+ 507              	.LVL17:
+ 508              	.L28:
+ 160:../Src/menu.c **** }
+ 509              		.loc 1 160 1 is_stmt 0 view .LVU116
+ 510              		@ sp needed
+ 511 0028 10BD     		pop	{r4, pc}
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 13
+
+
+ 512              	.L30:
+ 157:../Src/menu.c **** 
+ 513              		.loc 1 157 9 is_stmt 1 view .LVU117
+ 157:../Src/menu.c **** 
+ 514              		.loc 1 157 21 is_stmt 0 view .LVU118
+ 515 002a 054B     		ldr	r3, .L32+12
+ 516 002c 0022     		movs	r2, #0
+ 517 002e 1A70     		strb	r2, [r3]
+ 518 0030 F8E7     		b	.L31
+ 519              	.L33:
+ 520 0032 C046     		.align	2
+ 521              	.L32:
+ 522 0034 00000000 		.word	SaveSequenceStep
+ 523 0038 00000000 		.word	MenuActive
+ 524 003c 00000000 		.word	MenuIdleTimer
+ 525 0040 00000000 		.word	CurrentMode
+ 526              		.cfi_endproc
+ 527              	.LFE43:
+ 529              		.section	.text.Menu_Enter,"ax",%progbits
+ 530              		.align	1
+ 531              		.global	Menu_Enter
+ 532              		.syntax unified
+ 533              		.code	16
+ 534              		.thumb_func
+ 536              	Menu_Enter:
+ 537              	.LFB44:
+ 161:../Src/menu.c **** 
+ 162:../Src/menu.c **** void Menu_Enter(void)
+ 163:../Src/menu.c **** {
+ 538              		.loc 1 163 1 is_stmt 1 view -0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 0
+ 541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 542 0000 10B5     		push	{r4, lr}
+ 543              	.LCFI5:
+ 544              		.cfi_def_cfa_offset 8
+ 545              		.cfi_offset 4, -8
+ 546              		.cfi_offset 14, -4
+ 164:../Src/menu.c ****     MenuActive = true;
+ 547              		.loc 1 164 5 view .LVU120
+ 548              		.loc 1 164 16 is_stmt 0 view .LVU121
+ 549 0002 054B     		ldr	r3, .L35
+ 550 0004 0122     		movs	r2, #1
+ 551 0006 1A70     		strb	r2, [r3]
+ 165:../Src/menu.c ****     MenuIdleTimer = 0;
+ 552              		.loc 1 165 5 is_stmt 1 view .LVU122
+ 553              		.loc 1 165 19 is_stmt 0 view .LVU123
+ 554 0008 044B     		ldr	r3, .L35+4
+ 555 000a 0022     		movs	r2, #0
+ 556 000c 1A80     		strh	r2, [r3]
+ 166:../Src/menu.c ****     SaveSequenceStep = 0;
+ 557              		.loc 1 166 5 is_stmt 1 view .LVU124
+ 558              		.loc 1 166 22 is_stmt 0 view .LVU125
+ 559 000e 044B     		ldr	r3, .L35+8
+ 560 0010 1A70     		strb	r2, [r3]
+ 167:../Src/menu.c ****     Menu_UpdateDisplay();
+ 561              		.loc 1 167 5 is_stmt 1 view .LVU126
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 14
+
+
+ 562 0012 FFF7FEFF 		bl	Menu_UpdateDisplay
+ 563              	.LVL18:
+ 168:../Src/menu.c **** }
+ 564              		.loc 1 168 1 is_stmt 0 view .LVU127
+ 565              		@ sp needed
+ 566 0016 10BD     		pop	{r4, pc}
+ 567              	.L36:
+ 568              		.align	2
+ 569              	.L35:
+ 570 0018 00000000 		.word	MenuActive
+ 571 001c 00000000 		.word	MenuIdleTimer
+ 572 0020 00000000 		.word	SaveSequenceStep
+ 573              		.cfi_endproc
+ 574              	.LFE44:
+ 576              		.section	.text.Menu_OnButtonPress,"ax",%progbits
+ 577              		.align	1
+ 578              		.global	Menu_OnButtonPress
+ 579              		.syntax unified
+ 580              		.code	16
+ 581              		.thumb_func
+ 583              	Menu_OnButtonPress:
+ 584              	.LFB45:
+ 169:../Src/menu.c **** 
+ 170:../Src/menu.c **** void Menu_OnButtonPress(void)
+ 171:../Src/menu.c **** {
+ 585              		.loc 1 171 1 is_stmt 1 view -0
+ 586              		.cfi_startproc
+ 587              		@ args = 0, pretend = 0, frame = 0
+ 588              		@ frame_needed = 0, uses_anonymous_args = 0
+ 589 0000 10B5     		push	{r4, lr}
+ 590              	.LCFI6:
+ 591              		.cfi_def_cfa_offset 8
+ 592              		.cfi_offset 4, -8
+ 593              		.cfi_offset 14, -4
+ 172:../Src/menu.c ****     Menu_NextItem();
+ 594              		.loc 1 172 5 view .LVU129
+ 595 0002 FFF7FEFF 		bl	Menu_NextItem
+ 596              	.LVL19:
+ 173:../Src/menu.c **** }
+ 597              		.loc 1 173 1 is_stmt 0 view .LVU130
+ 598              		@ sp needed
+ 599 0006 10BD     		pop	{r4, pc}
+ 600              		.cfi_endproc
+ 601              	.LFE45:
+ 603              		.section	.text.Menu_IsActive,"ax",%progbits
+ 604              		.align	1
+ 605              		.global	Menu_IsActive
+ 606              		.syntax unified
+ 607              		.code	16
+ 608              		.thumb_func
+ 610              	Menu_IsActive:
+ 611              	.LFB46:
+ 174:../Src/menu.c **** 
+ 175:../Src/menu.c **** bool Menu_IsActive(void)
+ 176:../Src/menu.c **** {
+ 612              		.loc 1 176 1 is_stmt 1 view -0
+ 613              		.cfi_startproc
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 15
+
+
+ 614              		@ args = 0, pretend = 0, frame = 0
+ 615              		@ frame_needed = 0, uses_anonymous_args = 0
+ 616              		@ link register save eliminated.
+ 177:../Src/menu.c ****     return MenuActive;
+ 617              		.loc 1 177 5 view .LVU132
+ 618              		.loc 1 177 12 is_stmt 0 view .LVU133
+ 619 0000 014B     		ldr	r3, .L39
+ 620              		.loc 1 177 12 discriminator 1 view .LVU134
+ 621 0002 1878     		ldrb	r0, [r3]
+ 178:../Src/menu.c **** }
+ 622              		.loc 1 178 1 view .LVU135
+ 623              		@ sp needed
+ 624 0004 7047     		bx	lr
+ 625              	.L40:
+ 626 0006 C046     		.align	2
+ 627              	.L39:
+ 628 0008 00000000 		.word	MenuActive
+ 629              		.cfi_endproc
+ 630              	.LFE46:
+ 632              		.section	.text.Menu_GetMode,"ax",%progbits
+ 633              		.align	1
+ 634              		.global	Menu_GetMode
+ 635              		.syntax unified
+ 636              		.code	16
+ 637              		.thumb_func
+ 639              	Menu_GetMode:
+ 640              	.LFB47:
+ 179:../Src/menu.c **** 
+ 180:../Src/menu.c **** MenuMode_t Menu_GetMode(void)
+ 181:../Src/menu.c **** {
+ 641              		.loc 1 181 1 is_stmt 1 view -0
+ 642              		.cfi_startproc
+ 643              		@ args = 0, pretend = 0, frame = 0
+ 644              		@ frame_needed = 0, uses_anonymous_args = 0
+ 645              		@ link register save eliminated.
+ 182:../Src/menu.c ****     return CurrentMode;
+ 646              		.loc 1 182 5 view .LVU137
+ 647              		.loc 1 182 12 is_stmt 0 view .LVU138
+ 648 0000 014B     		ldr	r3, .L42
+ 649              		.loc 1 182 12 discriminator 1 view .LVU139
+ 650 0002 1878     		ldrb	r0, [r3]
+ 183:../Src/menu.c **** }...
+ 651              		.loc 1 183 1 view .LVU140
+ 652              		@ sp needed
+ 653 0004 7047     		bx	lr
+ 654              	.L43:
+ 655 0006 C046     		.align	2
+ 656              	.L42:
+ 657 0008 00000000 		.word	CurrentMode
+ 658              		.cfi_endproc
+ 659              	.LFE47:
+ 661              		.section	.bss.SaveSequenceStep,"aw",%nobits
+ 664              	SaveSequenceStep:
+ 665 0000 00       		.space	1
+ 666              		.section	.bss.MenuIdleTimer,"aw",%nobits
+ 667              		.align	1
+ 670              	MenuIdleTimer:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 16
+
+
+ 671 0000 0000     		.space	2
+ 672              		.section	.bss.MenuActive,"aw",%nobits
+ 675              	MenuActive:
+ 676 0000 00       		.space	1
+ 677              		.section	.bss.CsetIndex,"aw",%nobits
+ 680              	CsetIndex:
+ 681 0000 00       		.space	1
+ 682              		.section	.data.VsetIndex,"aw"
+ 685              	VsetIndex:
+ 686 0000 04       		.byte	4
+ 687              		.section	.bss.CurrentMode,"aw",%nobits
+ 690              	CurrentMode:
+ 691 0000 00       		.space	1
+ 692              		.section	.rodata.CsetTable,"a"
+ 693              		.align	2
+ 696              	CsetTable:
+ 697 0000 3E00     		.short	62
+ 698 0002 4800     		.short	72
+ 699 0004 5200     		.short	82
+ 700 0006 5C00     		.short	92
+ 701 0008 6600     		.short	102
+ 702              		.section	.rodata.VsetTable,"a"
+ 703              		.align	2
+ 706              	VsetTable:
+ 707 0000 5415     		.short	5460
+ 708 0002 6315     		.short	5475
+ 709 0004 D016     		.short	5840
+ 710 0006 F816     		.short	5880
+ 711 0008 4F1A     		.short	6735
+ 712 000a 171B     		.short	6935
+ 713 000c E41B     		.short	7140
+ 714 000e 841C     		.short	7300
+ 715 0010 CB20     		.short	8395
+ 716 0012 D020     		.short	8400
+ 717 0014 3822     		.short	8760
+ 718              		.text
+ 719              	.Letext0:
+ 720              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 721              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 722              		.file 4 "../Inc/menu.h"
+ 723              		.file 5 "../Inc/soc.h"
+ 724              		.file 6 "../Inc/battery.h"
+ 725              		.file 7 "../Inc/charger_sm.h"
+ 726              		.file 8 "../Inc/tm1637.h"
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 menu.c
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:19     .text.MenuVsetToMv:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:24     .text.MenuVsetToMv:00000000 MenuVsetToMv
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:46     .text.Menu_ApplySelection:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:51     .text.Menu_ApplySelection:00000000 Menu_ApplySelection
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:113    .text.Menu_ApplySelection:0000003c $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:685    .data.VsetIndex:00000000 VsetIndex
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:706    .rodata.VsetTable:00000000 VsetTable
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:696    .rodata.CsetTable:00000000 CsetTable
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:680    .bss.CsetIndex:00000000 CsetIndex
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:121    .text.Menu_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:127    .text.Menu_Init:00000000 Menu_Init
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:167    .text.Menu_Init:00000020 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:690    .bss.CurrentMode:00000000 CurrentMode
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:675    .bss.MenuActive:00000000 MenuActive
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:670    .bss.MenuIdleTimer:00000000 MenuIdleTimer
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:664    .bss.SaveSequenceStep:00000000 SaveSequenceStep
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:177    .text.Menu_Task:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:183    .text.Menu_Task:00000000 Menu_Task
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:288    .text.Menu_Task:00000070 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:299    .text.Menu_UpdateDisplay:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:305    .text.Menu_UpdateDisplay:00000000 Menu_UpdateDisplay
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:353    .text.Menu_UpdateDisplay:0000002c $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:362    .text.Menu_NextItem:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:368    .text.Menu_NextItem:00000000 Menu_NextItem
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:448    .text.Menu_NextItem:00000050 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:458    .text.Menu_ToggleMode:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:464    .text.Menu_ToggleMode:00000000 Menu_ToggleMode
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:522    .text.Menu_ToggleMode:00000034 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:530    .text.Menu_Enter:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:536    .text.Menu_Enter:00000000 Menu_Enter
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:570    .text.Menu_Enter:00000018 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:577    .text.Menu_OnButtonPress:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:583    .text.Menu_OnButtonPress:00000000 Menu_OnButtonPress
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:604    .text.Menu_IsActive:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:610    .text.Menu_IsActive:00000000 Menu_IsActive
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:628    .text.Menu_IsActive:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:633    .text.Menu_GetMode:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:639    .text.Menu_GetMode:00000000 Menu_GetMode
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:657    .text.Menu_GetMode:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:665    .bss.SaveSequenceStep:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:667    .bss.MenuIdleTimer:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:676    .bss.MenuActive:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:681    .bss.CsetIndex:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:691    .bss.CurrentMode:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:693    .rodata.CsetTable:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\cccEExAa.s:703    .rodata.VsetTable:00000000 $d
+
+UNDEFINED SYMBOLS
+ChargerSM_SetVset
+ChargerSM_SetCset
+Battery_SetVset
+SOC_SetVset
+TM1637_DisplayVoltage
+TM1637_DisplayCurrent

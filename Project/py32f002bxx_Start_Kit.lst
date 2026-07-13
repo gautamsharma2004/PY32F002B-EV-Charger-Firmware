@@ -1,0 +1,1340 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"py32f002bxx_Start_Kit.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Star
+  18              		.section	.text.BSP_GetVersion,"ax",%progbits
+  19              		.align	1
+  20              		.global	BSP_GetVersion
+  21              		.syntax unified
+  22              		.code	16
+  23              		.thumb_func
+  25              	BSP_GetVersion:
+  26              	.LFB37:
+   1:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+   2:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   ******************************************************************************
+   3:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @file    py32f002bxx_Start_Kit.c
+   4:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @author  MCU Application Team
+   5:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief   This file provides set of firmware functions to manage Leds, 
+   6:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *          push-button available on Start Kit.
+   7:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   ******************************************************************************
+   8:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @attention
+   9:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  10:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * <h2><center>&copy; Copyright (c) 2023 Puya Semiconductor Co.
+  11:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * All rights reserved.</center></h2>
+  12:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  13:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * This software component is licensed by Puya under BSD 3-Clause license,
+  14:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * the "License"; You may not use this file except in compliance with the
+  15:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * License. You may obtain a copy of the License at:
+  16:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  17:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  18:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   ******************************************************************************
+  19:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @attention
+  20:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  21:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  22:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * All rights reserved.</center></h2>
+  23:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  24:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  25:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * the "License"; You may not use this file except in compliance with the
+  26:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * License. You may obtain a copy of the License at:
+  27:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  28:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *
+  29:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   ******************************************************************************
+  30:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****  */
+  31:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  32:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /* Includes ------------------------------------------------------------------*/
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 2
+
+
+  33:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #include "py32f002bxx_Start_Kit.h"
+  34:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  35:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+  36:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief PY32F002Bxx STK BSP Driver version number
+  37:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+  38:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #define __PY32F002Bxx_STK_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
+  39:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #define __PY32F002Bxx_STK_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
+  40:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #define __PY32F002Bxx_STK_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
+  41:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #define __PY32F002Bxx_STK_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
+  42:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #define __PY32F002Bxx_STK_BSP_VERSION        ((__PY32F002Bxx_STK_BSP_VERSION_MAIN << 24) \
+  43:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****                                             |(__PY32F002Bxx_STK_BSP_VERSION_SUB1 << 16) \
+  44:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****                                             |(__PY32F002Bxx_STK_BSP_VERSION_SUB2 << 8 ) \
+  45:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****                                             |(__PY32F002Bxx_STK_BSP_VERSION_RC))
+  46:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  47:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #ifdef HAL_UART_MODULE_ENABLED
+  48:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** UART_HandleTypeDef DebugUartHandle;
+  49:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #endif
+  50:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** GPIO_TypeDef* LED_PORT[LEDn] = {LED3_GPIO_PORT};
+  51:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** const uint16_t LED_PIN[LEDn] = {LED3_PIN};
+  52:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  53:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** GPIO_TypeDef* BUTTON_PORT[BUTTONn] = {USER_BUTTON_GPIO_PORT };
+  54:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** const uint16_t BUTTON_PIN[BUTTONn] = {USER_BUTTON_PIN };
+  55:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** const uint8_t BUTTON_IRQn[BUTTONn] = {USER_BUTTON_EXTI_IRQn };
+  56:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  57:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /** @addtogroup PY32F002Bxx_STK_Exported_Functions
+  58:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @{
+  59:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+  60:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  61:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+  62:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  This method returns the PY32F002B STK BSP Driver revision.
+  63:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval version : 0xXYZR (8bits for each decimal, R for RC)
+  64:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+  65:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** uint32_t BSP_GetVersion(void)
+  66:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+  27              		.loc 1 66 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  67:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return __PY32F002Bxx_STK_BSP_VERSION;
+  32              		.loc 1 67 3 view .LVU1
+  33              		.loc 1 67 10 is_stmt 0 discriminator 1 view .LVU2
+  34 0000 8020     		movs	r0, #128
+  68:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+  35              		.loc 1 68 1 view .LVU3
+  36 0002 4004     		lsls	r0, r0, #17
+  37              		@ sp needed
+  38 0004 7047     		bx	lr
+  39              		.cfi_endproc
+  40              	.LFE37:
+  42              		.section	.text.BSP_LED_Init,"ax",%progbits
+  43              		.align	1
+  44              		.global	BSP_LED_Init
+  45              		.syntax unified
+  46              		.code	16
+  47              		.thumb_func
+  49              	BSP_LED_Init:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 3
+
+
+  50              	.LVL0:
+  51              	.LFB38:
+  69:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  70:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /** @addtogroup LED_Functions
+  71:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @{
+  72:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+  73:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  74:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+  75:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Configures LED GPIO.
+  76:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Led Specifies the Led to be configured.
+  77:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         This parameter can be one of following parameters:
+  78:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         @arg  LED3
+  79:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+  80:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+  81:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_LED_Init(Led_TypeDef Led)
+  82:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+  52              		.loc 1 82 1 is_stmt 1 view -0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 24
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+  56              		.loc 1 82 1 is_stmt 0 view .LVU5
+  57 0000 30B5     		push	{r4, r5, lr}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 12
+  60              		.cfi_offset 4, -12
+  61              		.cfi_offset 5, -8
+  62              		.cfi_offset 14, -4
+  63 0002 87B0     		sub	sp, sp, #28
+  64              	.LCFI1:
+  65              		.cfi_def_cfa_offset 40
+  83:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitTypeDef  GPIO_InitStruct;
+  66              		.loc 1 83 3 is_stmt 1 view .LVU6
+  84:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  85:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Enable the GPIO_LED Clock */
+  86:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   LEDx_GPIO_CLK_ENABLE(Led);
+  67              		.loc 1 86 3 view .LVU7
+  68              		.loc 1 86 3 view .LVU8
+  69              	.LBB2:
+  70              		.loc 1 86 3 view .LVU9
+  71              		.loc 1 86 3 view .LVU10
+  72 0004 0D4A     		ldr	r2, .L3
+  73 0006 516B     		ldr	r1, [r2, #52]
+  74 0008 0123     		movs	r3, #1
+  75 000a 1943     		orrs	r1, r3
+  76 000c 5163     		str	r1, [r2, #52]
+  77              		.loc 1 86 3 view .LVU11
+  78 000e 526B     		ldr	r2, [r2, #52]
+  79 0010 1A40     		ands	r2, r3
+  80 0012 0092     		str	r2, [sp]
+  81              		.loc 1 86 3 view .LVU12
+  82 0014 009A     		ldr	r2, [sp]
+  83              	.LBE2:
+  84              		.loc 1 86 3 view .LVU13
+  85              		.loc 1 86 3 view .LVU14
+  87:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  88:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Configure the GPIO_LED pin */
+  89:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pin = LED_PIN[Led];
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 4
+
+
+  86              		.loc 1 89 3 view .LVU15
+  87              		.loc 1 89 23 is_stmt 0 view .LVU16
+  88 0016 01A9     		add	r1, sp, #4
+  89 0018 0222     		movs	r2, #2
+  90 001a 0192     		str	r2, [sp, #4]
+  90:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  91              		.loc 1 90 3 is_stmt 1 view .LVU17
+  92              		.loc 1 90 24 is_stmt 0 view .LVU18
+  93 001c 4B60     		str	r3, [r1, #4]
+  91:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  94              		.loc 1 91 3 is_stmt 1 view .LVU19
+  95              		.loc 1 91 24 is_stmt 0 view .LVU20
+  96 001e 0023     		movs	r3, #0
+  97 0020 8B60     		str	r3, [r1, #8]
+  92:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  98              		.loc 1 92 3 is_stmt 1 view .LVU21
+  99              		.loc 1 92 25 is_stmt 0 view .LVU22
+ 100 0022 CA60     		str	r2, [r1, #12]
+  93:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+  94:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_Init(LED_PORT[Led], &GPIO_InitStruct);
+ 101              		.loc 1 94 3 is_stmt 1 view .LVU23
+ 102 0024 064C     		ldr	r4, .L3+4
+ 103 0026 8500     		lsls	r5, r0, #2
+ 104 0028 2859     		ldr	r0, [r5, r4]
+ 105              	.LVL1:
+ 106              		.loc 1 94 3 is_stmt 0 view .LVU24
+ 107 002a FFF7FEFF 		bl	HAL_GPIO_Init
+ 108              	.LVL2:
+  95:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET);
+ 109              		.loc 1 95 3 is_stmt 1 view .LVU25
+ 110 002e 2859     		ldr	r0, [r5, r4]
+ 111 0030 0122     		movs	r2, #1
+ 112 0032 0221     		movs	r1, #2
+ 113 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 114              	.LVL3:
+  96:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 115              		.loc 1 96 1 is_stmt 0 view .LVU26
+ 116 0038 07B0     		add	sp, sp, #28
+ 117              		@ sp needed
+ 118 003a 30BD     		pop	{r4, r5, pc}
+ 119              	.L4:
+ 120              		.align	2
+ 121              	.L3:
+ 122 003c 00100240 		.word	1073876992
+ 123 0040 00000000 		.word	LED_PORT
+ 124              		.cfi_endproc
+ 125              	.LFE38:
+ 127              		.section	.text.BSP_LED_DeInit,"ax",%progbits
+ 128              		.align	1
+ 129              		.global	BSP_LED_DeInit
+ 130              		.syntax unified
+ 131              		.code	16
+ 132              		.thumb_func
+ 134              	BSP_LED_DeInit:
+ 135              	.LVL4:
+ 136              	.LFB39:
+  97:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 5
+
+
+  98:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+  99:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  DeInitialize LED GPIO.
+ 100:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Led Specifies the Led to be deconfigured.
+ 101:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         This parameter can be one of the following values:
+ 102:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         @arg  LED3
+ 103:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @note BSP_LED_DeInit() does not disable the GPIO clock
+ 104:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 105:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 106:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_LED_DeInit(Led_TypeDef Led)
+ 107:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 137              		.loc 1 107 1 is_stmt 1 view -0
+ 138              		.cfi_startproc
+ 139              		@ args = 0, pretend = 0, frame = 24
+ 140              		@ frame_needed = 0, uses_anonymous_args = 0
+ 141              		.loc 1 107 1 is_stmt 0 view .LVU28
+ 142 0000 30B5     		push	{r4, r5, lr}
+ 143              	.LCFI2:
+ 144              		.cfi_def_cfa_offset 12
+ 145              		.cfi_offset 4, -12
+ 146              		.cfi_offset 5, -8
+ 147              		.cfi_offset 14, -4
+ 148 0002 87B0     		sub	sp, sp, #28
+ 149              	.LCFI3:
+ 150              		.cfi_def_cfa_offset 40
+ 108:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitTypeDef  GPIO_InitStruct;
+ 151              		.loc 1 108 3 is_stmt 1 view .LVU29
+ 109:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 110:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Turn off LED */
+ 111:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
+ 152              		.loc 1 111 3 view .LVU30
+ 153 0004 074C     		ldr	r4, .L6
+ 154 0006 8500     		lsls	r5, r0, #2
+ 155 0008 2859     		ldr	r0, [r5, r4]
+ 156              	.LVL5:
+ 157              		.loc 1 111 3 is_stmt 0 view .LVU31
+ 158 000a 0022     		movs	r2, #0
+ 159 000c 0221     		movs	r1, #2
+ 160 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 161              	.LVL6:
+ 112:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* DeInit the GPIO_LED pin */
+ 113:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pin = LED_PIN[Led];
+ 162              		.loc 1 113 3 is_stmt 1 view .LVU32
+ 163              		.loc 1 113 23 is_stmt 0 view .LVU33
+ 164 0012 0223     		movs	r3, #2
+ 165 0014 0193     		str	r3, [sp, #4]
+ 114:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_DeInit(LED_PORT[Led], GPIO_InitStruct.Pin);
+ 166              		.loc 1 114 3 is_stmt 1 view .LVU34
+ 167 0016 2859     		ldr	r0, [r5, r4]
+ 168 0018 0221     		movs	r1, #2
+ 169 001a FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 170              	.LVL7:
+ 115:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 171              		.loc 1 115 1 is_stmt 0 view .LVU35
+ 172 001e 07B0     		add	sp, sp, #28
+ 173              		@ sp needed
+ 174 0020 30BD     		pop	{r4, r5, pc}
+ 175              	.L7:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 6
+
+
+ 176 0022 C046     		.align	2
+ 177              	.L6:
+ 178 0024 00000000 		.word	LED_PORT
+ 179              		.cfi_endproc
+ 180              	.LFE39:
+ 182              		.section	.text.BSP_LED_On,"ax",%progbits
+ 183              		.align	1
+ 184              		.global	BSP_LED_On
+ 185              		.syntax unified
+ 186              		.code	16
+ 187              		.thumb_func
+ 189              	BSP_LED_On:
+ 190              	.LVL8:
+ 191              	.LFB40:
+ 116:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 117:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 118:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Turns selected LED On.
+ 119:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Led Specifies the Led to be set on.
+ 120:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter can be one of following parameters:
+ 121:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   @arg  LED3
+ 122:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 123:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 124:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_LED_On(Led_TypeDef Led)
+ 125:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 192              		.loc 1 125 1 is_stmt 1 view -0
+ 193              		.cfi_startproc
+ 194              		@ args = 0, pretend = 0, frame = 0
+ 195              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196              		.loc 1 125 1 is_stmt 0 view .LVU37
+ 197 0000 10B5     		push	{r4, lr}
+ 198              	.LCFI4:
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 4, -8
+ 201              		.cfi_offset 14, -4
+ 126:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
+ 202              		.loc 1 126 3 is_stmt 1 view .LVU38
+ 203 0002 044B     		ldr	r3, .L9
+ 204 0004 8000     		lsls	r0, r0, #2
+ 205              	.LVL9:
+ 206              		.loc 1 126 3 is_stmt 0 view .LVU39
+ 207 0006 C058     		ldr	r0, [r0, r3]
+ 208 0008 0022     		movs	r2, #0
+ 209 000a 0221     		movs	r1, #2
+ 210 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 211              	.LVL10:
+ 127:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 212              		.loc 1 127 1 view .LVU40
+ 213              		@ sp needed
+ 214 0010 10BD     		pop	{r4, pc}
+ 215              	.L10:
+ 216 0012 C046     		.align	2
+ 217              	.L9:
+ 218 0014 00000000 		.word	LED_PORT
+ 219              		.cfi_endproc
+ 220              	.LFE40:
+ 222              		.section	.text.BSP_LED_Off,"ax",%progbits
+ 223              		.align	1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 7
+
+
+ 224              		.global	BSP_LED_Off
+ 225              		.syntax unified
+ 226              		.code	16
+ 227              		.thumb_func
+ 229              	BSP_LED_Off:
+ 230              	.LVL11:
+ 231              	.LFB41:
+ 128:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 129:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 130:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Turns selected LED Off.
+ 131:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Led Specifies the Led to be set off.
+ 132:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter can be one of following parameters:
+ 133:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *            @arg  LED3
+ 134:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 135:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 136:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_LED_Off(Led_TypeDef Led)
+ 137:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 232              		.loc 1 137 1 is_stmt 1 view -0
+ 233              		.cfi_startproc
+ 234              		@ args = 0, pretend = 0, frame = 0
+ 235              		@ frame_needed = 0, uses_anonymous_args = 0
+ 236              		.loc 1 137 1 is_stmt 0 view .LVU42
+ 237 0000 10B5     		push	{r4, lr}
+ 238              	.LCFI5:
+ 239              		.cfi_def_cfa_offset 8
+ 240              		.cfi_offset 4, -8
+ 241              		.cfi_offset 14, -4
+ 138:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET);
+ 242              		.loc 1 138 3 is_stmt 1 view .LVU43
+ 243 0002 044B     		ldr	r3, .L12
+ 244 0004 8000     		lsls	r0, r0, #2
+ 245              	.LVL12:
+ 246              		.loc 1 138 3 is_stmt 0 view .LVU44
+ 247 0006 C058     		ldr	r0, [r0, r3]
+ 248 0008 0122     		movs	r2, #1
+ 249 000a 0221     		movs	r1, #2
+ 250 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 251              	.LVL13:
+ 139:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 252              		.loc 1 139 1 view .LVU45
+ 253              		@ sp needed
+ 254 0010 10BD     		pop	{r4, pc}
+ 255              	.L13:
+ 256 0012 C046     		.align	2
+ 257              	.L12:
+ 258 0014 00000000 		.word	LED_PORT
+ 259              		.cfi_endproc
+ 260              	.LFE41:
+ 262              		.section	.text.BSP_LED_Toggle,"ax",%progbits
+ 263              		.align	1
+ 264              		.global	BSP_LED_Toggle
+ 265              		.syntax unified
+ 266              		.code	16
+ 267              		.thumb_func
+ 269              	BSP_LED_Toggle:
+ 270              	.LVL14:
+ 271              	.LFB42:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 8
+
+
+ 140:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 141:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 142:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Toggles the selected LED.
+ 143:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Led Specifies the Led to be toggled.
+ 144:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter can be one of following parameters:
+ 145:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *            @arg  LED3
+ 146:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 147:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 148:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_LED_Toggle(Led_TypeDef Led)
+ 149:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 272              		.loc 1 149 1 is_stmt 1 view -0
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 0
+ 275              		@ frame_needed = 0, uses_anonymous_args = 0
+ 276              		.loc 1 149 1 is_stmt 0 view .LVU47
+ 277 0000 10B5     		push	{r4, lr}
+ 278              	.LCFI6:
+ 279              		.cfi_def_cfa_offset 8
+ 280              		.cfi_offset 4, -8
+ 281              		.cfi_offset 14, -4
+ 150:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_TogglePin(LED_PORT[Led], LED_PIN[Led]);
+ 282              		.loc 1 150 3 is_stmt 1 view .LVU48
+ 283 0002 034B     		ldr	r3, .L15
+ 284 0004 8000     		lsls	r0, r0, #2
+ 285              	.LVL15:
+ 286              		.loc 1 150 3 is_stmt 0 view .LVU49
+ 287 0006 C058     		ldr	r0, [r0, r3]
+ 288 0008 0221     		movs	r1, #2
+ 289 000a FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 290              	.LVL16:
+ 151:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 291              		.loc 1 151 1 view .LVU50
+ 292              		@ sp needed
+ 293 000e 10BD     		pop	{r4, pc}
+ 294              	.L16:
+ 295              		.align	2
+ 296              	.L15:
+ 297 0010 00000000 		.word	LED_PORT
+ 298              		.cfi_endproc
+ 299              	.LFE42:
+ 301              		.section	.text.BSP_PB_Init,"ax",%progbits
+ 302              		.align	1
+ 303              		.global	BSP_PB_Init
+ 304              		.syntax unified
+ 305              		.code	16
+ 306              		.thumb_func
+ 308              	BSP_PB_Init:
+ 309              	.LVL17:
+ 310              	.LFB43:
+ 152:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 153:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 154:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Configures Button GPIO and EXTI Line.
+ 155:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Button: Specifies the Button to be configured.
+ 156:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter should be: BUTTON_USER
+ 157:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  ButtonMode: Specifies Button mode.
+ 158:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter can be one of following parameters:
+ 159:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *     @arg  BUTTON_MODE_GPIO: Button will be used as simple IO
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 9
+
+
+ 160:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *     @arg BUTTON_MODE_EXTI: Button will be connected to EXTI line with interrupt
+ 161:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *                            generation capability
+ 162:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 163:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 164:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
+ 165:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 311              		.loc 1 165 1 is_stmt 1 view -0
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 24
+ 314              		@ frame_needed = 0, uses_anonymous_args = 0
+ 315              		.loc 1 165 1 is_stmt 0 view .LVU52
+ 316 0000 30B5     		push	{r4, r5, lr}
+ 317              	.LCFI7:
+ 318              		.cfi_def_cfa_offset 12
+ 319              		.cfi_offset 4, -12
+ 320              		.cfi_offset 5, -8
+ 321              		.cfi_offset 14, -4
+ 322 0002 87B0     		sub	sp, sp, #28
+ 323              	.LCFI8:
+ 324              		.cfi_def_cfa_offset 40
+ 325 0004 0500     		movs	r5, r0
+ 326 0006 0C00     		movs	r4, r1
+ 166:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitTypeDef gpioinitstruct;
+ 327              		.loc 1 166 3 is_stmt 1 view .LVU53
+ 167:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 168:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Enable the BUTTON Clock */
+ 169:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   BUTTONx_GPIO_CLK_ENABLE(Button);
+ 328              		.loc 1 169 3 view .LVU54
+ 329              		.loc 1 169 3 view .LVU55
+ 330 0008 0028     		cmp	r0, #0
+ 331 000a 08D1     		bne	.L18
+ 332              		.loc 1 169 3 discriminator 1 view .LVU56
+ 333              	.LBB3:
+ 334              		.loc 1 169 3 discriminator 1 view .LVU57
+ 335              		.loc 1 169 3 discriminator 1 view .LVU58
+ 336 000c 174A     		ldr	r2, .L23
+ 337 000e 516B     		ldr	r1, [r2, #52]
+ 338              	.LVL18:
+ 339              		.loc 1 169 3 is_stmt 0 discriminator 1 view .LVU59
+ 340 0010 0123     		movs	r3, #1
+ 341 0012 1943     		orrs	r1, r3
+ 342 0014 5163     		str	r1, [r2, #52]
+ 343              		.loc 1 169 3 is_stmt 1 view .LVU60
+ 344              		.loc 1 169 3 is_stmt 0 discriminator 1 view .LVU61
+ 345 0016 526B     		ldr	r2, [r2, #52]
+ 346 0018 1340     		ands	r3, r2
+ 347 001a 0093     		str	r3, [sp]
+ 348              		.loc 1 169 3 is_stmt 1 view .LVU62
+ 349              		.loc 1 169 3 is_stmt 0 discriminator 1 view .LVU63
+ 350 001c 009B     		ldr	r3, [sp]
+ 351              	.L18:
+ 352              	.LBE3:
+ 353              		.loc 1 169 3 is_stmt 1 view .LVU64
+ 354              		.loc 1 169 3 view .LVU65
+ 170:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 171:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   gpioinitstruct.Pin = BUTTON_PIN[Button];
+ 355              		.loc 1 171 3 view .LVU66
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 10
+
+
+ 356              		.loc 1 171 22 is_stmt 0 view .LVU67
+ 357 001e 01AB     		add	r3, sp, #4
+ 358 0020 0122     		movs	r2, #1
+ 359 0022 0192     		str	r2, [sp, #4]
+ 172:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   gpioinitstruct.Pull = GPIO_NOPULL;
+ 360              		.loc 1 172 3 is_stmt 1 view .LVU68
+ 361              		.loc 1 172 23 is_stmt 0 view .LVU69
+ 362 0024 0021     		movs	r1, #0
+ 363 0026 0391     		str	r1, [sp, #12]
+ 173:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   gpioinitstruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+ 364              		.loc 1 173 3 is_stmt 1 view .LVU70
+ 365              		.loc 1 173 24 is_stmt 0 view .LVU71
+ 366 0028 0492     		str	r2, [sp, #16]
+ 174:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 175:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   if(ButtonMode == BUTTON_MODE_GPIO)
+ 367              		.loc 1 175 3 is_stmt 1 view .LVU72
+ 368              		.loc 1 175 5 is_stmt 0 view .LVU73
+ 369 002a 002C     		cmp	r4, #0
+ 370 002c 03D0     		beq	.L21
+ 371              	.LVL19:
+ 372              	.L19:
+ 176:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   {
+ 177:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     /* Configure Button pin as input */
+ 178:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     gpioinitstruct.Mode = GPIO_MODE_INPUT;
+ 179:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 180:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpioinitstruct);
+ 181:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 182:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 183:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   if(ButtonMode == BUTTON_MODE_EXTI)
+ 373              		.loc 1 183 3 is_stmt 1 view .LVU74
+ 374              		.loc 1 183 5 is_stmt 0 view .LVU75
+ 375 002e 012C     		cmp	r4, #1
+ 376 0030 0AD0     		beq	.L22
+ 377              	.LVL20:
+ 378              	.L17:
+ 184:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   {
+ 185:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     /* Configure Button pin as input with External interrupt */
+ 186:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     gpioinitstruct.Mode   = GPIO_MODE_IT_FALLING;
+ 187:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpioinitstruct);
+ 188:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 189:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     /* Enable and set Button EXTI Interrupt to the lowest priority */
+ 190:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_NVIC_SetPriority((IRQn_Type)(BUTTON_IRQn[Button]), 0x0F, 0);
+ 191:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_NVIC_EnableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
+ 192:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 193:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 379              		.loc 1 193 1 view .LVU76
+ 380 0032 07B0     		add	sp, sp, #28
+ 381              		@ sp needed
+ 382              	.LVL21:
+ 383              		.loc 1 193 1 view .LVU77
+ 384 0034 30BD     		pop	{r4, r5, pc}
+ 385              	.LVL22:
+ 386              	.L21:
+ 178:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 387              		.loc 1 178 5 is_stmt 1 view .LVU78
+ 178:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 388              		.loc 1 178 25 is_stmt 0 view .LVU79
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 11
+
+
+ 389 0036 1900     		movs	r1, r3
+ 390 0038 0023     		movs	r3, #0
+ 391 003a 4B60     		str	r3, [r1, #4]
+ 180:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 392              		.loc 1 180 5 is_stmt 1 view .LVU80
+ 393 003c 0C4B     		ldr	r3, .L23+4
+ 394 003e AA00     		lsls	r2, r5, #2
+ 395 0040 D058     		ldr	r0, [r2, r3]
+ 396              	.LVL23:
+ 180:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 397              		.loc 1 180 5 is_stmt 0 view .LVU81
+ 398 0042 FFF7FEFF 		bl	HAL_GPIO_Init
+ 399              	.LVL24:
+ 400 0046 F2E7     		b	.L19
+ 401              	.L22:
+ 186:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpioinitstruct);
+ 402              		.loc 1 186 5 is_stmt 1 view .LVU82
+ 186:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpioinitstruct);
+ 403              		.loc 1 186 27 is_stmt 0 view .LVU83
+ 404 0048 01A9     		add	r1, sp, #4
+ 405 004a 0A4B     		ldr	r3, .L23+8
+ 406 004c 4B60     		str	r3, [r1, #4]
+ 187:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 407              		.loc 1 187 5 is_stmt 1 view .LVU84
+ 408 004e 084B     		ldr	r3, .L23+4
+ 409 0050 AD00     		lsls	r5, r5, #2
+ 410              	.LVL25:
+ 187:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 411              		.loc 1 187 5 is_stmt 0 view .LVU85
+ 412 0052 E858     		ldr	r0, [r5, r3]
+ 413 0054 FFF7FEFF 		bl	HAL_GPIO_Init
+ 414              	.LVL26:
+ 190:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     HAL_NVIC_EnableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
+ 415              		.loc 1 190 5 is_stmt 1 view .LVU86
+ 416 0058 0022     		movs	r2, #0
+ 417 005a 0F21     		movs	r1, #15
+ 418 005c 0520     		movs	r0, #5
+ 419 005e FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 420              	.LVL27:
+ 191:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 421              		.loc 1 191 5 view .LVU87
+ 422 0062 0520     		movs	r0, #5
+ 423 0064 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 424              	.LVL28:
+ 425              		.loc 1 193 1 is_stmt 0 view .LVU88
+ 426 0068 E3E7     		b	.L17
+ 427              	.L24:
+ 428 006a C046     		.align	2
+ 429              	.L23:
+ 430 006c 00100240 		.word	1073876992
+ 431 0070 00000000 		.word	BUTTON_PORT
+ 432 0074 00002110 		.word	270598144
+ 433              		.cfi_endproc
+ 434              	.LFE43:
+ 436              		.section	.text.BSP_PB_DeInit,"ax",%progbits
+ 437              		.align	1
+ 438              		.global	BSP_PB_DeInit
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 12
+
+
+ 439              		.syntax unified
+ 440              		.code	16
+ 441              		.thumb_func
+ 443              	BSP_PB_DeInit:
+ 444              	.LVL29:
+ 445              	.LFB44:
+ 194:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 195:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 196:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Push Button DeInit.
+ 197:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Button: Button to be configured
+ 198:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter should be: BUTTON_USER
+ 199:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @note PB DeInit does not disable the GPIO clock
+ 200:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 201:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 202:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_PB_DeInit(Button_TypeDef Button)
+ 203:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 446              		.loc 1 203 1 is_stmt 1 view -0
+ 447              		.cfi_startproc
+ 448              		@ args = 0, pretend = 0, frame = 24
+ 449              		@ frame_needed = 0, uses_anonymous_args = 0
+ 450              		.loc 1 203 1 is_stmt 0 view .LVU90
+ 451 0000 10B5     		push	{r4, lr}
+ 452              	.LCFI9:
+ 453              		.cfi_def_cfa_offset 8
+ 454              		.cfi_offset 4, -8
+ 455              		.cfi_offset 14, -4
+ 456 0002 86B0     		sub	sp, sp, #24
+ 457              	.LCFI10:
+ 458              		.cfi_def_cfa_offset 32
+ 459 0004 0400     		movs	r4, r0
+ 204:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitTypeDef gpio_init_structure;
+ 460              		.loc 1 204 3 is_stmt 1 view .LVU91
+ 205:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 206:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   gpio_init_structure.Pin = BUTTON_PIN[Button];
+ 461              		.loc 1 206 3 view .LVU92
+ 462              		.loc 1 206 27 is_stmt 0 view .LVU93
+ 463 0006 0123     		movs	r3, #1
+ 464 0008 0193     		str	r3, [sp, #4]
+ 207:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_NVIC_DisableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
+ 465              		.loc 1 207 3 is_stmt 1 view .LVU94
+ 466 000a 0520     		movs	r0, #5
+ 467              	.LVL30:
+ 468              		.loc 1 207 3 is_stmt 0 view .LVU95
+ 469 000c FFF7FEFF 		bl	HAL_NVIC_DisableIRQ
+ 470              	.LVL31:
+ 208:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_DeInit(BUTTON_PORT[Button], gpio_init_structure.Pin);
+ 471              		.loc 1 208 3 is_stmt 1 view .LVU96
+ 472 0010 034B     		ldr	r3, .L26
+ 473 0012 A400     		lsls	r4, r4, #2
+ 474              	.LVL32:
+ 475              		.loc 1 208 3 is_stmt 0 view .LVU97
+ 476 0014 E058     		ldr	r0, [r4, r3]
+ 477 0016 0121     		movs	r1, #1
+ 478 0018 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 479              	.LVL33:
+ 209:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 480              		.loc 1 209 1 view .LVU98
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 13
+
+
+ 481 001c 06B0     		add	sp, sp, #24
+ 482              		@ sp needed
+ 483 001e 10BD     		pop	{r4, pc}
+ 484              	.L27:
+ 485              		.align	2
+ 486              	.L26:
+ 487 0020 00000000 		.word	BUTTON_PORT
+ 488              		.cfi_endproc
+ 489              	.LFE44:
+ 491              		.section	.text.BSP_PB_GetState,"ax",%progbits
+ 492              		.align	1
+ 493              		.global	BSP_PB_GetState
+ 494              		.syntax unified
+ 495              		.code	16
+ 496              		.thumb_func
+ 498              	BSP_PB_GetState:
+ 499              	.LVL34:
+ 500              	.LFB45:
+ 210:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 211:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 212:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  Returns the selected Button state.
+ 213:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  Button: Specifies the Button to be checked.
+ 214:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *   This parameter should be: BUTTON_USER
+ 215:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval Button state.
+ 216:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 217:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** uint32_t BSP_PB_GetState(Button_TypeDef Button)
+ 218:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 501              		.loc 1 218 1 is_stmt 1 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 0
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 505              		.loc 1 218 1 is_stmt 0 view .LVU100
+ 506 0000 10B5     		push	{r4, lr}
+ 507              	.LCFI11:
+ 508              		.cfi_def_cfa_offset 8
+ 509              		.cfi_offset 4, -8
+ 510              		.cfi_offset 14, -4
+ 219:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #if StartKitVersion == 2
+ 220:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return (HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]) == GPIO_PIN_RESET);
+ 511              		.loc 1 220 3 is_stmt 1 view .LVU101
+ 512              		.loc 1 220 11 is_stmt 0 view .LVU102
+ 513 0002 044B     		ldr	r3, .L29
+ 514 0004 8000     		lsls	r0, r0, #2
+ 515              	.LVL35:
+ 516              		.loc 1 220 11 view .LVU103
+ 517 0006 C058     		ldr	r0, [r0, r3]
+ 518 0008 0121     		movs	r1, #1
+ 519 000a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 520              	.LVL36:
+ 521              		.loc 1 220 69 discriminator 1 view .LVU104
+ 522 000e 4342     		rsbs	r3, r0, #0
+ 523 0010 5841     		adcs	r0, r0, r3
+ 221:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #else
+ 222:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]);
+ 223:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #endif
+ 224:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 524              		.loc 1 224 1 view .LVU105
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 14
+
+
+ 525              		@ sp needed
+ 526 0012 10BD     		pop	{r4, pc}
+ 527              	.L30:
+ 528              		.align	2
+ 529              	.L29:
+ 530 0014 00000000 		.word	BUTTON_PORT
+ 531              		.cfi_endproc
+ 532              	.LFE45:
+ 534              		.section	.text.BSP_USART_Config,"ax",%progbits
+ 535              		.align	1
+ 536              		.global	BSP_USART_Config
+ 537              		.syntax unified
+ 538              		.code	16
+ 539              		.thumb_func
+ 541              	BSP_USART_Config:
+ 542              	.LFB46:
+ 225:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 226:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #ifdef HAL_UART_MODULE_ENABLED
+ 227:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 228:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  DEBUG_USART GPIO Config,Mode Config,115200 8-N-1
+ 229:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  None
+ 230:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval None
+ 231:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 232:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** void BSP_USART_Config(void)
+ 233:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 543              		.loc 1 233 1 is_stmt 1 view -0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 32
+ 546              		@ frame_needed = 0, uses_anonymous_args = 0
+ 547 0000 70B5     		push	{r4, r5, r6, lr}
+ 548              	.LCFI12:
+ 549              		.cfi_def_cfa_offset 16
+ 550              		.cfi_offset 4, -16
+ 551              		.cfi_offset 5, -12
+ 552              		.cfi_offset 6, -8
+ 553              		.cfi_offset 14, -4
+ 554 0002 88B0     		sub	sp, sp, #32
+ 555              	.LCFI13:
+ 556              		.cfi_def_cfa_offset 48
+ 234:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitTypeDef  GPIO_InitStruct;
+ 557              		.loc 1 234 3 view .LVU107
+ 235:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 236:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #if defined (__GNUC__)
+ 237:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   setvbuf(stdout,NULL,_IONBF,0);
+ 558              		.loc 1 237 3 view .LVU108
+ 559              		.loc 1 237 11 is_stmt 0 view .LVU109
+ 560 0004 284B     		ldr	r3, .L32
+ 561 0006 1B68     		ldr	r3, [r3]
+ 562 0008 9868     		ldr	r0, [r3, #8]
+ 563              		.loc 1 237 3 view .LVU110
+ 564 000a 0023     		movs	r3, #0
+ 565 000c 0222     		movs	r2, #2
+ 566 000e 0021     		movs	r1, #0
+ 567 0010 FFF7FEFF 		bl	setvbuf
+ 568              	.LVL37:
+ 238:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #endif
+ 239:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 15
+
+
+ 240:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DEBUG_USART_CLK_ENABLE();
+ 569              		.loc 1 240 3 is_stmt 1 view .LVU111
+ 570              	.LBB4:
+ 571              		.loc 1 240 3 view .LVU112
+ 572 0014 0023     		movs	r3, #0
+ 573 0016 0093     		str	r3, [sp]
+ 574              		.loc 1 240 3 view .LVU113
+ 575 0018 244C     		ldr	r4, .L32+4
+ 576 001a 226C     		ldr	r2, [r4, #64]
+ 577 001c 8021     		movs	r1, #128
+ 578 001e C901     		lsls	r1, r1, #7
+ 579 0020 0A43     		orrs	r2, r1
+ 580 0022 2264     		str	r2, [r4, #64]
+ 581              		.loc 1 240 3 view .LVU114
+ 582 0024 226C     		ldr	r2, [r4, #64]
+ 583 0026 0A40     		ands	r2, r1
+ 584 0028 0092     		str	r2, [sp]
+ 585              		.loc 1 240 3 view .LVU115
+ 586 002a 009A     		ldr	r2, [sp]
+ 587              	.LBE4:
+ 588              		.loc 1 240 3 view .LVU116
+ 241:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 242:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Instance          = DEBUG_USART;
+ 589              		.loc 1 242 3 view .LVU117
+ 590              		.loc 1 242 37 is_stmt 0 view .LVU118
+ 591 002c 2048     		ldr	r0, .L32+8
+ 592 002e 214A     		ldr	r2, .L32+12
+ 593 0030 0260     		str	r2, [r0]
+ 243:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 244:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.BaudRate     = DEBUG_USART_BAUDRATE;
+ 594              		.loc 1 244 3 is_stmt 1 view .LVU119
+ 595              		.loc 1 244 37 is_stmt 0 view .LVU120
+ 596 0032 E122     		movs	r2, #225
+ 597 0034 5202     		lsls	r2, r2, #9
+ 598 0036 4260     		str	r2, [r0, #4]
+ 245:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.WordLength   = UART_WORDLENGTH_8B;
+ 599              		.loc 1 245 3 is_stmt 1 view .LVU121
+ 600              		.loc 1 245 37 is_stmt 0 view .LVU122
+ 601 0038 8360     		str	r3, [r0, #8]
+ 246:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.StopBits     = UART_STOPBITS_1;
+ 602              		.loc 1 246 3 is_stmt 1 view .LVU123
+ 603              		.loc 1 246 37 is_stmt 0 view .LVU124
+ 604 003a C360     		str	r3, [r0, #12]
+ 247:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.Parity       = UART_PARITY_NONE;
+ 605              		.loc 1 247 3 is_stmt 1 view .LVU125
+ 606              		.loc 1 247 37 is_stmt 0 view .LVU126
+ 607 003c 0361     		str	r3, [r0, #16]
+ 248:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+ 608              		.loc 1 248 3 is_stmt 1 view .LVU127
+ 609              		.loc 1 248 37 is_stmt 0 view .LVU128
+ 610 003e 8361     		str	r3, [r0, #24]
+ 249:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.Mode         = UART_MODE_TX_RX;
+ 611              		.loc 1 249 3 is_stmt 1 view .LVU129
+ 612              		.loc 1 249 37 is_stmt 0 view .LVU130
+ 613 0040 0C22     		movs	r2, #12
+ 614 0042 4261     		str	r2, [r0, #20]
+ 250:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 16
+
+
+ 615              		.loc 1 250 3 is_stmt 1 view .LVU131
+ 616              		.loc 1 250 37 is_stmt 0 view .LVU132
+ 617 0044 C361     		str	r3, [r0, #28]
+ 251:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DebugUartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+ 618              		.loc 1 251 3 is_stmt 1 view .LVU133
+ 619              		.loc 1 251 47 is_stmt 0 view .LVU134
+ 620 0046 0362     		str	r3, [r0, #32]
+ 252:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 253:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_UART_Init(&DebugUartHandle);
+ 621              		.loc 1 253 3 is_stmt 1 view .LVU135
+ 622 0048 FFF7FEFF 		bl	HAL_UART_Init
+ 623              	.LVL38:
+ 254:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 255:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DEBUG_USART_RX_GPIO_CLK_ENABLE();
+ 624              		.loc 1 255 3 view .LVU136
+ 625              	.LBB5:
+ 626              		.loc 1 255 3 view .LVU137
+ 627              		.loc 1 255 3 view .LVU138
+ 628 004c 626B     		ldr	r2, [r4, #52]
+ 629 004e 0223     		movs	r3, #2
+ 630 0050 1A43     		orrs	r2, r3
+ 631 0052 6263     		str	r2, [r4, #52]
+ 632              		.loc 1 255 3 view .LVU139
+ 633 0054 626B     		ldr	r2, [r4, #52]
+ 634 0056 1A40     		ands	r2, r3
+ 635 0058 0192     		str	r2, [sp, #4]
+ 636              		.loc 1 255 3 view .LVU140
+ 637 005a 019A     		ldr	r2, [sp, #4]
+ 638              	.LBE5:
+ 639              		.loc 1 255 3 view .LVU141
+ 256:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   DEBUG_USART_TX_GPIO_CLK_ENABLE();
+ 640              		.loc 1 256 3 view .LVU142
+ 641              	.LBB6:
+ 642              		.loc 1 256 3 view .LVU143
+ 643              		.loc 1 256 3 view .LVU144
+ 644 005c 626B     		ldr	r2, [r4, #52]
+ 645 005e 1A43     		orrs	r2, r3
+ 646 0060 6263     		str	r2, [r4, #52]
+ 647              		.loc 1 256 3 view .LVU145
+ 648 0062 626B     		ldr	r2, [r4, #52]
+ 649 0064 1A40     		ands	r2, r3
+ 650 0066 0292     		str	r2, [sp, #8]
+ 651              		.loc 1 256 3 view .LVU146
+ 652 0068 029A     		ldr	r2, [sp, #8]
+ 653              	.LBE6:
+ 654              		.loc 1 256 3 view .LVU147
+ 257:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 258:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /**USART GPIO Configuration
+ 259:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     PB4     ------> USART1_TX
+ 260:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     PB5     ------> USART1_RX
+ 261:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     */
+ 262:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
+ 655              		.loc 1 262 3 view .LVU148
+ 656              		.loc 1 262 23 is_stmt 0 view .LVU149
+ 657 006a 03AC     		add	r4, sp, #12
+ 658 006c 1022     		movs	r2, #16
+ 659 006e 0392     		str	r2, [sp, #12]
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 17
+
+
+ 263:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 660              		.loc 1 263 3 is_stmt 1 view .LVU150
+ 661              		.loc 1 263 24 is_stmt 0 view .LVU151
+ 662 0070 0493     		str	r3, [sp, #16]
+ 264:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 663              		.loc 1 264 3 is_stmt 1 view .LVU152
+ 664              		.loc 1 264 24 is_stmt 0 view .LVU153
+ 665 0072 0125     		movs	r5, #1
+ 666 0074 0595     		str	r5, [sp, #20]
+ 265:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 667              		.loc 1 265 3 is_stmt 1 view .LVU154
+ 668              		.loc 1 265 25 is_stmt 0 view .LVU155
+ 669 0076 0133     		adds	r3, r3, #1
+ 670 0078 0693     		str	r3, [sp, #24]
+ 266:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
+ 671              		.loc 1 266 3 is_stmt 1 view .LVU156
+ 672              		.loc 1 266 29 is_stmt 0 view .LVU157
+ 673 007a 0795     		str	r5, [sp, #28]
+ 267:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
+ 674              		.loc 1 267 3 is_stmt 1 view .LVU158
+ 675 007c 0E4E     		ldr	r6, .L32+16
+ 676 007e 2100     		movs	r1, r4
+ 677 0080 3000     		movs	r0, r6
+ 678 0082 FFF7FEFF 		bl	HAL_GPIO_Init
+ 679              	.LVL39:
+ 268:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 269:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
+ 680              		.loc 1 269 3 view .LVU159
+ 681              		.loc 1 269 23 is_stmt 0 view .LVU160
+ 682 0086 2023     		movs	r3, #32
+ 683 0088 0393     		str	r3, [sp, #12]
+ 270:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
+ 684              		.loc 1 270 3 is_stmt 1 view .LVU161
+ 685              		.loc 1 270 29 is_stmt 0 view .LVU162
+ 686 008a 0795     		str	r5, [sp, #28]
+ 271:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 272:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct);
+ 687              		.loc 1 272 3 is_stmt 1 view .LVU163
+ 688 008c 2100     		movs	r1, r4
+ 689 008e 3000     		movs	r0, r6
+ 690 0090 FFF7FEFF 		bl	HAL_GPIO_Init
+ 691              	.LVL40:
+ 273:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 274:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* ENABLE NVIC */
+ 275:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_NVIC_SetPriority(DEBUG_USART_IRQ,0,1);
+ 692              		.loc 1 275 3 view .LVU164
+ 693 0094 0122     		movs	r2, #1
+ 694 0096 0021     		movs	r1, #0
+ 695 0098 1B20     		movs	r0, #27
+ 696 009a FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 697              	.LVL41:
+ 276:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_NVIC_EnableIRQ(DEBUG_USART_IRQ );
+ 698              		.loc 1 276 3 view .LVU165
+ 699 009e 1B20     		movs	r0, #27
+ 700 00a0 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 701              	.LVL42:
+ 277:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 18
+
+
+ 702              		.loc 1 277 1 is_stmt 0 view .LVU166
+ 703 00a4 08B0     		add	sp, sp, #32
+ 704              		@ sp needed
+ 705 00a6 70BD     		pop	{r4, r5, r6, pc}
+ 706              	.L33:
+ 707              		.align	2
+ 708              	.L32:
+ 709 00a8 00000000 		.word	_impure_ptr
+ 710 00ac 00100240 		.word	1073876992
+ 711 00b0 00000000 		.word	DebugUartHandle
+ 712 00b4 00380140 		.word	1073821696
+ 713 00b8 00040050 		.word	1342178304
+ 714              		.cfi_endproc
+ 715              	.LFE46:
+ 717              		.section	.text.__io_putchar,"ax",%progbits
+ 718              		.align	1
+ 719              		.global	__io_putchar
+ 720              		.syntax unified
+ 721              		.code	16
+ 722              		.thumb_func
+ 724              	__io_putchar:
+ 725              	.LVL43:
+ 726              	.LFB47:
+ 278:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 279:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #if (defined (__CC_ARM)) || (defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
+ 280:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 281:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  writes a character to the usart
+ 282:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  ch
+ 283:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         *f
+ 284:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval the character
+ 285:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 286:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** int fputc(int ch, FILE *f)
+ 287:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 288:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Send a byte to USART */
+ 289:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_UART_Transmit(&DebugUartHandle, (uint8_t *)&ch, 1, 1000);
+ 290:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 291:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return (ch);
+ 292:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 293:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 294:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 295:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  get a character from the usart
+ 296:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  *f
+ 297:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval a character
+ 298:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 299:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** int fgetc(FILE *f)
+ 300:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 301:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   int ch;
+ 302:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_UART_Receive(&DebugUartHandle, (uint8_t *)&ch, 1, 1000);
+ 303:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return (ch);
+ 304:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 305:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 306:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #elif defined(__ICCARM__)
+ 307:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 308:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  writes a character to the usart
+ 309:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  ch
+ 310:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   *         *f
+ 311:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval the character
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 19
+
+
+ 312:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 313:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** int putchar(int ch)
+ 314:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 315:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Send a byte to USART */
+ 316:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_UART_Transmit(&DebugUartHandle, (uint8_t *)&ch, 1, 1000);
+ 317:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 318:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return (ch);
+ 319:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 320:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** #elif  defined(__GNUC__)
+ 321:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** /**
+ 322:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @brief  writes a character to the usart
+ 323:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @param  ch
+ 324:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   * @retval the character
+ 325:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   */
+ 326:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** int __io_putchar(int ch)
+ 327:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 727              		.loc 1 327 1 is_stmt 1 view -0
+ 728              		.cfi_startproc
+ 729              		@ args = 0, pretend = 0, frame = 8
+ 730              		@ frame_needed = 0, uses_anonymous_args = 0
+ 731              		.loc 1 327 1 is_stmt 0 view .LVU168
+ 732 0000 00B5     		push	{lr}
+ 733              	.LCFI14:
+ 734              		.cfi_def_cfa_offset 4
+ 735              		.cfi_offset 14, -4
+ 736 0002 83B0     		sub	sp, sp, #12
+ 737              	.LCFI15:
+ 738              		.cfi_def_cfa_offset 16
+ 739 0004 0190     		str	r0, [sp, #4]
+ 328:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   /* Send a byte to USART */
+ 329:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   HAL_UART_Transmit(&DebugUartHandle, (uint8_t *)&ch, 1, 1000);
+ 740              		.loc 1 329 3 is_stmt 1 view .LVU169
+ 741 0006 FA23     		movs	r3, #250
+ 742 0008 0448     		ldr	r0, .L35
+ 743              	.LVL44:
+ 744              		.loc 1 329 3 is_stmt 0 view .LVU170
+ 745 000a 9B00     		lsls	r3, r3, #2
+ 746 000c 0122     		movs	r2, #1
+ 747 000e 01A9     		add	r1, sp, #4
+ 748              	.LVL45:
+ 749              		.loc 1 329 3 view .LVU171
+ 750 0010 FFF7FEFF 		bl	HAL_UART_Transmit
+ 751              	.LVL46:
+ 330:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 331:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return ch;
+ 752              		.loc 1 331 3 is_stmt 1 view .LVU172
+ 753              		.loc 1 331 10 is_stmt 0 discriminator 1 view .LVU173
+ 754 0014 0198     		ldr	r0, [sp, #4]
+ 332:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 755              		.loc 1 332 1 view .LVU174
+ 756 0016 03B0     		add	sp, sp, #12
+ 757              		@ sp needed
+ 758 0018 00BD     		pop	{pc}
+ 759              	.L36:
+ 760 001a C046     		.align	2
+ 761              	.L35:
+ 762 001c 00000000 		.word	DebugUartHandle
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 20
+
+
+ 763              		.cfi_endproc
+ 764              	.LFE47:
+ 766              		.section	.text._write,"ax",%progbits
+ 767              		.align	1
+ 768              		.global	_write
+ 769              		.syntax unified
+ 770              		.code	16
+ 771              		.thumb_func
+ 773              	_write:
+ 774              	.LVL47:
+ 775              	.LFB48:
+ 333:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** 
+ 334:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** int _write(int file, char *ptr, int len)
+ 335:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** {
+ 776              		.loc 1 335 1 is_stmt 1 view -0
+ 777              		.cfi_startproc
+ 778              		@ args = 0, pretend = 0, frame = 0
+ 779              		@ frame_needed = 0, uses_anonymous_args = 0
+ 780              		.loc 1 335 1 is_stmt 0 view .LVU176
+ 781 0000 70B5     		push	{r4, r5, r6, lr}
+ 782              	.LCFI16:
+ 783              		.cfi_def_cfa_offset 16
+ 784              		.cfi_offset 4, -16
+ 785              		.cfi_offset 5, -12
+ 786              		.cfi_offset 6, -8
+ 787              		.cfi_offset 14, -4
+ 788 0002 1600     		movs	r6, r2
+ 336:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   int DataIdx;
+ 789              		.loc 1 336 3 is_stmt 1 view .LVU177
+ 337:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   for (DataIdx=0;DataIdx<len;DataIdx++)
+ 790              		.loc 1 337 3 view .LVU178
+ 791              	.LVL48:
+ 792              		.loc 1 337 15 is_stmt 0 view .LVU179
+ 793 0004 0024     		movs	r4, #0
+ 794              		.loc 1 337 3 view .LVU180
+ 795 0006 05E0     		b	.L38
+ 796              	.LVL49:
+ 797              	.L39:
+ 338:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   {
+ 339:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****     __io_putchar(*ptr++);
+ 798              		.loc 1 339 5 is_stmt 1 view .LVU181
+ 799              		.loc 1 339 22 is_stmt 0 view .LVU182
+ 800 0008 4D1C     		adds	r5, r1, #1
+ 801              	.LVL50:
+ 802              		.loc 1 339 18 view .LVU183
+ 803 000a 0878     		ldrb	r0, [r1]
+ 804              		.loc 1 339 5 view .LVU184
+ 805 000c FFF7FEFF 		bl	__io_putchar
+ 806              	.LVL51:
+ 337:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   for (DataIdx=0;DataIdx<len;DataIdx++)
+ 807              		.loc 1 337 37 is_stmt 1 discriminator 3 view .LVU185
+ 808 0010 0134     		adds	r4, r4, #1
+ 809              	.LVL52:
+ 810              		.loc 1 339 22 is_stmt 0 view .LVU186
+ 811 0012 2900     		movs	r1, r5
+ 812              	.LVL53:
+ 813              	.L38:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 21
+
+
+ 337:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   for (DataIdx=0;DataIdx<len;DataIdx++)
+ 814              		.loc 1 337 25 is_stmt 1 discriminator 1 view .LVU187
+ 815 0014 B442     		cmp	r4, r6
+ 816 0016 F7DB     		blt	.L39
+ 340:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   }
+ 341:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c ****   return len;
+ 817              		.loc 1 341 3 view .LVU188
+ 342:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Start_Kit/py32f002bxx_Start_Kit.c **** }
+ 818              		.loc 1 342 1 is_stmt 0 view .LVU189
+ 819 0018 3000     		movs	r0, r6
+ 820              		@ sp needed
+ 821              	.LVL54:
+ 822              	.LVL55:
+ 823              		.loc 1 342 1 view .LVU190
+ 824 001a 70BD     		pop	{r4, r5, r6, pc}
+ 825              		.cfi_endproc
+ 826              	.LFE48:
+ 828              		.global	BUTTON_IRQn
+ 829              		.section	.rodata.BUTTON_IRQn,"a"
+ 830              		.align	2
+ 833              	BUTTON_IRQn:
+ 834 0000 05       		.ascii	"\005"
+ 835              		.global	BUTTON_PIN
+ 836              		.section	.rodata.BUTTON_PIN,"a"
+ 837              		.align	2
+ 840              	BUTTON_PIN:
+ 841 0000 0100     		.short	1
+ 842              		.global	BUTTON_PORT
+ 843              		.section	.data.BUTTON_PORT,"aw"
+ 844              		.align	2
+ 847              	BUTTON_PORT:
+ 848 0000 00000050 		.word	1342177280
+ 849              		.global	LED_PIN
+ 850              		.section	.rodata.LED_PIN,"a"
+ 851              		.align	2
+ 854              	LED_PIN:
+ 855 0000 0200     		.short	2
+ 856              		.global	LED_PORT
+ 857              		.section	.data.LED_PORT,"aw"
+ 858              		.align	2
+ 861              	LED_PORT:
+ 862 0000 00000050 		.word	1342177280
+ 863              		.global	DebugUartHandle
+ 864              		.section	.bss.DebugUartHandle,"aw",%nobits
+ 865              		.align	2
+ 868              	DebugUartHandle:
+ 869 0000 00000000 		.space	68
+ 869      00000000 
+ 869      00000000 
+ 869      00000000 
+ 869      00000000 
+ 870              		.text
+ 871              	.Letext0:
+ 872              		.file 2 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/CMSIS/Device/PY32F0x
+ 873              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 874              		.file 4 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 875              		.file 5 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/lib/gcc/arm-none-eabi/14
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 22
+
+
+ 876              		.file 6 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 877              		.file 7 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 878              		.file 8 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 879              		.file 9 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/st
+ 880              		.file 10 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Drive
+ 881              		.file 11 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Drive
+ 882              		.file 12 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Drive
+ 883              		.file 13 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/BSP/PY32F002Bxx_Sta
+ 884              		.file 14 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Drive
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 py32f002bxx_Start_Kit.c
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:19     .text.BSP_GetVersion:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:25     .text.BSP_GetVersion:00000000 BSP_GetVersion
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:43     .text.BSP_LED_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:49     .text.BSP_LED_Init:00000000 BSP_LED_Init
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:122    .text.BSP_LED_Init:0000003c $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:861    .data.LED_PORT:00000000 LED_PORT
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:128    .text.BSP_LED_DeInit:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:134    .text.BSP_LED_DeInit:00000000 BSP_LED_DeInit
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:178    .text.BSP_LED_DeInit:00000024 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:183    .text.BSP_LED_On:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:189    .text.BSP_LED_On:00000000 BSP_LED_On
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:218    .text.BSP_LED_On:00000014 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:223    .text.BSP_LED_Off:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:229    .text.BSP_LED_Off:00000000 BSP_LED_Off
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:258    .text.BSP_LED_Off:00000014 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:263    .text.BSP_LED_Toggle:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:269    .text.BSP_LED_Toggle:00000000 BSP_LED_Toggle
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:297    .text.BSP_LED_Toggle:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:302    .text.BSP_PB_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:308    .text.BSP_PB_Init:00000000 BSP_PB_Init
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:430    .text.BSP_PB_Init:0000006c $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:847    .data.BUTTON_PORT:00000000 BUTTON_PORT
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:437    .text.BSP_PB_DeInit:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:443    .text.BSP_PB_DeInit:00000000 BSP_PB_DeInit
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:487    .text.BSP_PB_DeInit:00000020 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:492    .text.BSP_PB_GetState:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:498    .text.BSP_PB_GetState:00000000 BSP_PB_GetState
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:530    .text.BSP_PB_GetState:00000014 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:535    .text.BSP_USART_Config:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:541    .text.BSP_USART_Config:00000000 BSP_USART_Config
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:709    .text.BSP_USART_Config:000000a8 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:868    .bss.DebugUartHandle:00000000 DebugUartHandle
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:718    .text.__io_putchar:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:724    .text.__io_putchar:00000000 __io_putchar
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:762    .text.__io_putchar:0000001c $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:767    .text._write:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:773    .text._write:00000000 _write
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:833    .rodata.BUTTON_IRQn:00000000 BUTTON_IRQn
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:830    .rodata.BUTTON_IRQn:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:840    .rodata.BUTTON_PIN:00000000 BUTTON_PIN
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:837    .rodata.BUTTON_PIN:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:844    .data.BUTTON_PORT:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:854    .rodata.LED_PIN:00000000 LED_PIN
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:851    .rodata.LED_PIN:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:858    .data.LED_PORT:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s:865    .bss.DebugUartHandle:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GPIO_DeInit
+HAL_GPIO_TogglePin
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_NVIC_DisableIRQ
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccnb7vOA.s 			page 24
+
+
+HAL_GPIO_ReadPin
+setvbuf
+HAL_UART_Init
+_impure_ptr
+HAL_UART_Transmit

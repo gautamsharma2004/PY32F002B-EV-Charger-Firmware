@@ -1,0 +1,1151 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"soc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../Src/soc.c"
+  18              		.section	.text.InterpolateSOC,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	InterpolateSOC:
+  25              	.LVL0:
+  26              	.LFB0:
+   1:../Src/soc.c  **** #include "soc.h"
+   2:../Src/soc.c  **** #include "charger_sm.h"
+   3:../Src/soc.c  **** #include <string.h>
+   4:../Src/soc.c  **** 
+   5:../Src/soc.c  **** /* =====================================================
+   6:../Src/soc.c  ****    SOC Lookup Table
+   7:../Src/soc.c  ****    ===================================================== */
+   8:../Src/soc.c  **** 
+   9:../Src/soc.c  **** static const uint16_t soc_voltage_table[SOC_LOOKUP_SIZE][2] = {
+  10:../Src/soc.c  ****     {650,  0},      // SOC  0% = 65.0% of VSET
+  11:../Src/soc.c  ****     {803,  5},
+  12:../Src/soc.c  ****     {826,  10},
+  13:../Src/soc.c  ****     {849,  15},
+  14:../Src/soc.c  ****     {872,  20},
+  15:../Src/soc.c  ****     {895,  25},
+  16:../Src/soc.c  ****     {900,  30},
+  17:../Src/soc.c  ****     {905,  35},
+  18:../Src/soc.c  ****     {910,  40},
+  19:../Src/soc.c  ****     {915,  45},
+  20:../Src/soc.c  ****     {920,  50},
+  21:../Src/soc.c  ****     {925,  55},
+  22:../Src/soc.c  ****     {930,  60},
+  23:../Src/soc.c  ****     {935,  65},
+  24:../Src/soc.c  ****     {940,  70},
+  25:../Src/soc.c  ****     {945,  75},
+  26:../Src/soc.c  ****     {956,  80},
+  27:../Src/soc.c  ****     {967,  85},
+  28:../Src/soc.c  ****     {978,  90},
+  29:../Src/soc.c  ****     {989,  95},
+  30:../Src/soc.c  ****     {1000, 100},    // SOC 100% = 100.0% of VSET
+  31:../Src/soc.c  **** };
+  32:../Src/soc.c  **** 
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 2
+
+
+  33:../Src/soc.c  **** /* =====================================================
+  34:../Src/soc.c  ****    Static Module State
+  35:../Src/soc.c  ****    ===================================================== */
+  36:../Src/soc.c  **** 
+  37:../Src/soc.c  **** static SOCConfig_t g_config;
+  38:../Src/soc.c  **** 
+  39:../Src/soc.c  **** typedef struct {
+  40:../Src/soc.c  ****     uint8_t display_soc;           // Displayed SOC (0-100%, qualified)
+  41:../Src/soc.c  ****     uint16_t raw_soc;              // Raw calculated SOC (for debug)
+  42:../Src/soc.c  ****     uint16_t last_voltage_percent; // Voltage % at last calculation
+  43:../Src/soc.c  ****     
+  44:../Src/soc.c  ****     bool is_qualified;             // Display is stable for 60 seconds
+  45:../Src/soc.c  ****     uint16_t qualification_timer;  // Deciseconds in current bracket
+  46:../Src/soc.c  ****     uint8_t last_bracket;          // Last SOC bracket for hysteresis
+  47:../Src/soc.c  ****     
+  48:../Src/soc.c  ****     bool bracket_changed;          // Set when SOC bracket changes
+  49:../Src/soc.c  ****     
+  50:../Src/soc.c  ****     uint8_t last_stable_soc;       // Tracks confirmed SOC for increment limits
+  51:../Src/soc.c  ****     uint8_t candidate_soc;         // Active target SOC waiting for 60s qualification
+  52:../Src/soc.c  **** } SOCRuntime_t;
+  53:../Src/soc.c  **** 
+  54:../Src/soc.c  **** static SOCRuntime_t g_runtime;
+  55:../Src/soc.c  **** 
+  56:../Src/soc.c  **** /* =====================================================
+  57:../Src/soc.c  ****    Interpolation Helper
+  58:../Src/soc.c  ****    ===================================================== */
+  59:../Src/soc.c  **** 
+  60:../Src/soc.c  **** static uint8_t InterpolateSOC(
+  61:../Src/soc.c  ****     uint16_t lower_volt_x10,
+  62:../Src/soc.c  ****     uint8_t  lower_soc,
+  63:../Src/soc.c  ****     uint16_t upper_volt_x10,
+  64:../Src/soc.c  ****     uint8_t  upper_soc,
+  65:../Src/soc.c  ****     uint16_t target_volt_x10
+  66:../Src/soc.c  **** )
+  67:../Src/soc.c  **** {
+  27              		.loc 1 67 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 4, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 67 1 is_stmt 0 view .LVU1
+  32 0000 70B5     		push	{r4, r5, r6, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 4, -16
+  36              		.cfi_offset 5, -12
+  37              		.cfi_offset 6, -8
+  38              		.cfi_offset 14, -4
+  39 0002 0500     		movs	r5, r0
+  40 0004 0C00     		movs	r4, r1
+  41 0006 04A9     		add	r1, sp, #16
+  42              	.LVL1:
+  43              		.loc 1 67 1 view .LVU2
+  44 0008 0E88     		ldrh	r6, [r1]
+  68:../Src/soc.c  ****     if (target_volt_x10 <= lower_volt_x10) return lower_soc;
+  45              		.loc 1 68 5 is_stmt 1 view .LVU3
+  46              		.loc 1 68 8 is_stmt 0 view .LVU4
+  47 000a 8642     		cmp	r6, r0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 3
+
+
+  48 000c 0ED9     		bls	.L3
+  69:../Src/soc.c  ****     if (target_volt_x10 >= upper_volt_x10) return upper_soc;
+  49              		.loc 1 69 5 is_stmt 1 view .LVU5
+  50              		.loc 1 69 8 is_stmt 0 view .LVU6
+  51 000e 9642     		cmp	r6, r2
+  52 0010 0ED2     		bcs	.L4
+  70:../Src/soc.c  ****     
+  71:../Src/soc.c  ****     uint16_t volt_range = upper_volt_x10 - lower_volt_x10;
+  53              		.loc 1 71 5 is_stmt 1 view .LVU7
+  54              		.loc 1 71 14 is_stmt 0 view .LVU8
+  55 0012 121A     		subs	r2, r2, r0
+  56              	.LVL2:
+  57              		.loc 1 71 14 view .LVU9
+  58 0014 91B2     		uxth	r1, r2
+  59              	.LVL3:
+  72:../Src/soc.c  ****     uint16_t soc_range = upper_soc - lower_soc;
+  60              		.loc 1 72 5 is_stmt 1 view .LVU10
+  61              		.loc 1 72 14 is_stmt 0 view .LVU11
+  62 0016 1B1B     		subs	r3, r3, r4
+  63              	.LVL4:
+  64              		.loc 1 72 14 view .LVU12
+  65 0018 98B2     		uxth	r0, r3
+  66              	.LVL5:
+  73:../Src/soc.c  ****     uint16_t volt_offset = target_volt_x10 - lower_volt_x10;
+  67              		.loc 1 73 5 is_stmt 1 view .LVU13
+  68              		.loc 1 73 14 is_stmt 0 view .LVU14
+  69 001a 761B     		subs	r6, r6, r5
+  70 001c B6B2     		uxth	r6, r6
+  71              	.LVL6:
+  74:../Src/soc.c  ****     
+  75:../Src/soc.c  ****     uint16_t interp = lower_soc + (volt_offset * soc_range) / volt_range;
+  72              		.loc 1 75 5 is_stmt 1 view .LVU15
+  73              		.loc 1 75 48 is_stmt 0 view .LVU16
+  74 001e 7043     		muls	r0, r6
+  75              	.LVL7:
+  76              		.loc 1 75 61 view .LVU17
+  77 0020 FFF7FEFF 		bl	__aeabi_idiv
+  78              	.LVL8:
+  79              		.loc 1 75 33 view .LVU18
+  80 0024 80B2     		uxth	r0, r0
+  81              		.loc 1 75 14 view .LVU19
+  82 0026 2018     		adds	r0, r4, r0
+  83              	.LVL9:
+  76:../Src/soc.c  ****     return (uint8_t)interp;
+  84              		.loc 1 76 5 is_stmt 1 view .LVU20
+  85              		.loc 1 76 12 is_stmt 0 view .LVU21
+  86 0028 C0B2     		uxtb	r0, r0
+  87              	.LVL10:
+  88              	.L2:
+  77:../Src/soc.c  **** }
+  89              		.loc 1 77 1 view .LVU22
+  90              		@ sp needed
+  91              	.LVL11:
+  92              	.LVL12:
+  93              		.loc 1 77 1 view .LVU23
+  94 002a 70BD     		pop	{r4, r5, r6, pc}
+  95              	.LVL13:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 4
+
+
+  96              	.L3:
+  68:../Src/soc.c  ****     if (target_volt_x10 >= upper_volt_x10) return upper_soc;
+  97              		.loc 1 68 51 discriminator 1 view .LVU24
+  98 002c 2000     		movs	r0, r4
+  99              	.LVL14:
+  68:../Src/soc.c  ****     if (target_volt_x10 >= upper_volt_x10) return upper_soc;
+ 100              		.loc 1 68 51 discriminator 1 view .LVU25
+ 101 002e FCE7     		b	.L2
+ 102              	.LVL15:
+ 103              	.L4:
+  69:../Src/soc.c  ****     
+ 104              		.loc 1 69 51 discriminator 1 view .LVU26
+ 105 0030 1800     		movs	r0, r3
+ 106              	.LVL16:
+  69:../Src/soc.c  ****     
+ 107              		.loc 1 69 51 discriminator 1 view .LVU27
+ 108 0032 FAE7     		b	.L2
+ 109              		.cfi_endproc
+ 110              	.LFE0:
+ 112              		.section	.text.CalculateRawSOC,"ax",%progbits
+ 113              		.align	1
+ 114              		.syntax unified
+ 115              		.code	16
+ 116              		.thumb_func
+ 118              	CalculateRawSOC:
+ 119              	.LVL17:
+ 120              	.LFB1:
+  78:../Src/soc.c  **** 
+  79:../Src/soc.c  **** static uint8_t CalculateRawSOC(uint32_t vbat_mv, uint32_t vset_mv)
+  80:../Src/soc.c  **** {
+ 121              		.loc 1 80 1 is_stmt 1 view -0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125              		.loc 1 80 1 is_stmt 0 view .LVU29
+ 126 0000 70B5     		push	{r4, r5, r6, lr}
+ 127              	.LCFI1:
+ 128              		.cfi_def_cfa_offset 16
+ 129              		.cfi_offset 4, -16
+ 130              		.cfi_offset 5, -12
+ 131              		.cfi_offset 6, -8
+ 132              		.cfi_offset 14, -4
+ 133 0002 82B0     		sub	sp, sp, #8
+ 134              	.LCFI2:
+ 135              		.cfi_def_cfa_offset 24
+  81:../Src/soc.c  ****     uint32_t voltage_percent_x10 = ((uint32_t)vbat_mv * 1000) / vset_mv;
+ 136              		.loc 1 81 5 is_stmt 1 view .LVU30
+ 137              		.loc 1 81 55 is_stmt 0 view .LVU31
+ 138 0004 4301     		lsls	r3, r0, #5
+ 139 0006 1B1A     		subs	r3, r3, r0
+ 140 0008 9B00     		lsls	r3, r3, #2
+ 141 000a 1818     		adds	r0, r3, r0
+ 142              	.LVL18:
+ 143              		.loc 1 81 55 view .LVU32
+ 144 000c C000     		lsls	r0, r0, #3
+ 145              		.loc 1 81 14 view .LVU33
+ 146 000e FFF7FEFF 		bl	__aeabi_uidiv
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 5
+
+
+ 147              	.LVL19:
+ 148              		.loc 1 81 14 view .LVU34
+ 149 0012 0500     		movs	r5, r0
+ 150              	.LVL20:
+  82:../Src/soc.c  ****     
+  83:../Src/soc.c  ****     if (voltage_percent_x10 <= soc_voltage_table[0][0]) return 0;
+ 151              		.loc 1 83 5 is_stmt 1 view .LVU35
+ 152              		.loc 1 83 8 is_stmt 0 view .LVU36
+ 153 0014 124B     		ldr	r3, .L14
+ 154 0016 9842     		cmp	r0, r3
+ 155 0018 1CD9     		bls	.L9
+  84:../Src/soc.c  ****     if (voltage_percent_x10 >= soc_voltage_table[SOC_LOOKUP_SIZE-1][0]) return 100;
+ 156              		.loc 1 84 5 is_stmt 1 view .LVU37
+ 157              		.loc 1 84 8 is_stmt 0 view .LVU38
+ 158 001a 5F33     		adds	r3, r3, #95
+ 159 001c FF33     		adds	r3, r3, #255
+ 160 001e 9842     		cmp	r0, r3
+ 161 0020 1BD2     		bcs	.L10
+ 162              	.LBB2:
+  85:../Src/soc.c  ****     
+  86:../Src/soc.c  ****     for (int i = 0; i < SOC_LOOKUP_SIZE - 1; i++) {
+ 163              		.loc 1 86 14 view .LVU39
+ 164 0022 0022     		movs	r2, #0
+ 165              	.LVL21:
+ 166              	.L7:
+ 167              		.loc 1 86 23 is_stmt 1 discriminator 1 view .LVU40
+ 168 0024 132A     		cmp	r2, #19
+ 169 0026 13DC     		bgt	.L13
+ 170              	.LBB3:
+  87:../Src/soc.c  ****         uint16_t lower_volt = soc_voltage_table[i][0];
+ 171              		.loc 1 87 9 view .LVU41
+ 172              		.loc 1 87 18 is_stmt 0 view .LVU42
+ 173 0028 0E4B     		ldr	r3, .L14+4
+ 174 002a 9100     		lsls	r1, r2, #2
+ 175 002c C85A     		ldrh	r0, [r1, r3]
+ 176              	.LVL22:
+  88:../Src/soc.c  ****         uint16_t upper_volt = soc_voltage_table[i+1][0];
+ 177              		.loc 1 88 9 is_stmt 1 view .LVU43
+ 178              		.loc 1 88 50 is_stmt 0 view .LVU44
+ 179 002e 0132     		adds	r2, r2, #1
+ 180              	.LVL23:
+ 181              		.loc 1 88 18 view .LVU45
+ 182 0030 9400     		lsls	r4, r2, #2
+ 183 0032 E65A     		ldrh	r6, [r4, r3]
+ 184              	.LVL24:
+  89:../Src/soc.c  ****         uint8_t  lower_soc  = soc_voltage_table[i][1];
+ 185              		.loc 1 89 9 is_stmt 1 view .LVU46
+ 186              		.loc 1 89 51 is_stmt 0 view .LVU47
+ 187 0034 5918     		adds	r1, r3, r1
+ 188              		.loc 1 89 18 view .LVU48
+ 189 0036 8978     		ldrb	r1, [r1, #2]
+ 190              	.LVL25:
+  90:../Src/soc.c  ****         uint8_t  upper_soc  = soc_voltage_table[i+1][1];
+ 191              		.loc 1 90 9 is_stmt 1 view .LVU49
+ 192              		.loc 1 90 53 is_stmt 0 view .LVU50
+ 193 0038 1B19     		adds	r3, r3, r4
+ 194              		.loc 1 90 18 view .LVU51
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 6
+
+
+ 195 003a 9B78     		ldrb	r3, [r3, #2]
+ 196              	.LVL26:
+  91:../Src/soc.c  ****         
+  92:../Src/soc.c  ****         if (voltage_percent_x10 >= lower_volt && voltage_percent_x10 <= upper_volt) {
+ 197              		.loc 1 92 9 is_stmt 1 view .LVU52
+ 198              		.loc 1 92 12 is_stmt 0 view .LVU53
+ 199 003c A842     		cmp	r0, r5
+ 200 003e F1D8     		bhi	.L7
+ 201              		.loc 1 92 47 discriminator 1 view .LVU54
+ 202 0040 AE42     		cmp	r6, r5
+ 203 0042 EFD3     		bcc	.L7
+  93:../Src/soc.c  ****             return InterpolateSOC(lower_volt, lower_soc,
+ 204              		.loc 1 93 13 is_stmt 1 view .LVU55
+ 205              		.loc 1 93 20 is_stmt 0 view .LVU56
+ 206 0044 ADB2     		uxth	r5, r5
+ 207              	.LVL27:
+ 208              		.loc 1 93 20 view .LVU57
+ 209 0046 0095     		str	r5, [sp]
+ 210 0048 3200     		movs	r2, r6
+ 211              	.LVL28:
+ 212              		.loc 1 93 20 view .LVU58
+ 213 004a FFF7FEFF 		bl	InterpolateSOC
+ 214              	.LVL29:
+ 215              		.loc 1 93 20 view .LVU59
+ 216 004e 02E0     		b	.L6
+ 217              	.LVL30:
+ 218              	.L13:
+ 219              		.loc 1 93 20 view .LVU60
+ 220              	.LBE3:
+ 221              	.LBE2:
+  94:../Src/soc.c  ****                                  upper_volt, upper_soc,
+  95:../Src/soc.c  ****                                  voltage_percent_x10);
+  96:../Src/soc.c  ****         }
+  97:../Src/soc.c  ****     }
+  98:../Src/soc.c  ****     return 0; 
+ 222              		.loc 1 98 12 view .LVU61
+ 223 0050 0020     		movs	r0, #0
+ 224              	.LBB4:
+ 225 0052 00E0     		b	.L6
+ 226              	.LVL31:
+ 227              	.L9:
+ 228              		.loc 1 98 12 view .LVU62
+ 229              	.LBE4:
+  83:../Src/soc.c  ****     if (voltage_percent_x10 >= soc_voltage_table[SOC_LOOKUP_SIZE-1][0]) return 100;
+ 230              		.loc 1 83 64 discriminator 1 view .LVU63
+ 231 0054 0020     		movs	r0, #0
+ 232              	.LVL32:
+ 233              	.L6:
+  99:../Src/soc.c  **** }
+ 234              		.loc 1 99 1 view .LVU64
+ 235 0056 02B0     		add	sp, sp, #8
+ 236              		@ sp needed
+ 237 0058 70BD     		pop	{r4, r5, r6, pc}
+ 238              	.LVL33:
+ 239              	.L10:
+  84:../Src/soc.c  ****     
+ 240              		.loc 1 84 80 discriminator 1 view .LVU65
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 7
+
+
+ 241 005a 6420     		movs	r0, #100
+ 242              	.LVL34:
+  84:../Src/soc.c  ****     
+ 243              		.loc 1 84 80 discriminator 1 view .LVU66
+ 244 005c FBE7     		b	.L6
+ 245              	.L15:
+ 246 005e C046     		.align	2
+ 247              	.L14:
+ 248 0060 8A020000 		.word	650
+ 249 0064 00000000 		.word	soc_voltage_table
+ 250              		.cfi_endproc
+ 251              	.LFE1:
+ 253              		.section	.text.SOC_Init,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	SOC_Init
+ 256              		.syntax unified
+ 257              		.code	16
+ 258              		.thumb_func
+ 260              	SOC_Init:
+ 261              	.LVL35:
+ 262              	.LFB2:
+ 100:../Src/soc.c  **** 
+ 101:../Src/soc.c  **** /* =====================================================
+ 102:../Src/soc.c  ****    Public API Implementation
+ 103:../Src/soc.c  ****    ===================================================== */
+ 104:../Src/soc.c  **** 
+ 105:../Src/soc.c  **** void SOC_Init(SOCConfig_t *cfg)
+ 106:../Src/soc.c  **** {
+ 263              		.loc 1 106 1 is_stmt 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267              		.loc 1 106 1 is_stmt 0 view .LVU68
+ 268 0000 10B5     		push	{r4, lr}
+ 269              	.LCFI3:
+ 270              		.cfi_def_cfa_offset 8
+ 271              		.cfi_offset 4, -8
+ 272              		.cfi_offset 14, -4
+ 273 0002 011E     		subs	r1, r0, #0
+ 107:../Src/soc.c  ****     if (!cfg) return;
+ 274              		.loc 1 107 5 is_stmt 1 view .LVU69
+ 275              		.loc 1 107 8 is_stmt 0 view .LVU70
+ 276 0004 16D0     		beq	.L16
+ 108:../Src/soc.c  ****     
+ 109:../Src/soc.c  ****     memcpy(&g_config, cfg, sizeof(SOCConfig_t));
+ 277              		.loc 1 109 5 is_stmt 1 view .LVU71
+ 278 0006 0C4C     		ldr	r4, .L19
+ 279 0008 0822     		movs	r2, #8
+ 280 000a 2000     		movs	r0, r4
+ 281              	.LVL36:
+ 282              		.loc 1 109 5 is_stmt 0 view .LVU72
+ 283 000c FFF7FEFF 		bl	memcpy
+ 284              	.LVL37:
+ 110:../Src/soc.c  ****     
+ 111:../Src/soc.c  ****     if (g_config.hysteresis_pct == 0)
+ 285              		.loc 1 111 5 is_stmt 1 view .LVU73
+ 286              		.loc 1 111 17 is_stmt 0 view .LVU74
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 8
+
+
+ 287 0010 2379     		ldrb	r3, [r4, #4]
+ 288              		.loc 1 111 8 view .LVU75
+ 289 0012 002B     		cmp	r3, #0
+ 290 0014 02D1     		bne	.L18
+ 112:../Src/soc.c  ****         g_config.hysteresis_pct = 2;
+ 291              		.loc 1 112 9 is_stmt 1 view .LVU76
+ 292              		.loc 1 112 33 is_stmt 0 view .LVU77
+ 293 0016 084B     		ldr	r3, .L19
+ 294 0018 0222     		movs	r2, #2
+ 295 001a 1A71     		strb	r2, [r3, #4]
+ 296              	.L18:
+ 113:../Src/soc.c  ****     
+ 114:../Src/soc.c  ****     g_runtime.display_soc = 0;
+ 297              		.loc 1 114 5 is_stmt 1 view .LVU78
+ 298              		.loc 1 114 27 is_stmt 0 view .LVU79
+ 299 001c 074B     		ldr	r3, .L19+4
+ 300 001e 0021     		movs	r1, #0
+ 301 0020 1970     		strb	r1, [r3]
+ 115:../Src/soc.c  ****     g_runtime.raw_soc = 0;
+ 302              		.loc 1 115 5 is_stmt 1 view .LVU80
+ 303              		.loc 1 115 23 is_stmt 0 view .LVU81
+ 304 0022 0022     		movs	r2, #0
+ 305 0024 5980     		strh	r1, [r3, #2]
+ 116:../Src/soc.c  ****     g_runtime.last_voltage_percent = 0;
+ 306              		.loc 1 116 5 is_stmt 1 view .LVU82
+ 307              		.loc 1 116 36 is_stmt 0 view .LVU83
+ 308 0026 9980     		strh	r1, [r3, #4]
+ 117:../Src/soc.c  ****     g_runtime.is_qualified = false;
+ 309              		.loc 1 117 5 is_stmt 1 view .LVU84
+ 310              		.loc 1 117 28 is_stmt 0 view .LVU85
+ 311 0028 9A71     		strb	r2, [r3, #6]
+ 118:../Src/soc.c  ****     g_runtime.qualification_timer = 0;
+ 312              		.loc 1 118 5 is_stmt 1 view .LVU86
+ 313              		.loc 1 118 35 is_stmt 0 view .LVU87
+ 314 002a 1981     		strh	r1, [r3, #8]
+ 119:../Src/soc.c  ****     g_runtime.last_bracket = 0;
+ 315              		.loc 1 119 5 is_stmt 1 view .LVU88
+ 316              		.loc 1 119 28 is_stmt 0 view .LVU89
+ 317 002c 9A72     		strb	r2, [r3, #10]
+ 120:../Src/soc.c  ****     g_runtime.bracket_changed = false;
+ 318              		.loc 1 120 5 is_stmt 1 view .LVU90
+ 319              		.loc 1 120 31 is_stmt 0 view .LVU91
+ 320 002e DA72     		strb	r2, [r3, #11]
+ 121:../Src/soc.c  ****     
+ 122:../Src/soc.c  ****     // Initialize new fields
+ 123:../Src/soc.c  ****     g_runtime.last_stable_soc = 0;
+ 321              		.loc 1 123 5 is_stmt 1 view .LVU92
+ 322              		.loc 1 123 31 is_stmt 0 view .LVU93
+ 323 0030 1A73     		strb	r2, [r3, #12]
+ 124:../Src/soc.c  ****     g_runtime.candidate_soc = 0;
+ 324              		.loc 1 124 5 is_stmt 1 view .LVU94
+ 325              		.loc 1 124 29 is_stmt 0 view .LVU95
+ 326 0032 5A73     		strb	r2, [r3, #13]
+ 327              	.L16:
+ 125:../Src/soc.c  **** }
+ 328              		.loc 1 125 1 view .LVU96
+ 329              		@ sp needed
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 9
+
+
+ 330 0034 10BD     		pop	{r4, pc}
+ 331              	.L20:
+ 332 0036 C046     		.align	2
+ 333              	.L19:
+ 334 0038 00000000 		.word	g_config
+ 335 003c 00000000 		.word	g_runtime
+ 336              		.cfi_endproc
+ 337              	.LFE2:
+ 339              		.section	.text.SOC_Update,"ax",%progbits
+ 340              		.align	1
+ 341              		.global	SOC_Update
+ 342              		.syntax unified
+ 343              		.code	16
+ 344              		.thumb_func
+ 346              	SOC_Update:
+ 347              	.LVL38:
+ 348              	.LFB3:
+ 126:../Src/soc.c  **** 
+ 127:../Src/soc.c  **** void SOC_Update(uint32_t vbat_mv)
+ 128:../Src/soc.c  **** {
+ 349              		.loc 1 128 1 is_stmt 1 view -0
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 0
+ 352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353              		.loc 1 128 1 is_stmt 0 view .LVU98
+ 354 0000 10B5     		push	{r4, lr}
+ 355              	.LCFI4:
+ 356              		.cfi_def_cfa_offset 8
+ 357              		.cfi_offset 4, -8
+ 358              		.cfi_offset 14, -4
+ 129:../Src/soc.c  ****     // Calculate raw target SOC based on the defined lookup table
+ 130:../Src/soc.c  ****     uint8_t target_soc = CalculateRawSOC(vbat_mv, g_config.vset);
+ 359              		.loc 1 130 5 is_stmt 1 view .LVU99
+ 360              		.loc 1 130 26 is_stmt 0 view .LVU100
+ 361 0002 174B     		ldr	r3, .L28
+ 362 0004 1968     		ldr	r1, [r3]
+ 363 0006 FFF7FEFF 		bl	CalculateRawSOC
+ 364              	.LVL39:
+ 131:../Src/soc.c  ****     
+ 132:../Src/soc.c  ****     // Require voltage to remain continuously above threshold for 60 seconds
+ 133:../Src/soc.c  ****     if (target_soc > g_runtime.last_stable_soc) {
+ 365              		.loc 1 133 5 is_stmt 1 view .LVU101
+ 366              		.loc 1 133 31 is_stmt 0 view .LVU102
+ 367 000a 164A     		ldr	r2, .L28+4
+ 368 000c 127B     		ldrb	r2, [r2, #12]
+ 369              		.loc 1 133 8 view .LVU103
+ 370 000e 8242     		cmp	r2, r0
+ 371 0010 07D2     		bcs	.L21
+ 134:../Src/soc.c  ****         if (target_soc == g_runtime.candidate_soc) {
+ 372              		.loc 1 134 9 is_stmt 1 view .LVU104
+ 373              		.loc 1 134 36 is_stmt 0 view .LVU105
+ 374 0012 1449     		ldr	r1, .L28+4
+ 375 0014 497B     		ldrb	r1, [r1, #13]
+ 376              		.loc 1 134 12 view .LVU106
+ 377 0016 8142     		cmp	r1, r0
+ 378 0018 04D0     		beq	.L27
+ 135:../Src/soc.c  ****             g_runtime.qualification_timer++;
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 10
+
+
+ 136:../Src/soc.c  ****             
+ 137:../Src/soc.c  ****             // 600 deciseconds = 60 seconds
+ 138:../Src/soc.c  ****             if (g_runtime.qualification_timer >= 600) {
+ 139:../Src/soc.c  ****                 
+ 140:../Src/soc.c  ****                 // Maximum increment limit = 5%
+ 141:../Src/soc.c  ****                 uint8_t increment = target_soc - g_runtime.last_stable_soc;
+ 142:../Src/soc.c  ****                 if (increment > 5) {
+ 143:../Src/soc.c  ****                     g_runtime.last_stable_soc += 5;
+ 144:../Src/soc.c  ****                 } else {
+ 145:../Src/soc.c  ****                     g_runtime.last_stable_soc = target_soc;
+ 146:../Src/soc.c  ****                 }
+ 147:../Src/soc.c  ****                 
+ 148:../Src/soc.c  ****                 // Downward transition lock (SOC never decreases during charging)
+ 149:../Src/soc.c  ****                 if (g_runtime.last_stable_soc > g_runtime.display_soc) {
+ 150:../Src/soc.c  ****                     g_runtime.display_soc = g_runtime.last_stable_soc;
+ 151:../Src/soc.c  ****                 }
+ 152:../Src/soc.c  ****                 
+ 153:../Src/soc.c  ****                 g_runtime.qualification_timer = 0; // Reset for next bracket
+ 154:../Src/soc.c  ****             }
+ 155:../Src/soc.c  ****         } else {
+ 156:../Src/soc.c  ****             // Voltage fluctuated, reset qualification timer
+ 157:../Src/soc.c  ****             g_runtime.candidate_soc = target_soc;
+ 379              		.loc 1 157 13 is_stmt 1 view .LVU107
+ 380              		.loc 1 157 37 is_stmt 0 view .LVU108
+ 381 001a 124B     		ldr	r3, .L28+4
+ 382 001c 5873     		strb	r0, [r3, #13]
+ 158:../Src/soc.c  ****             g_runtime.qualification_timer = 0;
+ 383              		.loc 1 158 13 is_stmt 1 view .LVU109
+ 384              		.loc 1 158 43 is_stmt 0 view .LVU110
+ 385 001e 0022     		movs	r2, #0
+ 386 0020 1A81     		strh	r2, [r3, #8]
+ 387              	.L21:
+ 159:../Src/soc.c  ****         }
+ 160:../Src/soc.c  ****     }
+ 161:../Src/soc.c  **** }
+ 388              		.loc 1 161 1 view .LVU111
+ 389              		@ sp needed
+ 390 0022 10BD     		pop	{r4, pc}
+ 391              	.L27:
+ 135:../Src/soc.c  ****             
+ 392              		.loc 1 135 13 is_stmt 1 view .LVU112
+ 135:../Src/soc.c  ****             
+ 393              		.loc 1 135 22 is_stmt 0 view .LVU113
+ 394 0024 0F49     		ldr	r1, .L28+4
+ 395 0026 0B89     		ldrh	r3, [r1, #8]
+ 135:../Src/soc.c  ****             
+ 396              		.loc 1 135 42 view .LVU114
+ 397 0028 0133     		adds	r3, r3, #1
+ 398 002a 9BB2     		uxth	r3, r3
+ 399 002c 0B81     		strh	r3, [r1, #8]
+ 138:../Src/soc.c  ****                 
+ 400              		.loc 1 138 13 is_stmt 1 view .LVU115
+ 138:../Src/soc.c  ****                 
+ 401              		.loc 1 138 16 is_stmt 0 view .LVU116
+ 402 002e 9621     		movs	r1, #150
+ 403 0030 8900     		lsls	r1, r1, #2
+ 404 0032 8B42     		cmp	r3, r1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 11
+
+
+ 405 0034 F5D3     		bcc	.L21
+ 406              	.LBB5:
+ 141:../Src/soc.c  ****                 if (increment > 5) {
+ 407              		.loc 1 141 17 is_stmt 1 view .LVU117
+ 141:../Src/soc.c  ****                 if (increment > 5) {
+ 408              		.loc 1 141 25 is_stmt 0 view .LVU118
+ 409 0036 831A     		subs	r3, r0, r2
+ 410 0038 DBB2     		uxtb	r3, r3
+ 411              	.LVL40:
+ 142:../Src/soc.c  ****                     g_runtime.last_stable_soc += 5;
+ 412              		.loc 1 142 17 is_stmt 1 view .LVU119
+ 142:../Src/soc.c  ****                     g_runtime.last_stable_soc += 5;
+ 413              		.loc 1 142 20 is_stmt 0 view .LVU120
+ 414 003a 052B     		cmp	r3, #5
+ 415 003c 0DD9     		bls	.L24
+ 143:../Src/soc.c  ****                 } else {
+ 416              		.loc 1 143 21 is_stmt 1 view .LVU121
+ 143:../Src/soc.c  ****                 } else {
+ 417              		.loc 1 143 47 is_stmt 0 view .LVU122
+ 418 003e 094B     		ldr	r3, .L28+4
+ 419              	.LVL41:
+ 143:../Src/soc.c  ****                 } else {
+ 420              		.loc 1 143 47 view .LVU123
+ 421 0040 0532     		adds	r2, r2, #5
+ 422              	.LVL42:
+ 143:../Src/soc.c  ****                 } else {
+ 423              		.loc 1 143 47 view .LVU124
+ 424 0042 1A73     		strb	r2, [r3, #12]
+ 425              	.LVL43:
+ 426              	.L25:
+ 149:../Src/soc.c  ****                     g_runtime.display_soc = g_runtime.last_stable_soc;
+ 427              		.loc 1 149 17 is_stmt 1 view .LVU125
+ 149:../Src/soc.c  ****                     g_runtime.display_soc = g_runtime.last_stable_soc;
+ 428              		.loc 1 149 30 is_stmt 0 view .LVU126
+ 429 0044 074B     		ldr	r3, .L28+4
+ 430 0046 1A7B     		ldrb	r2, [r3, #12]
+ 149:../Src/soc.c  ****                     g_runtime.display_soc = g_runtime.last_stable_soc;
+ 431              		.loc 1 149 58 view .LVU127
+ 432 0048 1B78     		ldrb	r3, [r3]
+ 149:../Src/soc.c  ****                     g_runtime.display_soc = g_runtime.last_stable_soc;
+ 433              		.loc 1 149 20 view .LVU128
+ 434 004a 9A42     		cmp	r2, r3
+ 435 004c 01D9     		bls	.L26
+ 150:../Src/soc.c  ****                 }
+ 436              		.loc 1 150 21 is_stmt 1 view .LVU129
+ 150:../Src/soc.c  ****                 }
+ 437              		.loc 1 150 43 is_stmt 0 view .LVU130
+ 438 004e 054B     		ldr	r3, .L28+4
+ 439 0050 1A70     		strb	r2, [r3]
+ 440              	.L26:
+ 153:../Src/soc.c  ****             }
+ 441              		.loc 1 153 17 is_stmt 1 view .LVU131
+ 153:../Src/soc.c  ****             }
+ 442              		.loc 1 153 47 is_stmt 0 view .LVU132
+ 443 0052 044B     		ldr	r3, .L28+4
+ 444 0054 0022     		movs	r2, #0
+ 445 0056 1A81     		strh	r2, [r3, #8]
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 12
+
+
+ 446 0058 E3E7     		b	.L21
+ 447              	.LVL44:
+ 448              	.L24:
+ 145:../Src/soc.c  ****                 }
+ 449              		.loc 1 145 21 is_stmt 1 view .LVU133
+ 145:../Src/soc.c  ****                 }
+ 450              		.loc 1 145 47 is_stmt 0 view .LVU134
+ 451 005a 024B     		ldr	r3, .L28+4
+ 452              	.LVL45:
+ 145:../Src/soc.c  ****                 }
+ 453              		.loc 1 145 47 view .LVU135
+ 454 005c 1873     		strb	r0, [r3, #12]
+ 455 005e F1E7     		b	.L25
+ 456              	.L29:
+ 457              		.align	2
+ 458              	.L28:
+ 459 0060 00000000 		.word	g_config
+ 460 0064 00000000 		.word	g_runtime
+ 461              	.LBE5:
+ 462              		.cfi_endproc
+ 463              	.LFE3:
+ 465              		.section	.text.SOC_SetVset,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	SOC_SetVset
+ 468              		.syntax unified
+ 469              		.code	16
+ 470              		.thumb_func
+ 472              	SOC_SetVset:
+ 473              	.LVL46:
+ 474              	.LFB4:
+ 162:../Src/soc.c  **** 
+ 163:../Src/soc.c  **** void SOC_SetVset(uint32_t vset_mv)
+ 164:../Src/soc.c  **** {
+ 475              		.loc 1 164 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              		@ link register save eliminated.
+ 165:../Src/soc.c  ****     g_config.vset = vset_mv;
+ 480              		.loc 1 165 5 view .LVU137
+ 481              		.loc 1 165 19 is_stmt 0 view .LVU138
+ 482 0000 054B     		ldr	r3, .L31
+ 483 0002 1860     		str	r0, [r3]
+ 166:../Src/soc.c  ****     
+ 167:../Src/soc.c  ****     g_runtime.is_qualified = false;
+ 484              		.loc 1 167 5 is_stmt 1 view .LVU139
+ 485              		.loc 1 167 28 is_stmt 0 view .LVU140
+ 486 0004 054B     		ldr	r3, .L31+4
+ 487 0006 0022     		movs	r2, #0
+ 488 0008 9A71     		strb	r2, [r3, #6]
+ 168:../Src/soc.c  ****     g_runtime.qualification_timer = 0;
+ 489              		.loc 1 168 5 is_stmt 1 view .LVU141
+ 490              		.loc 1 168 35 is_stmt 0 view .LVU142
+ 491 000a 1A81     		strh	r2, [r3, #8]
+ 169:../Src/soc.c  ****     g_runtime.bracket_changed = true;
+ 492              		.loc 1 169 5 is_stmt 1 view .LVU143
+ 493              		.loc 1 169 31 is_stmt 0 view .LVU144
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 13
+
+
+ 494 000c 0132     		adds	r2, r2, #1
+ 495 000e DA72     		strb	r2, [r3, #11]
+ 170:../Src/soc.c  ****     
+ 171:../Src/soc.c  ****     // Ensure SOC resets correctly if VSET is dropped drastically
+ 172:../Src/soc.c  ****     g_runtime.last_stable_soc = 0;
+ 496              		.loc 1 172 5 is_stmt 1 view .LVU145
+ 497              		.loc 1 172 31 is_stmt 0 view .LVU146
+ 498 0010 0022     		movs	r2, #0
+ 499 0012 1A73     		strb	r2, [r3, #12]
+ 173:../Src/soc.c  ****     g_runtime.candidate_soc = 0;
+ 500              		.loc 1 173 5 is_stmt 1 view .LVU147
+ 501              		.loc 1 173 29 is_stmt 0 view .LVU148
+ 502 0014 5A73     		strb	r2, [r3, #13]
+ 174:../Src/soc.c  **** }
+ 503              		.loc 1 174 1 view .LVU149
+ 504              		@ sp needed
+ 505 0016 7047     		bx	lr
+ 506              	.L32:
+ 507              		.align	2
+ 508              	.L31:
+ 509 0018 00000000 		.word	g_config
+ 510 001c 00000000 		.word	g_runtime
+ 511              		.cfi_endproc
+ 512              	.LFE4:
+ 514              		.section	.text.SOC_GetDisplaySOC,"ax",%progbits
+ 515              		.align	1
+ 516              		.global	SOC_GetDisplaySOC
+ 517              		.syntax unified
+ 518              		.code	16
+ 519              		.thumb_func
+ 521              	SOC_GetDisplaySOC:
+ 522              	.LFB5:
+ 175:../Src/soc.c  **** 
+ 176:../Src/soc.c  **** uint8_t SOC_GetDisplaySOC(void)
+ 177:../Src/soc.c  **** {
+ 523              		.loc 1 177 1 is_stmt 1 view -0
+ 524              		.cfi_startproc
+ 525              		@ args = 0, pretend = 0, frame = 0
+ 526              		@ frame_needed = 0, uses_anonymous_args = 0
+ 527              		@ link register save eliminated.
+ 178:../Src/soc.c  ****     return g_runtime.display_soc;
+ 528              		.loc 1 178 5 view .LVU151
+ 529              		.loc 1 178 21 is_stmt 0 view .LVU152
+ 530 0000 014B     		ldr	r3, .L34
+ 531              		.loc 1 178 21 discriminator 1 view .LVU153
+ 532 0002 1878     		ldrb	r0, [r3]
+ 179:../Src/soc.c  **** }
+ 533              		.loc 1 179 1 view .LVU154
+ 534              		@ sp needed
+ 535 0004 7047     		bx	lr
+ 536              	.L35:
+ 537 0006 C046     		.align	2
+ 538              	.L34:
+ 539 0008 00000000 		.word	g_runtime
+ 540              		.cfi_endproc
+ 541              	.LFE5:
+ 543              		.section	.text.SOC_GetRawSOC,"ax",%progbits
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 14
+
+
+ 544              		.align	1
+ 545              		.global	SOC_GetRawSOC
+ 546              		.syntax unified
+ 547              		.code	16
+ 548              		.thumb_func
+ 550              	SOC_GetRawSOC:
+ 551              	.LFB6:
+ 180:../Src/soc.c  **** 
+ 181:../Src/soc.c  **** uint16_t SOC_GetRawSOC(void)
+ 182:../Src/soc.c  **** {
+ 552              		.loc 1 182 1 is_stmt 1 view -0
+ 553              		.cfi_startproc
+ 554              		@ args = 0, pretend = 0, frame = 0
+ 555              		@ frame_needed = 0, uses_anonymous_args = 0
+ 556              		@ link register save eliminated.
+ 183:../Src/soc.c  ****     return g_runtime.raw_soc;
+ 557              		.loc 1 183 5 view .LVU156
+ 558              		.loc 1 183 21 is_stmt 0 view .LVU157
+ 559 0000 014B     		ldr	r3, .L37
+ 560              		.loc 1 183 21 discriminator 1 view .LVU158
+ 561 0002 5888     		ldrh	r0, [r3, #2]
+ 184:../Src/soc.c  **** }
+ 562              		.loc 1 184 1 view .LVU159
+ 563              		@ sp needed
+ 564 0004 7047     		bx	lr
+ 565              	.L38:
+ 566 0006 C046     		.align	2
+ 567              	.L37:
+ 568 0008 00000000 		.word	g_runtime
+ 569              		.cfi_endproc
+ 570              	.LFE6:
+ 572              		.section	.text.SOC_IsQualified,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	SOC_IsQualified
+ 575              		.syntax unified
+ 576              		.code	16
+ 577              		.thumb_func
+ 579              	SOC_IsQualified:
+ 580              	.LFB7:
+ 185:../Src/soc.c  **** 
+ 186:../Src/soc.c  **** bool SOC_IsQualified(void)
+ 187:../Src/soc.c  **** {
+ 581              		.loc 1 187 1 is_stmt 1 view -0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585              		@ link register save eliminated.
+ 188:../Src/soc.c  ****     return g_runtime.is_qualified;
+ 586              		.loc 1 188 5 view .LVU161
+ 587              		.loc 1 188 21 is_stmt 0 view .LVU162
+ 588 0000 014B     		ldr	r3, .L40
+ 589              		.loc 1 188 21 discriminator 1 view .LVU163
+ 590 0002 9879     		ldrb	r0, [r3, #6]
+ 189:../Src/soc.c  **** }
+ 591              		.loc 1 189 1 view .LVU164
+ 592              		@ sp needed
+ 593 0004 7047     		bx	lr
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 15
+
+
+ 594              	.L41:
+ 595 0006 C046     		.align	2
+ 596              	.L40:
+ 597 0008 00000000 		.word	g_runtime
+ 598              		.cfi_endproc
+ 599              	.LFE7:
+ 601              		.section	.text.SOC_ForceQualify,"ax",%progbits
+ 602              		.align	1
+ 603              		.global	SOC_ForceQualify
+ 604              		.syntax unified
+ 605              		.code	16
+ 606              		.thumb_func
+ 608              	SOC_ForceQualify:
+ 609              	.LFB8:
+ 190:../Src/soc.c  **** 
+ 191:../Src/soc.c  **** void SOC_ForceQualify(void)
+ 192:../Src/soc.c  **** {
+ 610              		.loc 1 192 1 is_stmt 1 view -0
+ 611              		.cfi_startproc
+ 612              		@ args = 0, pretend = 0, frame = 0
+ 613              		@ frame_needed = 0, uses_anonymous_args = 0
+ 614              		@ link register save eliminated.
+ 193:../Src/soc.c  ****     g_runtime.is_qualified = true;
+ 615              		.loc 1 193 5 view .LVU166
+ 616              		.loc 1 193 28 is_stmt 0 view .LVU167
+ 617 0000 0B4B     		ldr	r3, .L45
+ 618 0002 0122     		movs	r2, #1
+ 619 0004 9A71     		strb	r2, [r3, #6]
+ 194:../Src/soc.c  ****     g_runtime.qualification_timer = 600;
+ 620              		.loc 1 194 5 is_stmt 1 view .LVU168
+ 621              		.loc 1 194 35 is_stmt 0 view .LVU169
+ 622 0006 9622     		movs	r2, #150
+ 623 0008 9200     		lsls	r2, r2, #2
+ 624 000a 1A81     		strh	r2, [r3, #8]
+ 195:../Src/soc.c  ****     
+ 196:../Src/soc.c  ****     uint8_t soc_increase = g_runtime.raw_soc - g_runtime.display_soc;
+ 625              		.loc 1 196 5 is_stmt 1 view .LVU170
+ 626              		.loc 1 196 46 is_stmt 0 view .LVU171
+ 627 000c 9978     		ldrb	r1, [r3, #2]
+ 628              		.loc 1 196 57 view .LVU172
+ 629 000e 1A78     		ldrb	r2, [r3]
+ 630              		.loc 1 196 13 view .LVU173
+ 631 0010 8B1A     		subs	r3, r1, r2
+ 632 0012 DBB2     		uxtb	r3, r3
+ 633              	.LVL47:
+ 197:../Src/soc.c  ****     if (soc_increase > 5) {
+ 634              		.loc 1 197 5 is_stmt 1 view .LVU174
+ 635              		.loc 1 197 8 is_stmt 0 view .LVU175
+ 636 0014 052B     		cmp	r3, #5
+ 637 0016 06D9     		bls	.L43
+ 198:../Src/soc.c  ****         g_runtime.display_soc += 5;  
+ 638              		.loc 1 198 9 is_stmt 1 view .LVU176
+ 639              		.loc 1 198 31 is_stmt 0 view .LVU177
+ 640 0018 054B     		ldr	r3, .L45
+ 641              	.LVL48:
+ 642              		.loc 1 198 31 view .LVU178
+ 643 001a 0532     		adds	r2, r2, #5
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 16
+
+
+ 644              	.LVL49:
+ 645              		.loc 1 198 31 view .LVU179
+ 646 001c 1A70     		strb	r2, [r3]
+ 199:../Src/soc.c  ****         g_runtime.last_stable_soc += 5;
+ 647              		.loc 1 199 9 is_stmt 1 view .LVU180
+ 648              		.loc 1 199 18 is_stmt 0 view .LVU181
+ 649 001e 1A7B     		ldrb	r2, [r3, #12]
+ 650              	.LVL50:
+ 651              		.loc 1 199 35 view .LVU182
+ 652 0020 0532     		adds	r2, r2, #5
+ 653 0022 1A73     		strb	r2, [r3, #12]
+ 654              	.L42:
+ 200:../Src/soc.c  ****     } else {
+ 201:../Src/soc.c  ****         g_runtime.display_soc = g_runtime.raw_soc;
+ 202:../Src/soc.c  ****         g_runtime.last_stable_soc = g_runtime.raw_soc;
+ 203:../Src/soc.c  ****     }
+ 204:../Src/soc.c  **** }
+ 655              		.loc 1 204 1 view .LVU183
+ 656              		@ sp needed
+ 657 0024 7047     		bx	lr
+ 658              	.LVL51:
+ 659              	.L43:
+ 201:../Src/soc.c  ****         g_runtime.last_stable_soc = g_runtime.raw_soc;
+ 660              		.loc 1 201 9 is_stmt 1 view .LVU184
+ 201:../Src/soc.c  ****         g_runtime.last_stable_soc = g_runtime.raw_soc;
+ 661              		.loc 1 201 31 is_stmt 0 view .LVU185
+ 662 0026 024B     		ldr	r3, .L45
+ 663              	.LVL52:
+ 201:../Src/soc.c  ****         g_runtime.last_stable_soc = g_runtime.raw_soc;
+ 664              		.loc 1 201 31 view .LVU186
+ 665 0028 1970     		strb	r1, [r3]
+ 202:../Src/soc.c  ****     }
+ 666              		.loc 1 202 9 is_stmt 1 view .LVU187
+ 202:../Src/soc.c  ****     }
+ 667              		.loc 1 202 35 is_stmt 0 view .LVU188
+ 668 002a 1973     		strb	r1, [r3, #12]
+ 669              		.loc 1 204 1 view .LVU189
+ 670 002c FAE7     		b	.L42
+ 671              	.L46:
+ 672 002e C046     		.align	2
+ 673              	.L45:
+ 674 0030 00000000 		.word	g_runtime
+ 675              		.cfi_endproc
+ 676              	.LFE8:
+ 678              		.section	.text.SOC_GetQualificationTimer,"ax",%progbits
+ 679              		.align	1
+ 680              		.global	SOC_GetQualificationTimer
+ 681              		.syntax unified
+ 682              		.code	16
+ 683              		.thumb_func
+ 685              	SOC_GetQualificationTimer:
+ 686              	.LFB9:
+ 205:../Src/soc.c  **** 
+ 206:../Src/soc.c  **** uint16_t SOC_GetQualificationTimer(void)
+ 207:../Src/soc.c  **** {
+ 687              		.loc 1 207 1 is_stmt 1 view -0
+ 688              		.cfi_startproc
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 17
+
+
+ 689              		@ args = 0, pretend = 0, frame = 0
+ 690              		@ frame_needed = 0, uses_anonymous_args = 0
+ 691              		@ link register save eliminated.
+ 208:../Src/soc.c  ****     if (g_runtime.is_qualified)
+ 692              		.loc 1 208 5 view .LVU191
+ 693              		.loc 1 208 18 is_stmt 0 view .LVU192
+ 694 0000 064B     		ldr	r3, .L50
+ 695 0002 9B79     		ldrb	r3, [r3, #6]
+ 696              		.loc 1 208 8 view .LVU193
+ 697 0004 002B     		cmp	r3, #0
+ 698 0006 06D1     		bne	.L49
+ 209:../Src/soc.c  ****         return 0;
+ 210:../Src/soc.c  ****     return 600 - g_runtime.qualification_timer;  
+ 699              		.loc 1 210 5 is_stmt 1 view .LVU194
+ 700              		.loc 1 210 27 is_stmt 0 view .LVU195
+ 701 0008 044B     		ldr	r3, .L50
+ 702 000a 1B89     		ldrh	r3, [r3, #8]
+ 703              		.loc 1 210 16 view .LVU196
+ 704 000c 9620     		movs	r0, #150
+ 705 000e 8000     		lsls	r0, r0, #2
+ 706 0010 C01A     		subs	r0, r0, r3
+ 707 0012 80B2     		uxth	r0, r0
+ 708              	.L48:
+ 211:../Src/soc.c  **** }
+ 709              		.loc 1 211 1 view .LVU197
+ 710              		@ sp needed
+ 711 0014 7047     		bx	lr
+ 712              	.L49:
+ 209:../Src/soc.c  ****         return 0;
+ 713              		.loc 1 209 16 view .LVU198
+ 714 0016 0020     		movs	r0, #0
+ 715 0018 FCE7     		b	.L48
+ 716              	.L51:
+ 717 001a C046     		.align	2
+ 718              	.L50:
+ 719 001c 00000000 		.word	g_runtime
+ 720              		.cfi_endproc
+ 721              	.LFE9:
+ 723              		.section	.text.SOC_GetLastVoltagePercent,"ax",%progbits
+ 724              		.align	1
+ 725              		.global	SOC_GetLastVoltagePercent
+ 726              		.syntax unified
+ 727              		.code	16
+ 728              		.thumb_func
+ 730              	SOC_GetLastVoltagePercent:
+ 731              	.LFB10:
+ 212:../Src/soc.c  **** 
+ 213:../Src/soc.c  **** uint16_t SOC_GetLastVoltagePercent(void)
+ 214:../Src/soc.c  **** {
+ 732              		.loc 1 214 1 is_stmt 1 view -0
+ 733              		.cfi_startproc
+ 734              		@ args = 0, pretend = 0, frame = 0
+ 735              		@ frame_needed = 0, uses_anonymous_args = 0
+ 736              		@ link register save eliminated.
+ 215:../Src/soc.c  ****     return g_runtime.last_voltage_percent;
+ 737              		.loc 1 215 5 view .LVU200
+ 738              		.loc 1 215 21 is_stmt 0 view .LVU201
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 18
+
+
+ 739 0000 014B     		ldr	r3, .L53
+ 740              		.loc 1 215 21 discriminator 1 view .LVU202
+ 741 0002 9888     		ldrh	r0, [r3, #4]
+ 216:../Src/soc.c  **** }...
+ 742              		.loc 1 216 1 view .LVU203
+ 743              		@ sp needed
+ 744 0004 7047     		bx	lr
+ 745              	.L54:
+ 746 0006 C046     		.align	2
+ 747              	.L53:
+ 748 0008 00000000 		.word	g_runtime
+ 749              		.cfi_endproc
+ 750              	.LFE10:
+ 752              		.section	.bss.g_runtime,"aw",%nobits
+ 753              		.align	2
+ 756              	g_runtime:
+ 757 0000 00000000 		.space	14
+ 757      00000000 
+ 757      00000000 
+ 757      0000
+ 758              		.section	.bss.g_config,"aw",%nobits
+ 759              		.align	2
+ 762              	g_config:
+ 763 0000 00000000 		.space	8
+ 763      00000000 
+ 764              		.section	.rodata.soc_voltage_table,"a"
+ 765              		.align	2
+ 768              	soc_voltage_table:
+ 769 0000 8A02     		.short	650
+ 770 0002 0000     		.short	0
+ 771 0004 2303     		.short	803
+ 772 0006 0500     		.short	5
+ 773 0008 3A03     		.short	826
+ 774 000a 0A00     		.short	10
+ 775 000c 5103     		.short	849
+ 776 000e 0F00     		.short	15
+ 777 0010 6803     		.short	872
+ 778 0012 1400     		.short	20
+ 779 0014 7F03     		.short	895
+ 780 0016 1900     		.short	25
+ 781 0018 8403     		.short	900
+ 782 001a 1E00     		.short	30
+ 783 001c 8903     		.short	905
+ 784 001e 2300     		.short	35
+ 785 0020 8E03     		.short	910
+ 786 0022 2800     		.short	40
+ 787 0024 9303     		.short	915
+ 788 0026 2D00     		.short	45
+ 789 0028 9803     		.short	920
+ 790 002a 3200     		.short	50
+ 791 002c 9D03     		.short	925
+ 792 002e 3700     		.short	55
+ 793 0030 A203     		.short	930
+ 794 0032 3C00     		.short	60
+ 795 0034 A703     		.short	935
+ 796 0036 4100     		.short	65
+ 797 0038 AC03     		.short	940
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 19
+
+
+ 798 003a 4600     		.short	70
+ 799 003c B103     		.short	945
+ 800 003e 4B00     		.short	75
+ 801 0040 BC03     		.short	956
+ 802 0042 5000     		.short	80
+ 803 0044 C703     		.short	967
+ 804 0046 5500     		.short	85
+ 805 0048 D203     		.short	978
+ 806 004a 5A00     		.short	90
+ 807 004c DD03     		.short	989
+ 808 004e 5F00     		.short	95
+ 809 0050 E803     		.short	1000
+ 810 0052 6400     		.short	100
+ 811              		.text
+ 812              	.Letext0:
+ 813              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 814              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 815              		.file 4 "../Inc/soc.h"
+ 816              		.file 5 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/st
+ 817              		.file 6 "<built-in>"
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 soc.c
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:19     .text.InterpolateSOC:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:24     .text.InterpolateSOC:00000000 InterpolateSOC
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:113    .text.CalculateRawSOC:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:118    .text.CalculateRawSOC:00000000 CalculateRawSOC
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:248    .text.CalculateRawSOC:00000060 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:768    .rodata.soc_voltage_table:00000000 soc_voltage_table
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:254    .text.SOC_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:260    .text.SOC_Init:00000000 SOC_Init
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:334    .text.SOC_Init:00000038 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:762    .bss.g_config:00000000 g_config
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:756    .bss.g_runtime:00000000 g_runtime
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:340    .text.SOC_Update:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:346    .text.SOC_Update:00000000 SOC_Update
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:459    .text.SOC_Update:00000060 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:466    .text.SOC_SetVset:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:472    .text.SOC_SetVset:00000000 SOC_SetVset
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:509    .text.SOC_SetVset:00000018 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:515    .text.SOC_GetDisplaySOC:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:521    .text.SOC_GetDisplaySOC:00000000 SOC_GetDisplaySOC
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:539    .text.SOC_GetDisplaySOC:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:544    .text.SOC_GetRawSOC:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:550    .text.SOC_GetRawSOC:00000000 SOC_GetRawSOC
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:568    .text.SOC_GetRawSOC:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:573    .text.SOC_IsQualified:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:579    .text.SOC_IsQualified:00000000 SOC_IsQualified
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:597    .text.SOC_IsQualified:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:602    .text.SOC_ForceQualify:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:608    .text.SOC_ForceQualify:00000000 SOC_ForceQualify
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:674    .text.SOC_ForceQualify:00000030 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:679    .text.SOC_GetQualificationTimer:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:685    .text.SOC_GetQualificationTimer:00000000 SOC_GetQualificationTimer
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:719    .text.SOC_GetQualificationTimer:0000001c $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:724    .text.SOC_GetLastVoltagePercent:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:730    .text.SOC_GetLastVoltagePercent:00000000 SOC_GetLastVoltagePercent
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:748    .text.SOC_GetLastVoltagePercent:00000008 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:753    .bss.g_runtime:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:759    .bss.g_config:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccl8nwDp.s:765    .rodata.soc_voltage_table:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_idiv
+__aeabi_uidiv
+memcpy

@@ -1,0 +1,241 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"py32f002b_it.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../Src/py32f002b_it.c"
+  18              		.section	.text.NMI_Handler,"ax",%progbits
+  19              		.align	1
+  20              		.global	NMI_Handler
+  21              		.syntax unified
+  22              		.code	16
+  23              		.thumb_func
+  25              	NMI_Handler:
+  26              	.LFB37:
+   1:../Src/py32f002b_it.c **** /**
+   2:../Src/py32f002b_it.c ****   ******************************************************************************
+   3:../Src/py32f002b_it.c ****   * @file    py32f002b_it.c
+   4:../Src/py32f002b_it.c ****   * @author  MCU Application Team
+   5:../Src/py32f002b_it.c ****   * @brief   Interrupt Service Routines.
+   6:../Src/py32f002b_it.c ****   ******************************************************************************
+   7:../Src/py32f002b_it.c ****   * @attention
+   8:../Src/py32f002b_it.c ****   *
+   9:../Src/py32f002b_it.c ****   * <h2><center>&copy; Copyright (c) 2023 Puya Semiconductor Co.
+  10:../Src/py32f002b_it.c ****   * All rights reserved.</center></h2>
+  11:../Src/py32f002b_it.c ****   *
+  12:../Src/py32f002b_it.c ****   * This software component is licensed by Puya under BSD 3-Clause license,
+  13:../Src/py32f002b_it.c ****   * the "License"; You may not use this file except in compliance with the
+  14:../Src/py32f002b_it.c ****   * License. You may obtain a copy of the License at:
+  15:../Src/py32f002b_it.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:../Src/py32f002b_it.c ****   *
+  17:../Src/py32f002b_it.c ****   ******************************************************************************
+  18:../Src/py32f002b_it.c ****   * @attention
+  19:../Src/py32f002b_it.c ****   *
+  20:../Src/py32f002b_it.c ****   * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  21:../Src/py32f002b_it.c ****   * All rights reserved.</center></h2>
+  22:../Src/py32f002b_it.c ****   *
+  23:../Src/py32f002b_it.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  24:../Src/py32f002b_it.c ****   * the "License"; You may not use this file except in compliance with the
+  25:../Src/py32f002b_it.c ****   * License. You may obtain a copy of the License at:
+  26:../Src/py32f002b_it.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  27:../Src/py32f002b_it.c ****   *
+  28:../Src/py32f002b_it.c ****   ******************************************************************************
+  29:../Src/py32f002b_it.c ****   */
+  30:../Src/py32f002b_it.c **** 
+  31:../Src/py32f002b_it.c **** /* Includes ------------------------------------------------------------------*/
+  32:../Src/py32f002b_it.c **** #include "main.h"
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s 			page 2
+
+
+  33:../Src/py32f002b_it.c **** #include "py32f002b_it.h"
+  34:../Src/py32f002b_it.c **** 
+  35:../Src/py32f002b_it.c **** /* Private includes ----------------------------------------------------------*/
+  36:../Src/py32f002b_it.c **** /* Private typedef -----------------------------------------------------------*/
+  37:../Src/py32f002b_it.c **** /* Private define ------------------------------------------------------------*/
+  38:../Src/py32f002b_it.c **** /* Private macro -------------------------------------------------------------*/
+  39:../Src/py32f002b_it.c **** /* Private variables ---------------------------------------------------------*/
+  40:../Src/py32f002b_it.c **** /* Private function prototypes -----------------------------------------------*/
+  41:../Src/py32f002b_it.c **** /* Private user code ---------------------------------------------------------*/
+  42:../Src/py32f002b_it.c **** /* External variables --------------------------------------------------------*/
+  43:../Src/py32f002b_it.c **** 
+  44:../Src/py32f002b_it.c **** /******************************************************************************/
+  45:../Src/py32f002b_it.c **** /*          Cortex-M0+ Processor Interruption and Exception Handlers          */
+  46:../Src/py32f002b_it.c **** /******************************************************************************/
+  47:../Src/py32f002b_it.c **** /**
+  48:../Src/py32f002b_it.c ****   * @brief This function handles Non maskable interrupt.
+  49:../Src/py32f002b_it.c ****   */
+  50:../Src/py32f002b_it.c **** void NMI_Handler(void)
+  51:../Src/py32f002b_it.c **** {
+  27              		.loc 1 51 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  52:../Src/py32f002b_it.c **** }
+  32              		.loc 1 52 1 view .LVU1
+  33              		@ sp needed
+  34 0000 7047     		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE37:
+  38              		.section	.text.HardFault_Handler,"ax",%progbits
+  39              		.align	1
+  40              		.global	HardFault_Handler
+  41              		.syntax unified
+  42              		.code	16
+  43              		.thumb_func
+  45              	HardFault_Handler:
+  46              	.LFB38:
+  53:../Src/py32f002b_it.c **** 
+  54:../Src/py32f002b_it.c **** /**
+  55:../Src/py32f002b_it.c ****   * @brief This function handles Hard fault interrupt.
+  56:../Src/py32f002b_it.c ****   */
+  57:../Src/py32f002b_it.c **** void HardFault_Handler(void)
+  58:../Src/py32f002b_it.c **** {
+  47              		.loc 1 58 1 view -0
+  48              		.cfi_startproc
+  49              		@ Volatile: function does not return.
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  53              	.L3:
+  59:../Src/py32f002b_it.c ****   while (1)
+  54              		.loc 1 59 3 view .LVU3
+  60:../Src/py32f002b_it.c ****   {
+  61:../Src/py32f002b_it.c ****   }
+  55              		.loc 1 61 3 view .LVU4
+  59:../Src/py32f002b_it.c ****   while (1)
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s 			page 3
+
+
+  56              		.loc 1 59 9 view .LVU5
+  57 0000 FEE7     		b	.L3
+  58              		.cfi_endproc
+  59              	.LFE38:
+  61              		.section	.text.SVC_Handler,"ax",%progbits
+  62              		.align	1
+  63              		.global	SVC_Handler
+  64              		.syntax unified
+  65              		.code	16
+  66              		.thumb_func
+  68              	SVC_Handler:
+  69              	.LFB39:
+  62:../Src/py32f002b_it.c **** }
+  63:../Src/py32f002b_it.c **** 
+  64:../Src/py32f002b_it.c **** /**
+  65:../Src/py32f002b_it.c ****   * @brief This function handles System service call via SWI instruction.
+  66:../Src/py32f002b_it.c ****   */
+  67:../Src/py32f002b_it.c **** void SVC_Handler(void)
+  68:../Src/py32f002b_it.c **** {
+  70              		.loc 1 68 1 view -0
+  71              		.cfi_startproc
+  72              		@ args = 0, pretend = 0, frame = 0
+  73              		@ frame_needed = 0, uses_anonymous_args = 0
+  74              		@ link register save eliminated.
+  69:../Src/py32f002b_it.c **** }
+  75              		.loc 1 69 1 view .LVU7
+  76              		@ sp needed
+  77 0000 7047     		bx	lr
+  78              		.cfi_endproc
+  79              	.LFE39:
+  81              		.section	.text.PendSV_Handler,"ax",%progbits
+  82              		.align	1
+  83              		.global	PendSV_Handler
+  84              		.syntax unified
+  85              		.code	16
+  86              		.thumb_func
+  88              	PendSV_Handler:
+  89              	.LFB40:
+  70:../Src/py32f002b_it.c **** 
+  71:../Src/py32f002b_it.c **** /**
+  72:../Src/py32f002b_it.c ****   * @brief This function handles Pendable request for system service.
+  73:../Src/py32f002b_it.c ****   */
+  74:../Src/py32f002b_it.c **** void PendSV_Handler(void)
+  75:../Src/py32f002b_it.c **** {
+  90              		.loc 1 75 1 view -0
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94              		@ link register save eliminated.
+  76:../Src/py32f002b_it.c **** }
+  95              		.loc 1 76 1 view .LVU9
+  96              		@ sp needed
+  97 0000 7047     		bx	lr
+  98              		.cfi_endproc
+  99              	.LFE40:
+ 101              		.section	.text.SysTick_Handler,"ax",%progbits
+ 102              		.align	1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s 			page 4
+
+
+ 103              		.global	SysTick_Handler
+ 104              		.syntax unified
+ 105              		.code	16
+ 106              		.thumb_func
+ 108              	SysTick_Handler:
+ 109              	.LFB41:
+  77:../Src/py32f002b_it.c **** 
+  78:../Src/py32f002b_it.c **** /**
+  79:../Src/py32f002b_it.c ****   * @brief This function handles System tick timer.
+  80:../Src/py32f002b_it.c ****   */
+  81:../Src/py32f002b_it.c **** void SysTick_Handler(void)
+  82:../Src/py32f002b_it.c **** {
+ 110              		.loc 1 82 1 view -0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 0
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114 0000 10B5     		push	{r4, lr}
+ 115              	.LCFI0:
+ 116              		.cfi_def_cfa_offset 8
+ 117              		.cfi_offset 4, -8
+ 118              		.cfi_offset 14, -4
+  83:../Src/py32f002b_it.c ****   HAL_IncTick();
+ 119              		.loc 1 83 3 view .LVU11
+ 120 0002 FFF7FEFF 		bl	HAL_IncTick
+ 121              	.LVL0:
+  84:../Src/py32f002b_it.c ****   App_SysTickHandler();
+ 122              		.loc 1 84 3 view .LVU12
+ 123 0006 FFF7FEFF 		bl	App_SysTickHandler
+ 124              	.LVL1:
+  85:../Src/py32f002b_it.c **** }
+ 125              		.loc 1 85 1 is_stmt 0 view .LVU13
+ 126              		@ sp needed
+ 127 000a 10BD     		pop	{r4, pc}
+ 128              		.cfi_endproc
+ 129              	.LFE41:
+ 131              		.text
+ 132              	.Letext0:
+ 133              		.file 2 "../Inc/main.h"
+ 134              		.file 3 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 py32f002b_it.c
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:19     .text.NMI_Handler:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:25     .text.NMI_Handler:00000000 NMI_Handler
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:39     .text.HardFault_Handler:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:45     .text.HardFault_Handler:00000000 HardFault_Handler
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:62     .text.SVC_Handler:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:68     .text.SVC_Handler:00000000 SVC_Handler
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:82     .text.PendSV_Handler:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:88     .text.PendSV_Handler:00000000 PendSV_Handler
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:102    .text.SysTick_Handler:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccRDcxUH.s:108    .text.SysTick_Handler:00000000 SysTick_Handler
+
+UNDEFINED SYMBOLS
+HAL_IncTick
+App_SysTickHandler

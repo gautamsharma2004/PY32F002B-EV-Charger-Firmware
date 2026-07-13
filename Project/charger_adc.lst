@@ -1,0 +1,1092 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"charger_adc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../Src/charger_adc.c"
+  18              		.section	.text.ADC_NTCToTemperature_Internal,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	ADC_NTCToTemperature_Internal:
+  25              	.LVL0:
+  26              	.LFB1:
+   1:../Src/charger_adc.c **** #include "charger_adc.h"
+   2:../Src/charger_adc.c **** #include <string.h>
+   3:../Src/charger_adc.c **** 
+   4:../Src/charger_adc.c **** /* =====================================================
+   5:../Src/charger_adc.c ****    Static Module State
+   6:../Src/charger_adc.c ****    ===================================================== */
+   7:../Src/charger_adc.c **** 
+   8:../Src/charger_adc.c **** static ADCConfig_t g_config;
+   9:../Src/charger_adc.c **** static ADCMeasurement_t g_measurement;
+  10:../Src/charger_adc.c **** static bool g_has_valid_vbat = false;
+  11:../Src/charger_adc.c **** 
+  12:../Src/charger_adc.c **** // Circular buffers for filtering (3-sample median filter)
+  13:../Src/charger_adc.c **** static uint16_t g_vbat_buffer[3] = {0};
+  14:../Src/charger_adc.c **** static uint16_t g_ibat_buffer[3] = {0};
+  15:../Src/charger_adc.c **** static uint16_t g_temp_mosfet_buffer[3] = {0};
+  16:../Src/charger_adc.c **** static uint16_t g_temp_ntc_buffer[3] = {0};
+  17:../Src/charger_adc.c **** 
+  18:../Src/charger_adc.c **** static uint8_t g_buffer_index = 0;
+  19:../Src/charger_adc.c **** 
+  20:../Src/charger_adc.c **** /* =====================================================
+  21:../Src/charger_adc.c ****    NTC Temperature Lookup Table
+  22:../Src/charger_adc.c ****    ===================================================== 
+  23:../Src/charger_adc.c ****    
+  24:../Src/charger_adc.c ****    10kΩ NTC thermistor (typically B=3950K)
+  25:../Src/charger_adc.c ****    ADC reference: 3.3V, 12-bit resolution (0-4095 counts)
+  26:../Src/charger_adc.c ****    10k pullup resistor
+  27:../Src/charger_adc.c ****    
+  28:../Src/charger_adc.c ****    Table: ADC count → Temperature in 0.1°C units
+  29:../Src/charger_adc.c ****    
+  30:../Src/charger_adc.c ****    Typical NTC characteristics:
+  31:../Src/charger_adc.c ****    - At 25°C: ~2000 ADC counts (1.6V across NTC)
+  32:../Src/charger_adc.c ****    - At 80°C: ~800 ADC counts (0.64V across NTC)
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 2
+
+
+  33:../Src/charger_adc.c ****    - At 90°C: ~600 ADC counts (0.48V across NTC)
+  34:../Src/charger_adc.c ****    
+  35:../Src/charger_adc.c ****    This is a simplified lookup. For production, use Steinhart-Hart equation.
+  36:../Src/charger_adc.c ****    
+  37:../Src/charger_adc.c ****    ===================================================== */
+  38:../Src/charger_adc.c **** 
+  39:../Src/charger_adc.c **** static const struct {
+  40:../Src/charger_adc.c ****     uint16_t adc;    // ADC count
+  41:../Src/charger_adc.c ****     uint16_t temp;   // Temperature in 0.1°C (e.g., 250 = 25.0°C)
+  42:../Src/charger_adc.c **** } ntc_lookup[] = {
+  43:../Src/charger_adc.c ****     // Format: { ADC_count, Temp_x10 }
+  44:../Src/charger_adc.c ****     // Decreasing ADC → Increasing Temperature
+  45:../Src/charger_adc.c ****     {3800, 0},       // -40°C (below practical range)
+  46:../Src/charger_adc.c ****     {3500, 100},     // 10°C
+  47:../Src/charger_adc.c ****     {3000, 250},     // 25°C (typical room temp)
+  48:../Src/charger_adc.c ****     {2500, 400},     // 40°C
+  49:../Src/charger_adc.c ****     {2000, 550},     // 55°C
+  50:../Src/charger_adc.c ****     {1500, 700},     // 70°C
+  51:../Src/charger_adc.c ****     {1000, 800},     // 80°C
+  52:../Src/charger_adc.c ****     {800,  900},     // 90°C (shutdown threshold)
+  53:../Src/charger_adc.c ****     {600,  1000},    // 100°C
+  54:../Src/charger_adc.c ****     {400,  1100},    // 110°C
+  55:../Src/charger_adc.c **** };
+  56:../Src/charger_adc.c **** 
+  57:../Src/charger_adc.c **** #define NTC_LOOKUP_SIZE (sizeof(ntc_lookup) / sizeof(ntc_lookup[0]))
+  58:../Src/charger_adc.c **** 
+  59:../Src/charger_adc.c **** /* =====================================================
+  60:../Src/charger_adc.c ****    Helper: Median of 3 values
+  61:../Src/charger_adc.c ****    ===================================================== */
+  62:../Src/charger_adc.c **** 
+  63:../Src/charger_adc.c **** static uint16_t Median3(uint16_t a, uint16_t b, uint16_t c)
+  64:../Src/charger_adc.c **** {
+  65:../Src/charger_adc.c ****     if (a > b) {
+  66:../Src/charger_adc.c ****         if (b > c) return b;           // a > b > c
+  67:../Src/charger_adc.c ****         else if (a > c) return c;      // a > c >= b
+  68:../Src/charger_adc.c ****         else return a;                  // c >= a > b
+  69:../Src/charger_adc.c ****     } else {
+  70:../Src/charger_adc.c ****         if (a > c) return a;           // b >= a > c
+  71:../Src/charger_adc.c ****         else if (b > c) return c;      // b >= c >= a
+  72:../Src/charger_adc.c ****         else return b;                  // c >= b >= a
+  73:../Src/charger_adc.c ****     }
+  74:../Src/charger_adc.c **** }
+  75:../Src/charger_adc.c **** 
+  76:../Src/charger_adc.c **** /* =====================================================
+  77:../Src/charger_adc.c ****    Helper: NTC Temperature Conversion
+  78:../Src/charger_adc.c ****    ===================================================== */
+  79:../Src/charger_adc.c **** 
+  80:../Src/charger_adc.c **** static uint16_t ADC_NTCToTemperature_Internal(uint16_t adc_raw)
+  81:../Src/charger_adc.c **** {
+  27              		.loc 1 81 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 81 1 is_stmt 0 view .LVU1
+  32 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 3
+
+
+  35              		.cfi_offset 3, -24
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  82:../Src/charger_adc.c ****     // Find bracket in lookup table
+  83:../Src/charger_adc.c ****     for (int i = 0; i < NTC_LOOKUP_SIZE - 1; i++) {
+  41              		.loc 1 83 5 is_stmt 1 view .LVU2
+  42              	.LBB2:
+  43              		.loc 1 83 10 view .LVU3
+  44              	.LVL1:
+  45              		.loc 1 83 14 is_stmt 0 view .LVU4
+  46 0002 0022     		movs	r2, #0
+  47              	.LVL2:
+  48              	.L2:
+  49              		.loc 1 83 23 is_stmt 1 discriminator 1 view .LVU5
+  50 0004 082A     		cmp	r2, #8
+  51 0006 19D8     		bhi	.L8
+  52              	.LBB3:
+  84:../Src/charger_adc.c ****         uint16_t adc_lower = ntc_lookup[i].adc;
+  53              		.loc 1 84 9 view .LVU6
+  54              		.loc 1 84 18 is_stmt 0 view .LVU7
+  55 0008 104B     		ldr	r3, .L9
+  56 000a 9100     		lsls	r1, r2, #2
+  57 000c CD5A     		ldrh	r5, [r1, r3]
+  58              	.LVL3:
+  85:../Src/charger_adc.c ****         uint16_t adc_upper = ntc_lookup[i+1].adc;
+  59              		.loc 1 85 9 is_stmt 1 view .LVU8
+  60              		.loc 1 85 42 is_stmt 0 view .LVU9
+  61 000e 0132     		adds	r2, r2, #1
+  62              	.LVL4:
+  63              		.loc 1 85 18 view .LVU10
+  64 0010 9400     		lsls	r4, r2, #2
+  65 0012 E75A     		ldrh	r7, [r4, r3]
+  66              	.LVL5:
+  86:../Src/charger_adc.c ****         uint16_t temp_lower = ntc_lookup[i].temp;
+  67              		.loc 1 86 9 is_stmt 1 view .LVU11
+  68              		.loc 1 86 18 is_stmt 0 view .LVU12
+  69 0014 5918     		adds	r1, r3, r1
+  70 0016 4E88     		ldrh	r6, [r1, #2]
+  71              	.LVL6:
+  87:../Src/charger_adc.c ****         uint16_t temp_upper = ntc_lookup[i+1].temp;
+  72              		.loc 1 87 9 is_stmt 1 view .LVU13
+  73              		.loc 1 87 18 is_stmt 0 view .LVU14
+  74 0018 1B19     		adds	r3, r3, r4
+  75 001a 5B88     		ldrh	r3, [r3, #2]
+  76              	.LVL7:
+  88:../Src/charger_adc.c ****         
+  89:../Src/charger_adc.c ****         // ADC values decrease as temp increases
+  90:../Src/charger_adc.c ****         if (adc_raw <= adc_lower && adc_raw > adc_upper) {
+  77              		.loc 1 90 9 is_stmt 1 view .LVU15
+  78              		.loc 1 90 12 is_stmt 0 view .LVU16
+  79 001c A842     		cmp	r0, r5
+  80 001e F1D8     		bhi	.L2
+  81              		.loc 1 90 34 discriminator 1 view .LVU17
+  82 0020 B842     		cmp	r0, r7
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 4
+
+
+  83 0022 EFD9     		bls	.L2
+  84              	.LBB4:
+  91:../Src/charger_adc.c ****             // Linear interpolation
+  92:../Src/charger_adc.c ****             if (adc_lower == adc_upper)
+  85              		.loc 1 92 13 is_stmt 1 view .LVU18
+  86              		.loc 1 92 16 is_stmt 0 view .LVU19
+  87 0024 BD42     		cmp	r5, r7
+  88 0026 0DD0     		beq	.L3
+  93:../Src/charger_adc.c ****                 return temp_lower;
+  94:../Src/charger_adc.c ****             
+  95:../Src/charger_adc.c ****             uint16_t temp = temp_lower +
+  89              		.loc 1 95 13 is_stmt 1 view .LVU20
+  96:../Src/charger_adc.c ****                 ((adc_lower - adc_raw) * (temp_upper - temp_lower)) /
+  90              		.loc 1 96 29 is_stmt 0 view .LVU21
+  91 0028 2A1A     		subs	r2, r5, r0
+  92              	.LVL8:
+  93              		.loc 1 96 54 view .LVU22
+  94 002a 981B     		subs	r0, r3, r6
+  95              	.LVL9:
+  96              		.loc 1 96 40 view .LVU23
+  97 002c 5043     		muls	r0, r2
+  97:../Src/charger_adc.c ****                 (adc_lower - adc_upper);
+  98              		.loc 1 97 28 view .LVU24
+  99 002e E91B     		subs	r1, r5, r7
+  96:../Src/charger_adc.c ****                 ((adc_lower - adc_raw) * (temp_upper - temp_lower)) /
+ 100              		.loc 1 96 69 view .LVU25
+ 101 0030 FFF7FEFF 		bl	__aeabi_idiv
+ 102              	.LVL10:
+  95:../Src/charger_adc.c ****                 ((adc_lower - adc_raw) * (temp_upper - temp_lower)) /
+ 103              		.loc 1 95 40 view .LVU26
+ 104 0034 80B2     		uxth	r0, r0
+  95:../Src/charger_adc.c ****                 ((adc_lower - adc_raw) * (temp_upper - temp_lower)) /
+ 105              		.loc 1 95 22 view .LVU27
+ 106 0036 8619     		adds	r6, r0, r6
+ 107              	.LVL11:
+  95:../Src/charger_adc.c ****                 ((adc_lower - adc_raw) * (temp_upper - temp_lower)) /
+ 108              		.loc 1 95 22 view .LVU28
+ 109 0038 B6B2     		uxth	r6, r6
+ 110              	.LVL12:
+  98:../Src/charger_adc.c ****             return temp;
+ 111              		.loc 1 98 13 is_stmt 1 view .LVU29
+ 112              		.loc 1 98 20 is_stmt 0 view .LVU30
+ 113 003a 03E0     		b	.L3
+ 114              	.LVL13:
+ 115              	.L8:
+ 116              		.loc 1 98 20 view .LVU31
+ 117              	.LBE4:
+ 118              	.LBE3:
+ 119              	.LBE2:
+  99:../Src/charger_adc.c ****         }
+ 100:../Src/charger_adc.c ****     }
+ 101:../Src/charger_adc.c ****     
+ 102:../Src/charger_adc.c ****     // Clamp to bounds
+ 103:../Src/charger_adc.c ****     if (adc_raw >= ntc_lookup[0].adc)
+ 120              		.loc 1 103 5 is_stmt 1 view .LVU32
+ 121              		.loc 1 103 8 is_stmt 0 view .LVU33
+ 122 003c 044B     		ldr	r3, .L9+4
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 5
+
+
+ 123 003e 9842     		cmp	r0, r3
+ 124 0040 02D8     		bhi	.L7
+ 104:../Src/charger_adc.c ****         return ntc_lookup[0].temp;
+ 105:../Src/charger_adc.c ****     return ntc_lookup[NTC_LOOKUP_SIZE-1].temp;
+ 125              		.loc 1 105 41 view .LVU34
+ 126 0042 044E     		ldr	r6, .L9+8
+ 127              	.LVL14:
+ 128              	.L3:
+ 106:../Src/charger_adc.c **** }
+ 129              		.loc 1 106 1 view .LVU35
+ 130 0044 3000     		movs	r0, r6
+ 131              		@ sp needed
+ 132 0046 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 133              	.LVL15:
+ 134              	.L7:
+ 104:../Src/charger_adc.c ****         return ntc_lookup[0].temp;
+ 135              		.loc 1 104 29 view .LVU36
+ 136 0048 0026     		movs	r6, #0
+ 137 004a FBE7     		b	.L3
+ 138              	.L10:
+ 139              		.align	2
+ 140              	.L9:
+ 141 004c 00000000 		.word	ntc_lookup
+ 142 0050 D70E0000 		.word	3799
+ 143 0054 4C040000 		.word	1100
+ 144              		.cfi_endproc
+ 145              	.LFE1:
+ 147              		.section	.text.ADC_Init,"ax",%progbits
+ 148              		.align	1
+ 149              		.global	ADC_Init
+ 150              		.syntax unified
+ 151              		.code	16
+ 152              		.thumb_func
+ 154              	ADC_Init:
+ 155              	.LVL16:
+ 156              	.LFB2:
+ 107:../Src/charger_adc.c **** 
+ 108:../Src/charger_adc.c **** /* =====================================================
+ 109:../Src/charger_adc.c ****    Public API Implementation
+ 110:../Src/charger_adc.c ****    ===================================================== */
+ 111:../Src/charger_adc.c **** 
+ 112:../Src/charger_adc.c **** void ADC_Init(ADCConfig_t *cfg)
+ 113:../Src/charger_adc.c **** {
+ 157              		.loc 1 113 1 is_stmt 1 view -0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161              		.loc 1 113 1 is_stmt 0 view .LVU38
+ 162 0000 10B5     		push	{r4, lr}
+ 163              	.LCFI1:
+ 164              		.cfi_def_cfa_offset 8
+ 165              		.cfi_offset 4, -8
+ 166              		.cfi_offset 14, -4
+ 167 0002 0100     		movs	r1, r0
+ 114:../Src/charger_adc.c ****     memcpy(&g_config, cfg, sizeof(ADCConfig_t));
+ 168              		.loc 1 114 5 is_stmt 1 view .LVU39
+ 169 0004 134B     		ldr	r3, .L12
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 6
+
+
+ 170 0006 1422     		movs	r2, #20
+ 171 0008 1800     		movs	r0, r3
+ 172              	.LVL17:
+ 173              		.loc 1 114 5 is_stmt 0 view .LVU40
+ 174 000a FFF7FEFF 		bl	memcpy
+ 175              	.LVL18:
+ 115:../Src/charger_adc.c ****     memset(&g_measurement, 0, sizeof(ADCMeasurement_t));
+ 176              		.loc 1 115 5 is_stmt 1 view .LVU41
+ 177 000e 124C     		ldr	r4, .L12+4
+ 178 0010 1422     		movs	r2, #20
+ 179 0012 0021     		movs	r1, #0
+ 180 0014 2000     		movs	r0, r4
+ 181 0016 FFF7FEFF 		bl	memset
+ 182              	.LVL19:
+ 116:../Src/charger_adc.c ****     memset(g_vbat_buffer, 0, sizeof(g_vbat_buffer));
+ 183              		.loc 1 116 5 view .LVU42
+ 184 001a 1048     		ldr	r0, .L12+8
+ 185 001c 0622     		movs	r2, #6
+ 186 001e 0021     		movs	r1, #0
+ 187 0020 FFF7FEFF 		bl	memset
+ 188              	.LVL20:
+ 117:../Src/charger_adc.c ****     memset(g_ibat_buffer, 0, sizeof(g_ibat_buffer));
+ 189              		.loc 1 117 5 view .LVU43
+ 190 0024 0E48     		ldr	r0, .L12+12
+ 191 0026 0622     		movs	r2, #6
+ 192 0028 0021     		movs	r1, #0
+ 193 002a FFF7FEFF 		bl	memset
+ 194              	.LVL21:
+ 118:../Src/charger_adc.c ****     memset(g_temp_mosfet_buffer, 0, sizeof(g_temp_mosfet_buffer));
+ 195              		.loc 1 118 5 view .LVU44
+ 196 002e 0D48     		ldr	r0, .L12+16
+ 197 0030 0622     		movs	r2, #6
+ 198 0032 0021     		movs	r1, #0
+ 199 0034 FFF7FEFF 		bl	memset
+ 200              	.LVL22:
+ 119:../Src/charger_adc.c ****     memset(g_temp_ntc_buffer, 0, sizeof(g_temp_ntc_buffer));
+ 201              		.loc 1 119 5 view .LVU45
+ 202 0038 0B48     		ldr	r0, .L12+20
+ 203 003a 0622     		movs	r2, #6
+ 204 003c 0021     		movs	r1, #0
+ 205 003e FFF7FEFF 		bl	memset
+ 206              	.LVL23:
+ 120:../Src/charger_adc.c ****     g_buffer_index = 0;
+ 207              		.loc 1 120 5 view .LVU46
+ 208              		.loc 1 120 20 is_stmt 0 view .LVU47
+ 209 0042 0A4B     		ldr	r3, .L12+24
+ 210 0044 0022     		movs	r2, #0
+ 211 0046 1A70     		strb	r2, [r3]
+ 121:../Src/charger_adc.c ****     g_has_valid_vbat = false;
+ 212              		.loc 1 121 5 is_stmt 1 view .LVU48
+ 213              		.loc 1 121 22 is_stmt 0 view .LVU49
+ 214 0048 094B     		ldr	r3, .L12+28
+ 215 004a 1A70     		strb	r2, [r3]
+ 122:../Src/charger_adc.c **** 
+ 123:../Src/charger_adc.c ****     // Keep a sane fallback on the display until real ADC samples arrive.
+ 124:../Src/charger_adc.c ****     g_measurement.vbat_mv = 67200;
+ 216              		.loc 1 124 5 is_stmt 1 view .LVU50
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 7
+
+
+ 217              		.loc 1 124 27 is_stmt 0 view .LVU51
+ 218 004c 094B     		ldr	r3, .L12+32
+ 219 004e 2360     		str	r3, [r4]
+ 125:../Src/charger_adc.c **** }
+ 220              		.loc 1 125 1 view .LVU52
+ 221              		@ sp needed
+ 222 0050 10BD     		pop	{r4, pc}
+ 223              	.L13:
+ 224 0052 C046     		.align	2
+ 225              	.L12:
+ 226 0054 00000000 		.word	g_config
+ 227 0058 00000000 		.word	g_measurement
+ 228 005c 00000000 		.word	g_vbat_buffer
+ 229 0060 00000000 		.word	g_ibat_buffer
+ 230 0064 00000000 		.word	g_temp_mosfet_buffer
+ 231 0068 00000000 		.word	g_temp_ntc_buffer
+ 232 006c 00000000 		.word	g_buffer_index
+ 233 0070 00000000 		.word	g_has_valid_vbat
+ 234 0074 80060100 		.word	67200
+ 235              		.cfi_endproc
+ 236              	.LFE2:
+ 238              		.section	.text.ADC_ProcessRawSample,"ax",%progbits
+ 239              		.align	1
+ 240              		.global	ADC_ProcessRawSample
+ 241              		.syntax unified
+ 242              		.code	16
+ 243              		.thumb_func
+ 245              	ADC_ProcessRawSample:
+ 246              	.LVL24:
+ 247              	.LFB3:
+ 126:../Src/charger_adc.c **** 
+ 127:../Src/charger_adc.c **** void ADC_ProcessRawSample(ADCChannel_t channel, uint16_t raw_adc_value)
+ 128:../Src/charger_adc.c **** {
+ 248              		.loc 1 128 1 is_stmt 1 view -0
+ 249              		.cfi_startproc
+ 250              		@ args = 0, pretend = 0, frame = 0
+ 251              		@ frame_needed = 0, uses_anonymous_args = 0
+ 252              		.loc 1 128 1 is_stmt 0 view .LVU54
+ 253 0000 10B5     		push	{r4, lr}
+ 254              	.LCFI2:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 4, -8
+ 257              		.cfi_offset 14, -4
+ 258 0002 0300     		movs	r3, r0
+ 259 0004 0800     		movs	r0, r1
+ 260              	.LVL25:
+ 129:../Src/charger_adc.c ****     // Store raw value in buffer
+ 130:../Src/charger_adc.c ****     switch (channel) {
+ 261              		.loc 1 130 5 is_stmt 1 view .LVU55
+ 262 0006 022B     		cmp	r3, #2
+ 263 0008 46D0     		beq	.L15
+ 264 000a 18D8     		bhi	.L16
+ 265 000c 002B     		cmp	r3, #0
+ 266 000e 23D0     		beq	.L17
+ 267 0010 012B     		cmp	r3, #1
+ 268 0012 4BD1     		bne	.L19
+ 131:../Src/charger_adc.c ****         case ADC_VBAT:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 8
+
+
+ 132:../Src/charger_adc.c ****             g_vbat_buffer[g_buffer_index] = raw_adc_value;
+ 133:../Src/charger_adc.c ****             g_measurement.vbat_adc = raw_adc_value;
+ 134:../Src/charger_adc.c ****             
+ 135:../Src/charger_adc.c ****             // Convert ADC to mV using scale factor
+ 136:../Src/charger_adc.c ****             if (raw_adc_value > g_config.vbat_offset) {
+ 137:../Src/charger_adc.c ****                 g_measurement.vbat_mv = (uint32_t)(raw_adc_value - g_config.vbat_offset) 
+ 138:../Src/charger_adc.c ****                                         * g_config.vbat_scale / 100;
+ 139:../Src/charger_adc.c ****                 g_has_valid_vbat = true;
+ 140:../Src/charger_adc.c ****             } else {
+ 141:../Src/charger_adc.c ****                 g_measurement.vbat_mv = 0;
+ 142:../Src/charger_adc.c ****             }
+ 143:../Src/charger_adc.c ****             break;
+ 144:../Src/charger_adc.c ****             
+ 145:../Src/charger_adc.c ****         case ADC_IBAT:
+ 146:../Src/charger_adc.c ****             g_ibat_buffer[g_buffer_index] = raw_adc_value;
+ 269              		.loc 1 146 13 view .LVU56
+ 270              		.loc 1 146 26 is_stmt 0 view .LVU57
+ 271 0014 2B4B     		ldr	r3, .L24
+ 272              	.LVL26:
+ 273              		.loc 1 146 26 view .LVU58
+ 274 0016 1A78     		ldrb	r2, [r3]
+ 275              		.loc 1 146 43 view .LVU59
+ 276 0018 2B4B     		ldr	r3, .L24+4
+ 277 001a 5200     		lsls	r2, r2, #1
+ 278 001c D152     		strh	r1, [r2, r3]
+ 147:../Src/charger_adc.c ****             g_measurement.ibat_adc = raw_adc_value;
+ 279              		.loc 1 147 13 is_stmt 1 view .LVU60
+ 280              		.loc 1 147 36 is_stmt 0 view .LVU61
+ 281 001e 2B4B     		ldr	r3, .L24+8
+ 282 0020 9981     		strh	r1, [r3, #12]
+ 148:../Src/charger_adc.c ****             
+ 149:../Src/charger_adc.c ****             // Convert ADC to mA
+ 150:../Src/charger_adc.c ****             // Subtract offset, then scale
+ 151:../Src/charger_adc.c ****             if (raw_adc_value > g_config.ibat_offset) {
+ 283              		.loc 1 151 13 is_stmt 1 view .LVU62
+ 284              		.loc 1 151 41 is_stmt 0 view .LVU63
+ 285 0022 2B4B     		ldr	r3, .L24+12
+ 286 0024 1B89     		ldrh	r3, [r3, #8]
+ 287              		.loc 1 151 16 view .LVU64
+ 288 0026 8B42     		cmp	r3, r1
+ 289 0028 32D2     		bcs	.L22
+ 152:../Src/charger_adc.c ****                 g_measurement.ibat_ma = (raw_adc_value - g_config.ibat_offset) 
+ 290              		.loc 1 152 17 is_stmt 1 view .LVU65
+ 291              		.loc 1 152 56 is_stmt 0 view .LVU66
+ 292 002a CB1A     		subs	r3, r1, r3
+ 153:../Src/charger_adc.c ****                                         * g_config.ibat_scale / 100;
+ 293              		.loc 1 153 51 view .LVU67
+ 294 002c 284A     		ldr	r2, .L24+12
+ 295 002e 5088     		ldrh	r0, [r2, #2]
+ 296              		.loc 1 153 41 view .LVU68
+ 297 0030 5843     		muls	r0, r3
+ 298              		.loc 1 153 63 view .LVU69
+ 299 0032 6421     		movs	r1, #100
+ 300              	.LVL27:
+ 301              		.loc 1 153 63 view .LVU70
+ 302 0034 FFF7FEFF 		bl	__aeabi_idiv
+ 303              	.LVL28:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 9
+
+
+ 152:../Src/charger_adc.c ****                 g_measurement.ibat_ma = (raw_adc_value - g_config.ibat_offset) 
+ 304              		.loc 1 152 39 view .LVU71
+ 305 0038 244B     		ldr	r3, .L24+8
+ 306 003a 9880     		strh	r0, [r3, #4]
+ 307 003c 36E0     		b	.L19
+ 308              	.LVL29:
+ 309              	.L16:
+ 130:../Src/charger_adc.c ****         case ADC_VBAT:
+ 310              		.loc 1 130 5 view .LVU72
+ 311 003e 032B     		cmp	r3, #3
+ 312 0040 34D1     		bne	.L19
+ 154:../Src/charger_adc.c ****             } else {
+ 155:../Src/charger_adc.c ****                 g_measurement.ibat_ma = 0;
+ 156:../Src/charger_adc.c ****             }
+ 157:../Src/charger_adc.c ****             break;
+ 158:../Src/charger_adc.c ****             
+ 159:../Src/charger_adc.c ****         case ADC_TEMP_MOSFET:
+ 160:../Src/charger_adc.c ****             g_temp_mosfet_buffer[g_buffer_index] = raw_adc_value;
+ 161:../Src/charger_adc.c ****             g_measurement.temp_mosfet_adc = raw_adc_value;
+ 162:../Src/charger_adc.c ****             g_measurement.temp_mosfet = ADC_NTCToTemperature_Internal(raw_adc_value);
+ 163:../Src/charger_adc.c ****             break;
+ 164:../Src/charger_adc.c ****             
+ 165:../Src/charger_adc.c ****         case ADC_TEMP_NTC:
+ 166:../Src/charger_adc.c ****             g_temp_ntc_buffer[g_buffer_index] = raw_adc_value;
+ 313              		.loc 1 166 13 is_stmt 1 view .LVU73
+ 314              		.loc 1 166 30 is_stmt 0 view .LVU74
+ 315 0042 204B     		ldr	r3, .L24
+ 316 0044 1A78     		ldrb	r2, [r3]
+ 317              		.loc 1 166 47 view .LVU75
+ 318 0046 234B     		ldr	r3, .L24+16
+ 319 0048 5200     		lsls	r2, r2, #1
+ 320 004a D152     		strh	r1, [r2, r3]
+ 167:../Src/charger_adc.c ****             g_measurement.temp_ntc_adc = raw_adc_value;
+ 321              		.loc 1 167 13 is_stmt 1 view .LVU76
+ 322              		.loc 1 167 40 is_stmt 0 view .LVU77
+ 323 004c 1F4C     		ldr	r4, .L24+8
+ 324 004e 2182     		strh	r1, [r4, #16]
+ 168:../Src/charger_adc.c ****             g_measurement.temp_ntc = ADC_NTCToTemperature_Internal(raw_adc_value);
+ 325              		.loc 1 168 13 is_stmt 1 view .LVU78
+ 326              		.loc 1 168 38 is_stmt 0 view .LVU79
+ 327 0050 FFF7FEFF 		bl	ADC_NTCToTemperature_Internal
+ 328              	.LVL30:
+ 329              		.loc 1 168 36 discriminator 1 view .LVU80
+ 330 0054 2081     		strh	r0, [r4, #8]
+ 169:../Src/charger_adc.c ****             break;
+ 331              		.loc 1 169 13 is_stmt 1 view .LVU81
+ 332 0056 29E0     		b	.L19
+ 333              	.LVL31:
+ 334              	.L17:
+ 132:../Src/charger_adc.c ****             g_measurement.vbat_adc = raw_adc_value;
+ 335              		.loc 1 132 13 view .LVU82
+ 132:../Src/charger_adc.c ****             g_measurement.vbat_adc = raw_adc_value;
+ 336              		.loc 1 132 26 is_stmt 0 view .LVU83
+ 337 0058 1A4B     		ldr	r3, .L24
+ 338 005a 1A78     		ldrb	r2, [r3]
+ 132:../Src/charger_adc.c ****             g_measurement.vbat_adc = raw_adc_value;
+ 339              		.loc 1 132 43 view .LVU84
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 10
+
+
+ 340 005c 1E4B     		ldr	r3, .L24+20
+ 341 005e 5200     		lsls	r2, r2, #1
+ 342 0060 D152     		strh	r1, [r2, r3]
+ 133:../Src/charger_adc.c ****             
+ 343              		.loc 1 133 13 is_stmt 1 view .LVU85
+ 133:../Src/charger_adc.c ****             
+ 344              		.loc 1 133 36 is_stmt 0 view .LVU86
+ 345 0062 1A4B     		ldr	r3, .L24+8
+ 346 0064 5981     		strh	r1, [r3, #10]
+ 136:../Src/charger_adc.c ****                 g_measurement.vbat_mv = (uint32_t)(raw_adc_value - g_config.vbat_offset) 
+ 347              		.loc 1 136 13 is_stmt 1 view .LVU87
+ 136:../Src/charger_adc.c ****                 g_measurement.vbat_mv = (uint32_t)(raw_adc_value - g_config.vbat_offset) 
+ 348              		.loc 1 136 41 is_stmt 0 view .LVU88
+ 349 0066 1A4B     		ldr	r3, .L24+12
+ 350 0068 DB88     		ldrh	r3, [r3, #6]
+ 136:../Src/charger_adc.c ****                 g_measurement.vbat_mv = (uint32_t)(raw_adc_value - g_config.vbat_offset) 
+ 351              		.loc 1 136 16 view .LVU89
+ 352 006a 8B42     		cmp	r3, r1
+ 353 006c 0CD2     		bcs	.L21
+ 137:../Src/charger_adc.c ****                                         * g_config.vbat_scale / 100;
+ 354              		.loc 1 137 17 is_stmt 1 view .LVU90
+ 137:../Src/charger_adc.c ****                                         * g_config.vbat_scale / 100;
+ 355              		.loc 1 137 66 is_stmt 0 view .LVU91
+ 356 006e CB1A     		subs	r3, r1, r3
+ 138:../Src/charger_adc.c ****                 g_has_valid_vbat = true;
+ 357              		.loc 1 138 51 view .LVU92
+ 358 0070 174A     		ldr	r2, .L24+12
+ 359 0072 1088     		ldrh	r0, [r2]
+ 138:../Src/charger_adc.c ****                 g_has_valid_vbat = true;
+ 360              		.loc 1 138 41 view .LVU93
+ 361 0074 5843     		muls	r0, r3
+ 138:../Src/charger_adc.c ****                 g_has_valid_vbat = true;
+ 362              		.loc 1 138 63 view .LVU94
+ 363 0076 6421     		movs	r1, #100
+ 364              	.LVL32:
+ 138:../Src/charger_adc.c ****                 g_has_valid_vbat = true;
+ 365              		.loc 1 138 63 view .LVU95
+ 366 0078 FFF7FEFF 		bl	__aeabi_uidiv
+ 367              	.LVL33:
+ 137:../Src/charger_adc.c ****                                         * g_config.vbat_scale / 100;
+ 368              		.loc 1 137 39 view .LVU96
+ 369 007c 134B     		ldr	r3, .L24+8
+ 370 007e 1860     		str	r0, [r3]
+ 139:../Src/charger_adc.c ****             } else {
+ 371              		.loc 1 139 17 is_stmt 1 view .LVU97
+ 139:../Src/charger_adc.c ****             } else {
+ 372              		.loc 1 139 34 is_stmt 0 view .LVU98
+ 373 0080 164B     		ldr	r3, .L24+24
+ 374 0082 0122     		movs	r2, #1
+ 375 0084 1A70     		strb	r2, [r3]
+ 376 0086 11E0     		b	.L19
+ 377              	.LVL34:
+ 378              	.L21:
+ 141:../Src/charger_adc.c ****             }
+ 379              		.loc 1 141 17 is_stmt 1 view .LVU99
+ 141:../Src/charger_adc.c ****             }
+ 380              		.loc 1 141 39 is_stmt 0 view .LVU100
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 11
+
+
+ 381 0088 104B     		ldr	r3, .L24+8
+ 382 008a 0022     		movs	r2, #0
+ 383 008c 1A60     		str	r2, [r3]
+ 384 008e 0DE0     		b	.L19
+ 385              	.L22:
+ 155:../Src/charger_adc.c ****             }
+ 386              		.loc 1 155 17 is_stmt 1 view .LVU101
+ 155:../Src/charger_adc.c ****             }
+ 387              		.loc 1 155 39 is_stmt 0 view .LVU102
+ 388 0090 0E4B     		ldr	r3, .L24+8
+ 389 0092 0022     		movs	r2, #0
+ 390 0094 9A80     		strh	r2, [r3, #4]
+ 391 0096 09E0     		b	.L19
+ 392              	.L15:
+ 160:../Src/charger_adc.c ****             g_measurement.temp_mosfet_adc = raw_adc_value;
+ 393              		.loc 1 160 13 is_stmt 1 view .LVU103
+ 160:../Src/charger_adc.c ****             g_measurement.temp_mosfet_adc = raw_adc_value;
+ 394              		.loc 1 160 33 is_stmt 0 view .LVU104
+ 395 0098 0A4B     		ldr	r3, .L24
+ 396 009a 1A78     		ldrb	r2, [r3]
+ 160:../Src/charger_adc.c ****             g_measurement.temp_mosfet_adc = raw_adc_value;
+ 397              		.loc 1 160 50 view .LVU105
+ 398 009c 104B     		ldr	r3, .L24+28
+ 399 009e 5200     		lsls	r2, r2, #1
+ 400 00a0 D152     		strh	r1, [r2, r3]
+ 161:../Src/charger_adc.c ****             g_measurement.temp_mosfet = ADC_NTCToTemperature_Internal(raw_adc_value);
+ 401              		.loc 1 161 13 is_stmt 1 view .LVU106
+ 161:../Src/charger_adc.c ****             g_measurement.temp_mosfet = ADC_NTCToTemperature_Internal(raw_adc_value);
+ 402              		.loc 1 161 43 is_stmt 0 view .LVU107
+ 403 00a2 0A4C     		ldr	r4, .L24+8
+ 404 00a4 E181     		strh	r1, [r4, #14]
+ 162:../Src/charger_adc.c ****             break;
+ 405              		.loc 1 162 13 is_stmt 1 view .LVU108
+ 162:../Src/charger_adc.c ****             break;
+ 406              		.loc 1 162 41 is_stmt 0 view .LVU109
+ 407 00a6 FFF7FEFF 		bl	ADC_NTCToTemperature_Internal
+ 408              	.LVL35:
+ 162:../Src/charger_adc.c ****             break;
+ 409              		.loc 1 162 39 discriminator 1 view .LVU110
+ 410 00aa E080     		strh	r0, [r4, #6]
+ 163:../Src/charger_adc.c ****             
+ 411              		.loc 1 163 13 is_stmt 1 view .LVU111
+ 412              	.L19:
+ 170:../Src/charger_adc.c ****             
+ 171:../Src/charger_adc.c ****         case ADC_VAUX:
+ 172:../Src/charger_adc.c ****             // Not used, but could store here if needed
+ 173:../Src/charger_adc.c ****             break;
+ 174:../Src/charger_adc.c ****             
+ 175:../Src/charger_adc.c ****         default:
+ 176:../Src/charger_adc.c ****             break;
+ 177:../Src/charger_adc.c ****     }
+ 178:../Src/charger_adc.c ****     
+ 179:../Src/charger_adc.c ****     // Advance buffer index (round-robin, 3-sample median filter)
+ 180:../Src/charger_adc.c ****     g_buffer_index++;
+ 413              		.loc 1 180 5 view .LVU112
+ 414              		.loc 1 180 19 is_stmt 0 view .LVU113
+ 415 00ac 054A     		ldr	r2, .L24
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 12
+
+
+ 416 00ae 1378     		ldrb	r3, [r2]
+ 417 00b0 0133     		adds	r3, r3, #1
+ 418 00b2 DBB2     		uxtb	r3, r3
+ 419 00b4 1370     		strb	r3, [r2]
+ 181:../Src/charger_adc.c ****     if (g_buffer_index >= 3)
+ 420              		.loc 1 181 5 is_stmt 1 view .LVU114
+ 421              		.loc 1 181 8 is_stmt 0 view .LVU115
+ 422 00b6 022B     		cmp	r3, #2
+ 423 00b8 02D9     		bls	.L14
+ 182:../Src/charger_adc.c ****         g_buffer_index = 0;
+ 424              		.loc 1 182 9 is_stmt 1 view .LVU116
+ 425              		.loc 1 182 24 is_stmt 0 view .LVU117
+ 426 00ba 1300     		movs	r3, r2
+ 427 00bc 0022     		movs	r2, #0
+ 428 00be 1A70     		strb	r2, [r3]
+ 429              	.L14:
+ 183:../Src/charger_adc.c **** }
+ 430              		.loc 1 183 1 view .LVU118
+ 431              		@ sp needed
+ 432 00c0 10BD     		pop	{r4, pc}
+ 433              	.L25:
+ 434 00c2 C046     		.align	2
+ 435              	.L24:
+ 436 00c4 00000000 		.word	g_buffer_index
+ 437 00c8 00000000 		.word	g_ibat_buffer
+ 438 00cc 00000000 		.word	g_measurement
+ 439 00d0 00000000 		.word	g_config
+ 440 00d4 00000000 		.word	g_temp_ntc_buffer
+ 441 00d8 00000000 		.word	g_vbat_buffer
+ 442 00dc 00000000 		.word	g_has_valid_vbat
+ 443 00e0 00000000 		.word	g_temp_mosfet_buffer
+ 444              		.cfi_endproc
+ 445              	.LFE3:
+ 447              		.section	.text.ADC_GetMeasurement,"ax",%progbits
+ 448              		.align	1
+ 449              		.global	ADC_GetMeasurement
+ 450              		.syntax unified
+ 451              		.code	16
+ 452              		.thumb_func
+ 454              	ADC_GetMeasurement:
+ 455              	.LVL36:
+ 456              	.LFB4:
+ 184:../Src/charger_adc.c **** 
+ 185:../Src/charger_adc.c **** ADCMeasurement_t ADC_GetMeasurement(void)
+ 186:../Src/charger_adc.c **** {
+ 457              		.loc 1 186 1 is_stmt 1 view -0
+ 458              		.cfi_startproc
+ 459              		@ args = 0, pretend = 0, frame = 0
+ 460              		@ frame_needed = 0, uses_anonymous_args = 0
+ 461              		.loc 1 186 1 is_stmt 0 view .LVU120
+ 462 0000 30B5     		push	{r4, r5, lr}
+ 463              	.LCFI3:
+ 464              		.cfi_def_cfa_offset 12
+ 465              		.cfi_offset 4, -12
+ 466              		.cfi_offset 5, -8
+ 467              		.cfi_offset 14, -4
+ 187:../Src/charger_adc.c ****     // Return latest filtered measurement
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 13
+
+
+ 188:../Src/charger_adc.c ****     // (Filtering is done incrementally in ProcessRawSample)
+ 189:../Src/charger_adc.c **** 
+ 190:../Src/charger_adc.c ****     if (!g_has_valid_vbat) {
+ 468              		.loc 1 190 5 is_stmt 1 view .LVU121
+ 469              		.loc 1 190 9 is_stmt 0 view .LVU122
+ 470 0002 074B     		ldr	r3, .L28
+ 471 0004 1B78     		ldrb	r3, [r3]
+ 472              		.loc 1 190 8 view .LVU123
+ 473 0006 002B     		cmp	r3, #0
+ 474 0008 02D1     		bne	.L27
+ 191:../Src/charger_adc.c ****         g_measurement.vbat_mv = 67200;
+ 475              		.loc 1 191 9 is_stmt 1 view .LVU124
+ 476              		.loc 1 191 31 is_stmt 0 view .LVU125
+ 477 000a 064B     		ldr	r3, .L28+4
+ 478 000c 064A     		ldr	r2, .L28+8
+ 479 000e 1A60     		str	r2, [r3]
+ 480              	.L27:
+ 192:../Src/charger_adc.c ****     }
+ 193:../Src/charger_adc.c **** 
+ 194:../Src/charger_adc.c ****     return g_measurement;
+ 481              		.loc 1 194 5 is_stmt 1 view .LVU126
+ 482              		.loc 1 194 12 is_stmt 0 view .LVU127
+ 483 0010 044B     		ldr	r3, .L28+4
+ 484 0012 0200     		movs	r2, r0
+ 485 0014 32CB     		ldmia	r3!, {r1, r4, r5}
+ 486 0016 32C2     		stmia	r2!, {r1, r4, r5}
+ 487 0018 12CB     		ldmia	r3!, {r1, r4}
+ 488 001a 12C2     		stmia	r2!, {r1, r4}
+ 195:../Src/charger_adc.c **** }
+ 489              		.loc 1 195 1 view .LVU128
+ 490              		@ sp needed
+ 491 001c 30BD     		pop	{r4, r5, pc}
+ 492              	.L29:
+ 493 001e C046     		.align	2
+ 494              	.L28:
+ 495 0020 00000000 		.word	g_has_valid_vbat
+ 496 0024 00000000 		.word	g_measurement
+ 497 0028 80060100 		.word	67200
+ 498              		.cfi_endproc
+ 499              	.LFE4:
+ 501              		.section	.text.ADC_StartConversion,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	ADC_StartConversion
+ 504              		.syntax unified
+ 505              		.code	16
+ 506              		.thumb_func
+ 508              	ADC_StartConversion:
+ 509              	.LFB5:
+ 196:../Src/charger_adc.c **** 
+ 197:../Src/charger_adc.c **** void ADC_StartConversion(void)
+ 198:../Src/charger_adc.c **** {
+ 510              		.loc 1 198 1 is_stmt 1 view -0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+ 514              		@ link register save eliminated.
+ 199:../Src/charger_adc.c ****     // This would trigger a new ADC conversion cycle
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 14
+
+
+ 200:../Src/charger_adc.c ****     // For now, this is a placeholder for hardware integration
+ 201:../Src/charger_adc.c ****     // In real code, this sets ADC_CR2 START bit or similar
+ 202:../Src/charger_adc.c **** }
+ 515              		.loc 1 202 1 view .LVU130
+ 516              		@ sp needed
+ 517 0000 7047     		bx	lr
+ 518              		.cfi_endproc
+ 519              	.LFE5:
+ 521              		.section	.text.ADC_NTCToTemperature,"ax",%progbits
+ 522              		.align	1
+ 523              		.global	ADC_NTCToTemperature
+ 524              		.syntax unified
+ 525              		.code	16
+ 526              		.thumb_func
+ 528              	ADC_NTCToTemperature:
+ 529              	.LVL37:
+ 530              	.LFB6:
+ 203:../Src/charger_adc.c **** 
+ 204:../Src/charger_adc.c **** uint16_t ADC_NTCToTemperature(uint16_t adc_raw)
+ 205:../Src/charger_adc.c **** {
+ 531              		.loc 1 205 1 view -0
+ 532              		.cfi_startproc
+ 533              		@ args = 0, pretend = 0, frame = 0
+ 534              		@ frame_needed = 0, uses_anonymous_args = 0
+ 535              		.loc 1 205 1 is_stmt 0 view .LVU132
+ 536 0000 10B5     		push	{r4, lr}
+ 537              	.LCFI4:
+ 538              		.cfi_def_cfa_offset 8
+ 539              		.cfi_offset 4, -8
+ 540              		.cfi_offset 14, -4
+ 206:../Src/charger_adc.c ****     return ADC_NTCToTemperature_Internal(adc_raw);
+ 541              		.loc 1 206 5 is_stmt 1 view .LVU133
+ 542              		.loc 1 206 12 is_stmt 0 view .LVU134
+ 543 0002 FFF7FEFF 		bl	ADC_NTCToTemperature_Internal
+ 544              	.LVL38:
+ 207:../Src/charger_adc.c **** }
+ 545              		.loc 1 207 1 view .LVU135
+ 546              		@ sp needed
+ 547 0006 10BD     		pop	{r4, pc}
+ 548              		.cfi_endproc
+ 549              	.LFE6:
+ 551              		.section	.text.ADC_GetRawValue,"ax",%progbits
+ 552              		.align	1
+ 553              		.global	ADC_GetRawValue
+ 554              		.syntax unified
+ 555              		.code	16
+ 556              		.thumb_func
+ 558              	ADC_GetRawValue:
+ 559              	.LVL39:
+ 560              	.LFB7:
+ 208:../Src/charger_adc.c **** 
+ 209:../Src/charger_adc.c **** uint16_t ADC_GetRawValue(ADCChannel_t channel)
+ 210:../Src/charger_adc.c **** {
+ 561              		.loc 1 210 1 is_stmt 1 view -0
+ 562              		.cfi_startproc
+ 563              		@ args = 0, pretend = 0, frame = 0
+ 564              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 15
+
+
+ 565              		@ link register save eliminated.
+ 211:../Src/charger_adc.c ****     switch (channel) {
+ 566              		.loc 1 211 5 view .LVU137
+ 567 0000 0228     		cmp	r0, #2
+ 568 0002 13D0     		beq	.L33
+ 569 0004 08D8     		bhi	.L34
+ 570 0006 0028     		cmp	r0, #0
+ 571 0008 0DD0     		beq	.L35
+ 572 000a 0128     		cmp	r0, #1
+ 573 000c 02D1     		bne	.L39
+ 212:../Src/charger_adc.c ****         case ADC_VBAT:
+ 213:../Src/charger_adc.c ****             return g_measurement.vbat_adc;
+ 214:../Src/charger_adc.c ****         case ADC_IBAT:
+ 215:../Src/charger_adc.c ****             return g_measurement.ibat_adc;
+ 574              		.loc 1 215 13 view .LVU138
+ 575              		.loc 1 215 33 is_stmt 0 view .LVU139
+ 576 000e 094B     		ldr	r3, .L41
+ 577 0010 9889     		ldrh	r0, [r3, #12]
+ 578              	.LVL40:
+ 579              		.loc 1 215 33 view .LVU140
+ 580 0012 0AE0     		b	.L37
+ 581              	.LVL41:
+ 582              	.L39:
+ 211:../Src/charger_adc.c ****     switch (channel) {
+ 583              		.loc 1 211 5 view .LVU141
+ 584 0014 0020     		movs	r0, #0
+ 585              	.LVL42:
+ 211:../Src/charger_adc.c ****     switch (channel) {
+ 586              		.loc 1 211 5 view .LVU142
+ 587 0016 08E0     		b	.L37
+ 588              	.LVL43:
+ 589              	.L34:
+ 211:../Src/charger_adc.c ****     switch (channel) {
+ 590              		.loc 1 211 5 view .LVU143
+ 591 0018 0328     		cmp	r0, #3
+ 592 001a 02D1     		bne	.L40
+ 216:../Src/charger_adc.c ****         case ADC_TEMP_MOSFET:
+ 217:../Src/charger_adc.c ****             return g_measurement.temp_mosfet_adc;
+ 218:../Src/charger_adc.c ****         case ADC_TEMP_NTC:
+ 219:../Src/charger_adc.c ****             return g_measurement.temp_ntc_adc;
+ 593              		.loc 1 219 13 is_stmt 1 view .LVU144
+ 594              		.loc 1 219 33 is_stmt 0 view .LVU145
+ 595 001c 054B     		ldr	r3, .L41
+ 596 001e 188A     		ldrh	r0, [r3, #16]
+ 597              	.LVL44:
+ 598              		.loc 1 219 33 view .LVU146
+ 599 0020 03E0     		b	.L37
+ 600              	.LVL45:
+ 601              	.L40:
+ 211:../Src/charger_adc.c ****         case ADC_VBAT:
+ 602              		.loc 1 211 5 view .LVU147
+ 603 0022 0020     		movs	r0, #0
+ 604              	.LVL46:
+ 211:../Src/charger_adc.c ****         case ADC_VBAT:
+ 605              		.loc 1 211 5 view .LVU148
+ 606 0024 01E0     		b	.L37
+ 607              	.LVL47:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 16
+
+
+ 608              	.L35:
+ 213:../Src/charger_adc.c ****         case ADC_IBAT:
+ 609              		.loc 1 213 13 is_stmt 1 view .LVU149
+ 213:../Src/charger_adc.c ****         case ADC_IBAT:
+ 610              		.loc 1 213 33 is_stmt 0 view .LVU150
+ 611 0026 034B     		ldr	r3, .L41
+ 612 0028 5889     		ldrh	r0, [r3, #10]
+ 613              	.LVL48:
+ 614              	.L37:
+ 220:../Src/charger_adc.c ****         default:
+ 221:../Src/charger_adc.c ****             return 0;
+ 222:../Src/charger_adc.c ****     }
+ 223:../Src/charger_adc.c **** }
+ 615              		.loc 1 223 1 view .LVU151
+ 616              		@ sp needed
+ 617 002a 7047     		bx	lr
+ 618              	.LVL49:
+ 619              	.L33:
+ 217:../Src/charger_adc.c ****         case ADC_TEMP_NTC:
+ 620              		.loc 1 217 13 is_stmt 1 view .LVU152
+ 217:../Src/charger_adc.c ****         case ADC_TEMP_NTC:
+ 621              		.loc 1 217 33 is_stmt 0 view .LVU153
+ 622 002c 014B     		ldr	r3, .L41
+ 623 002e D889     		ldrh	r0, [r3, #14]
+ 624              	.LVL50:
+ 217:../Src/charger_adc.c ****         case ADC_TEMP_NTC:
+ 625              		.loc 1 217 33 view .LVU154
+ 626 0030 FBE7     		b	.L37
+ 627              	.L42:
+ 628 0032 C046     		.align	2
+ 629              	.L41:
+ 630 0034 00000000 		.word	g_measurement
+ 631              		.cfi_endproc
+ 632              	.LFE7:
+ 634              		.section	.text.ADC_GetACVoltage,"ax",%progbits
+ 635              		.align	1
+ 636              		.global	ADC_GetACVoltage
+ 637              		.syntax unified
+ 638              		.code	16
+ 639              		.thumb_func
+ 641              	ADC_GetACVoltage:
+ 642              	.LFB8:
+ 224:../Src/charger_adc.c **** 
+ 225:../Src/charger_adc.c **** uint16_t ADC_GetACVoltage(void)
+ 226:../Src/charger_adc.c **** {
+ 643              		.loc 1 226 1 is_stmt 1 view -0
+ 644              		.cfi_startproc
+ 645              		@ args = 0, pretend = 0, frame = 0
+ 646              		@ frame_needed = 0, uses_anonymous_args = 0
+ 647              		@ link register save eliminated.
+ 227:../Src/charger_adc.c ****     // AC voltage sensing is not yet wired into the ADC channel map.
+ 228:../Src/charger_adc.c ****     // Return a safe nominal value until the actual divider channel is connected.
+ 229:../Src/charger_adc.c ****     return 230;
+ 648              		.loc 1 229 5 view .LVU156
+ 230:../Src/charger_adc.c **** }...
+ 649              		.loc 1 230 1 is_stmt 0 view .LVU157
+ 650 0000 E620     		movs	r0, #230
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 17
+
+
+ 651              		@ sp needed
+ 652 0002 7047     		bx	lr
+ 653              		.cfi_endproc
+ 654              	.LFE8:
+ 656              		.section	.rodata.ntc_lookup,"a"
+ 657              		.align	2
+ 660              	ntc_lookup:
+ 661 0000 D80E     		.short	3800
+ 662 0002 0000     		.short	0
+ 663 0004 AC0D     		.short	3500
+ 664 0006 6400     		.short	100
+ 665 0008 B80B     		.short	3000
+ 666 000a FA00     		.short	250
+ 667 000c C409     		.short	2500
+ 668 000e 9001     		.short	400
+ 669 0010 D007     		.short	2000
+ 670 0012 2602     		.short	550
+ 671 0014 DC05     		.short	1500
+ 672 0016 BC02     		.short	700
+ 673 0018 E803     		.short	1000
+ 674 001a 2003     		.short	800
+ 675 001c 2003     		.short	800
+ 676 001e 8403     		.short	900
+ 677 0020 5802     		.short	600
+ 678 0022 E803     		.short	1000
+ 679 0024 9001     		.short	400
+ 680 0026 4C04     		.short	1100
+ 681              		.section	.bss.g_buffer_index,"aw",%nobits
+ 684              	g_buffer_index:
+ 685 0000 00       		.space	1
+ 686              		.section	.bss.g_temp_ntc_buffer,"aw",%nobits
+ 687              		.align	2
+ 690              	g_temp_ntc_buffer:
+ 691 0000 00000000 		.space	6
+ 691      0000
+ 692              		.section	.bss.g_temp_mosfet_buffer,"aw",%nobits
+ 693              		.align	2
+ 696              	g_temp_mosfet_buffer:
+ 697 0000 00000000 		.space	6
+ 697      0000
+ 698              		.section	.bss.g_ibat_buffer,"aw",%nobits
+ 699              		.align	2
+ 702              	g_ibat_buffer:
+ 703 0000 00000000 		.space	6
+ 703      0000
+ 704              		.section	.bss.g_vbat_buffer,"aw",%nobits
+ 705              		.align	2
+ 708              	g_vbat_buffer:
+ 709 0000 00000000 		.space	6
+ 709      0000
+ 710              		.section	.bss.g_has_valid_vbat,"aw",%nobits
+ 713              	g_has_valid_vbat:
+ 714 0000 00       		.space	1
+ 715              		.section	.bss.g_measurement,"aw",%nobits
+ 716              		.align	2
+ 719              	g_measurement:
+ 720 0000 00000000 		.space	20
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 18
+
+
+ 720      00000000 
+ 720      00000000 
+ 720      00000000 
+ 720      00000000 
+ 721              		.section	.bss.g_config,"aw",%nobits
+ 722              		.align	2
+ 725              	g_config:
+ 726 0000 00000000 		.space	20
+ 726      00000000 
+ 726      00000000 
+ 726      00000000 
+ 726      00000000 
+ 727              		.text
+ 728              	.Letext0:
+ 729              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 730              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 731              		.file 4 "../Inc/charger_adc.h"
+ 732              		.file 5 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/st
+ 733              		.file 6 "<built-in>"
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 charger_adc.c
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:19     .text.ADC_NTCToTemperature_Internal:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:24     .text.ADC_NTCToTemperature_Internal:00000000 ADC_NTCToTemperature_Internal
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:141    .text.ADC_NTCToTemperature_Internal:0000004c $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:660    .rodata.ntc_lookup:00000000 ntc_lookup
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:148    .text.ADC_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:154    .text.ADC_Init:00000000 ADC_Init
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:226    .text.ADC_Init:00000054 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:725    .bss.g_config:00000000 g_config
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:719    .bss.g_measurement:00000000 g_measurement
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:708    .bss.g_vbat_buffer:00000000 g_vbat_buffer
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:702    .bss.g_ibat_buffer:00000000 g_ibat_buffer
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:696    .bss.g_temp_mosfet_buffer:00000000 g_temp_mosfet_buffer
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:690    .bss.g_temp_ntc_buffer:00000000 g_temp_ntc_buffer
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:684    .bss.g_buffer_index:00000000 g_buffer_index
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:713    .bss.g_has_valid_vbat:00000000 g_has_valid_vbat
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:239    .text.ADC_ProcessRawSample:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:245    .text.ADC_ProcessRawSample:00000000 ADC_ProcessRawSample
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:436    .text.ADC_ProcessRawSample:000000c4 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:448    .text.ADC_GetMeasurement:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:454    .text.ADC_GetMeasurement:00000000 ADC_GetMeasurement
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:495    .text.ADC_GetMeasurement:00000020 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:502    .text.ADC_StartConversion:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:508    .text.ADC_StartConversion:00000000 ADC_StartConversion
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:522    .text.ADC_NTCToTemperature:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:528    .text.ADC_NTCToTemperature:00000000 ADC_NTCToTemperature
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:552    .text.ADC_GetRawValue:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:558    .text.ADC_GetRawValue:00000000 ADC_GetRawValue
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:630    .text.ADC_GetRawValue:00000034 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:635    .text.ADC_GetACVoltage:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:641    .text.ADC_GetACVoltage:00000000 ADC_GetACVoltage
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:657    .rodata.ntc_lookup:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:685    .bss.g_buffer_index:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:687    .bss.g_temp_ntc_buffer:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:693    .bss.g_temp_mosfet_buffer:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:699    .bss.g_ibat_buffer:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:705    .bss.g_vbat_buffer:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:714    .bss.g_has_valid_vbat:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:716    .bss.g_measurement:00000000 $d
+C:\Users\Gautam\AppData\Local\Temp\ccwiy1cV.s:722    .bss.g_config:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_idiv
+memcpy
+memset
+__aeabi_uidiv

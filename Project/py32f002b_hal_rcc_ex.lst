@@ -1,0 +1,967 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"py32f002b_hal_rcc_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+  18              		.section	.text.HAL_RCCEx_PeriphCLKConfig,"ax",%progbits
+  19              		.align	1
+  20              		.global	HAL_RCCEx_PeriphCLKConfig
+  21              		.syntax unified
+  22              		.code	16
+  23              		.thumb_func
+  25              	HAL_RCCEx_PeriphCLKConfig:
+  26              	.LVL0:
+  27              	.LFB37:
+   1:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+   2:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   ******************************************************************************
+   3:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @file    py32f002b_hal_rcc_ex.c
+   4:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @author  MCU Application Team
+   5:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief   Extended RCC HAL module driver.
+   6:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *          This file provides firmware functions to manage the following
+   7:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *          functionalities RCC extended peripheral:
+   8:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *           + Extended Peripheral Control functions
+   9:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *           + Extended Clock management functions
+  10:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  11:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   ******************************************************************************
+  12:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @attention
+  13:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  14:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * <h2><center>&copy; Copyright (c) 2023 Puya Semiconductor Co.
+  15:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * All rights reserved.</center></h2>
+  16:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  17:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * This software component is licensed by Puya under BSD 3-Clause license,
+  18:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * the "License"; You may not use this file except in compliance with the
+  19:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * License. You may obtain a copy of the License at:
+  20:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  21:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  22:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   ******************************************************************************
+  23:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @attention
+  24:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  25:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  26:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * All rights reserved.</center></h2>
+  27:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  28:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  29:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * the "License"; You may not use this file except in compliance with the
+  30:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * License. You may obtain a copy of the License at:
+  31:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *                        opensource.org/licenses/BSD-3-Clause
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 2
+
+
+  32:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  33:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   ******************************************************************************
+  34:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  35:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  36:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Includes ------------------------------------------------------------------*/
+  37:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #include "py32f0xx_hal.h"
+  38:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  39:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /** @addtogroup PY32F002B_HAL_Driver
+  40:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @{
+  41:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  42:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  43:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /** @defgroup RCCEx RCCEx
+  44:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief RCC Extended HAL module driver
+  45:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @{
+  46:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  47:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  48:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #ifdef HAL_RCC_MODULE_ENABLED
+  49:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  50:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  51:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Private defines -----------------------------------------------------------*/
+  52:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Private macros ------------------------------------------------------------*/
+  53:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Private variables ---------------------------------------------------------*/
+  54:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  55:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  56:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /* Exported functions --------------------------------------------------------*/
+  57:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  58:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /** @defgroup RCCEx_Exported_Functions RCCEx Exported Functions
+  59:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @{
+  60:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  61:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  62:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /** @defgroup RCCEx_Exported_Functions_Group1 Extended Peripheral Control functions
+  63:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  *  @brief  Extended Peripheral Control functions
+  64:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  *
+  65:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** @verbatim
+  66:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  ===============================================================================
+  67:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****                 ##### Extended Peripheral Control functions  #####
+  68:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  ===============================================================================
+  69:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     [..]
+  70:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     This subsection provides a set of functions allowing to control the RCC Clocks
+  71:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     frequencies.
+  72:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     [..]
+  73:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     (@) Important note: Care must be taken when @ref HAL_RCCEx_PeriphCLKConfig() is used to
+  74:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****         select the RTC clock source; in this case the Backup domain will be reset in
+  75:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****         order to modify the RTC Clock source, as consequence RTC registers (including
+  76:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****         the backup registers) and RCC_BDCR register are set to their reset values.
+  77:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+  78:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** @endverbatim
+  79:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @{
+  80:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  81:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+  82:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief  Initialize the RCC extended peripherals clocks according to the specified
+  83:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         parameters in the @ref RCC_PeriphCLKInitTypeDef.
+  84:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @param  PeriphClkInit  pointer to a @ref RCC_PeriphCLKInitTypeDef structure that
+  85:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         contains a field PeriphClockSelection which can be a combination of the following value
+  86:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_COMP1   COMP1 peripheral clock  (1)
+  87:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_COMP2   COMP2 peripheral clock  (1)
+  88:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_LPTIM  LPTIM peripheral clock  (1)
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 3
+
+
+  89:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  90:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @note   (1) Peripherals maybe not available on some devices
+  91:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @note   Care must be taken when @ref HAL_RCCEx_PeriphCLKConfig() is used to select
+  92:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         the RTC clock source: in this case the access to Backup domain is enabled.
+  93:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *
+  94:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @retval HAL status
+  95:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+  96:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
+  97:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** {
+  28              		.loc 1 97 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 97 1 is_stmt 0 view .LVU1
+  33 0000 30B5     		push	{r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 12
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 5, -8
+  38              		.cfi_offset 14, -4
+  98:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Check the parameters */
+  99:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   assert_param(IS_RCC_PERIPHCLOCK(PeriphClkInit->PeriphClockSelection));
+  39              		.loc 1 99 3 is_stmt 1 view .LVU2
+ 100:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 101:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP1SEL)
+ 102:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /*-------------------------- COMP1 clock source configuration -------------------*/
+ 103:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   if (((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_COMP1) == RCC_PERIPHCLK_COMP1)
+  40              		.loc 1 103 3 view .LVU3
+  41              		.loc 1 103 22 is_stmt 0 view .LVU4
+  42 0002 0368     		ldr	r3, [r0]
+  43              		.loc 1 103 6 view .LVU5
+  44 0004 9B07     		lsls	r3, r3, #30
+  45 0006 0FD5     		bpl	.L2
+ 104:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   {
+ 105:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Check the parameters */
+ 106:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     assert_param(IS_RCC_COMP1CLKSOURCE(PeriphClkInit->Comp1ClockSelection));
+  46              		.loc 1 106 5 is_stmt 1 view .LVU6
+ 107:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 108:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Configure the COMP1 clock source */
+ 109:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     __HAL_RCC_COMP1_CONFIG(PeriphClkInit->Comp1ClockSelection);
+  47              		.loc 1 109 5 view .LVU7
+  48              	.LBB2:
+  49              		.loc 1 109 5 view .LVU8
+  50 0008 1C4C     		ldr	r4, .L8
+  51 000a 636D     		ldr	r3, [r4, #84]
+  52 000c 8022     		movs	r2, #128
+  53 000e 1201     		lsls	r2, r2, #4
+  54 0010 1340     		ands	r3, r2
+  55              	.LVL1:
+  56              		.loc 1 109 5 view .LVU9
+  57 0012 9A08     		lsrs	r2, r3, #2
+  58 0014 1A43     		orrs	r2, r3
+  59              	.LVL2:
+  60              		.loc 1 109 5 view .LVU10
+  61 0016 4368     		ldr	r3, [r0, #4]
+  62 0018 9908     		lsrs	r1, r3, #2
+  63 001a 1943     		orrs	r1, r3
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 4
+
+
+  64              	.LVL3:
+  65              		.loc 1 109 5 view .LVU11
+  66 001c 636D     		ldr	r3, [r4, #84]
+  67 001e 184D     		ldr	r5, .L8+4
+  68 0020 2B40     		ands	r3, r5
+  69 0022 0A43     		orrs	r2, r1
+  70              	.LVL4:
+  71              		.loc 1 109 5 is_stmt 0 view .LVU12
+  72 0024 1343     		orrs	r3, r2
+  73 0026 6365     		str	r3, [r4, #84]
+  74              	.LVL5:
+  75              	.L2:
+  76              		.loc 1 109 5 view .LVU13
+  77              	.LBE2:
+  78              		.loc 1 109 5 is_stmt 1 view .LVU14
+ 110:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   }
+ 111:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP1SEL */
+ 112:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 113:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP2SEL)
+ 114:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /*-------------------------- COMP2 clock source configuration -------------------*/
+ 115:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   if (((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_COMP2) == RCC_PERIPHCLK_COMP2)
+  79              		.loc 1 115 3 view .LVU15
+  80              		.loc 1 115 22 is_stmt 0 view .LVU16
+  81 0028 0368     		ldr	r3, [r0]
+  82              		.loc 1 115 6 view .LVU17
+  83 002a 9B06     		lsls	r3, r3, #26
+  84 002c 0FD5     		bpl	.L3
+ 116:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   {
+ 117:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Check the parameters */
+ 118:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     assert_param(IS_RCC_COMP2CLKSOURCE(PeriphClkInit->Comp2ClockSelection));
+  85              		.loc 1 118 5 is_stmt 1 view .LVU18
+ 119:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 120:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Configure the COMP2 clock source */
+ 121:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     __HAL_RCC_COMP2_CONFIG(PeriphClkInit->Comp2ClockSelection);
+  86              		.loc 1 121 5 view .LVU19
+  87              	.LBB3:
+  88              		.loc 1 121 5 view .LVU20
+  89 002e 134C     		ldr	r4, .L8
+  90 0030 636D     		ldr	r3, [r4, #84]
+  91 0032 8022     		movs	r2, #128
+  92 0034 D200     		lsls	r2, r2, #3
+  93 0036 1340     		ands	r3, r2
+  94              	.LVL6:
+  95              		.loc 1 121 5 view .LVU21
+  96 0038 9A08     		lsrs	r2, r3, #2
+  97 003a 1A43     		orrs	r2, r3
+  98              	.LVL7:
+  99              		.loc 1 121 5 view .LVU22
+ 100 003c 8368     		ldr	r3, [r0, #8]
+ 101 003e 9908     		lsrs	r1, r3, #2
+ 102 0040 1943     		orrs	r1, r3
+ 103              	.LVL8:
+ 104              		.loc 1 121 5 view .LVU23
+ 105 0042 636D     		ldr	r3, [r4, #84]
+ 106 0044 0F4D     		ldr	r5, .L8+8
+ 107 0046 2B40     		ands	r3, r5
+ 108 0048 0A43     		orrs	r2, r1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 5
+
+
+ 109              	.LVL9:
+ 110              		.loc 1 121 5 is_stmt 0 view .LVU24
+ 111 004a 1343     		orrs	r3, r2
+ 112 004c 6365     		str	r3, [r4, #84]
+ 113              	.LVL10:
+ 114              	.L3:
+ 115              		.loc 1 121 5 view .LVU25
+ 116              	.LBE3:
+ 117              		.loc 1 121 5 is_stmt 1 view .LVU26
+ 122:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   }
+ 123:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP2SEL */
+ 124:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 125:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_LPTIMSEL)
+ 126:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /*-------------------------- LPTIM clock source configuration -------------------*/
+ 127:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   if (((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_LPTIM) == (RCC_PERIPHCLK_LPTIM))
+ 118              		.loc 1 127 3 view .LVU27
+ 119              		.loc 1 127 22 is_stmt 0 view .LVU28
+ 120 004e 0368     		ldr	r3, [r0]
+ 121              		.loc 1 127 6 view .LVU29
+ 122 0050 9B05     		lsls	r3, r3, #22
+ 123 0052 11D5     		bpl	.L4
+ 128:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   {
+ 129:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     assert_param(IS_RCC_LPTIM1CLKSOURCE(PeriphClkInit->LptimClockSelection));
+ 124              		.loc 1 129 5 is_stmt 1 view .LVU30
+ 130:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     __HAL_RCC_LPTIM_CONFIG(PeriphClkInit->LptimClockSelection);
+ 125              		.loc 1 130 5 view .LVU31
+ 126              	.LBB4:
+ 127              		.loc 1 130 5 view .LVU32
+ 128 0054 0949     		ldr	r1, .L8
+ 129 0056 4A6D     		ldr	r2, [r1, #84]
+ 130 0058 FF23     		movs	r3, #255
+ 131 005a 1B02     		lsls	r3, r3, #8
+ 132 005c 1A40     		ands	r2, r3
+ 133              	.LVL11:
+ 134              		.loc 1 130 5 view .LVU33
+ 135 005e 4B6D     		ldr	r3, [r1, #84]
+ 136 0060 9B08     		lsrs	r3, r3, #2
+ 137 0062 FF24     		movs	r4, #255
+ 138 0064 A401     		lsls	r4, r4, #6
+ 139 0066 2340     		ands	r3, r4
+ 140              	.LVL12:
+ 141              		.loc 1 130 5 view .LVU34
+ 142 0068 1A43     		orrs	r2, r3
+ 143              	.LVL13:
+ 144              		.loc 1 130 5 view .LVU35
+ 145 006a 4B6D     		ldr	r3, [r1, #84]
+ 146              	.LVL14:
+ 147              		.loc 1 130 5 is_stmt 0 view .LVU36
+ 148 006c 064C     		ldr	r4, .L8+12
+ 149 006e 2340     		ands	r3, r4
+ 150 0070 C068     		ldr	r0, [r0, #12]
+ 151              	.LVL15:
+ 152              		.loc 1 130 5 view .LVU37
+ 153 0072 0243     		orrs	r2, r0
+ 154              	.LVL16:
+ 155              		.loc 1 130 5 view .LVU38
+ 156 0074 1343     		orrs	r3, r2
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 6
+
+
+ 157 0076 4B65     		str	r3, [r1, #84]
+ 158              	.LVL17:
+ 159              	.L4:
+ 160              		.loc 1 130 5 view .LVU39
+ 161              	.LBE4:
+ 162              		.loc 1 130 5 is_stmt 1 view .LVU40
+ 131:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   }
+ 132:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_LPTIM1SEL */
+ 133:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 134:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   return HAL_OK;
+ 163              		.loc 1 134 3 view .LVU41
+ 135:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 164              		.loc 1 135 1 is_stmt 0 view .LVU42
+ 165 0078 0020     		movs	r0, #0
+ 166              		@ sp needed
+ 167 007a 30BD     		pop	{r4, r5, pc}
+ 168              	.L9:
+ 169              		.align	2
+ 170              	.L8:
+ 171 007c 00100240 		.word	1073876992
+ 172 0080 FFFBFFFF 		.word	-1025
+ 173 0084 FFF7FFFF 		.word	-2049
+ 174 0088 FFFFF3FF 		.word	-786433
+ 175              		.cfi_endproc
+ 176              	.LFE37:
+ 178              		.section	.text.HAL_RCCEx_GetPeriphCLKConfig,"ax",%progbits
+ 179              		.align	1
+ 180              		.global	HAL_RCCEx_GetPeriphCLKConfig
+ 181              		.syntax unified
+ 182              		.code	16
+ 183              		.thumb_func
+ 185              	HAL_RCCEx_GetPeriphCLKConfig:
+ 186              	.LVL18:
+ 187              	.LFB38:
+ 136:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 137:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+ 138:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief  Get the RCC_ClkInitStruct according to the internal RCC configuration registers.
+ 139:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @param  PeriphClkInit pointer to an RCC_PeriphCLKInitTypeDef structure that
+ 140:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         returns the configuration information for the Extended Peripherals
+ 141:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         clocks: COMP1, COMP2, LPTIM
+ 142:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @note   Depending on devices and packages, some Peripherals may not be available.
+ 143:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         Refer to device datasheet for Peripheral availability.
+ 144:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @retval None
+ 145:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 146:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
+ 147:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** {
+ 188              		.loc 1 147 1 is_stmt 1 view -0
+ 189              		.cfi_startproc
+ 190              		@ args = 0, pretend = 0, frame = 0
+ 191              		@ frame_needed = 0, uses_anonymous_args = 0
+ 192              		@ link register save eliminated.
+ 148:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Set all possible values for the extended clock type parameter------------*/
+ 149:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->PeriphClockSelection = 0;
+ 193              		.loc 1 149 3 view .LVU44
+ 194              		.loc 1 149 39 is_stmt 0 view .LVU45
+ 195 0000 0023     		movs	r3, #0
+ 196 0002 0360     		str	r3, [r0]
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 7
+
+
+ 150:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP1SEL)
+ 151:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_COMP1;
+ 197              		.loc 1 151 3 is_stmt 1 view .LVU46
+ 198              		.loc 1 151 39 is_stmt 0 view .LVU47
+ 199 0004 0233     		adds	r3, r3, #2
+ 200 0006 0360     		str	r3, [r0]
+ 152:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP1SEL */
+ 153:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP2SEL)
+ 154:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_COMP2;
+ 201              		.loc 1 154 3 is_stmt 1 view .LVU48
+ 202              		.loc 1 154 39 is_stmt 0 view .LVU49
+ 203 0008 2033     		adds	r3, r3, #32
+ 204 000a 0360     		str	r3, [r0]
+ 155:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP2SEL */
+ 156:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_LPTIMSEL)
+ 157:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->PeriphClockSelection |= RCC_PERIPHCLK_LPTIM;
+ 205              		.loc 1 157 3 is_stmt 1 view .LVU50
+ 206              		.loc 1 157 39 is_stmt 0 view .LVU51
+ 207 000c 094B     		ldr	r3, .L11
+ 208 000e 0360     		str	r3, [r0]
+ 158:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_LPTIM2SEL */
+ 159:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 160:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP1SEL)
+ 161:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Get the COMP1 clock source --------------------------------------------*/
+ 162:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->Comp1ClockSelection = __HAL_RCC_GET_COMP1_SOURCE();
+ 209              		.loc 1 162 3 is_stmt 1 view .LVU52
+ 210              		.loc 1 162 40 is_stmt 0 view .LVU53
+ 211 0010 094B     		ldr	r3, .L11+4
+ 212 0012 5A6D     		ldr	r2, [r3, #84]
+ 213 0014 8021     		movs	r1, #128
+ 214 0016 C900     		lsls	r1, r1, #3
+ 215 0018 0A40     		ands	r2, r1
+ 216              		.loc 1 162 38 view .LVU54
+ 217 001a 4260     		str	r2, [r0, #4]
+ 163:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP1SEL */
+ 164:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP2SEL)
+ 165:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Get the COMP2 clock source ---------------------------------------------*/
+ 166:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->Comp2ClockSelection  = __HAL_RCC_GET_COMP2_SOURCE();
+ 218              		.loc 1 166 3 is_stmt 1 view .LVU55
+ 219              		.loc 1 166 41 is_stmt 0 view .LVU56
+ 220 001c 5A6D     		ldr	r2, [r3, #84]
+ 221 001e 8021     		movs	r1, #128
+ 222 0020 0901     		lsls	r1, r1, #4
+ 223 0022 0A40     		ands	r2, r1
+ 224              		.loc 1 166 39 view .LVU57
+ 225 0024 8260     		str	r2, [r0, #8]
+ 167:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_COMP2SEL */
+ 168:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_LPTIMSEL)
+ 169:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Get the LPTIM clock source ---------------------------------------------*/
+ 170:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   PeriphClkInit->LptimClockSelection  = __HAL_RCC_GET_LPTIM_SOURCE();
+ 226              		.loc 1 170 3 is_stmt 1 view .LVU58
+ 227              		.loc 1 170 41 is_stmt 0 view .LVU59
+ 228 0026 5B6D     		ldr	r3, [r3, #84]
+ 229 0028 C022     		movs	r2, #192
+ 230 002a 1203     		lsls	r2, r2, #12
+ 231 002c 1340     		ands	r3, r2
+ 232              		.loc 1 170 39 view .LVU60
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 8
+
+
+ 233 002e C360     		str	r3, [r0, #12]
+ 171:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_LPTIM2SEL */
+ 172:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 234              		.loc 1 172 1 view .LVU61
+ 235              		@ sp needed
+ 236 0030 7047     		bx	lr
+ 237              	.L12:
+ 238 0032 C046     		.align	2
+ 239              	.L11:
+ 240 0034 22020000 		.word	546
+ 241 0038 00100240 		.word	1073876992
+ 242              		.cfi_endproc
+ 243              	.LFE38:
+ 245              		.section	.text.HAL_RCCEx_GetPeriphCLKFreq,"ax",%progbits
+ 246              		.align	1
+ 247              		.global	HAL_RCCEx_GetPeriphCLKFreq
+ 248              		.syntax unified
+ 249              		.code	16
+ 250              		.thumb_func
+ 252              	HAL_RCCEx_GetPeriphCLKFreq:
+ 253              	.LVL19:
+ 254              	.LFB39:
+ 173:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 174:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+ 175:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief  Return the peripheral clock frequency.
+ 176:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @note   Return 0 if peripheral clock identifier not managed by this API
+ 177:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @param  PeriphClk  Peripheral clock identifier
+ 178:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         This parameter can be one of the following values:
+ 179:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_COMP1   COMP1 peripheral clock
+ 180:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_COMP2   COMP2 peripheral clock
+ 181:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_LPTIM   LPTIM peripheral clock
+ 182:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @note   Depending on devices and packages, some Peripherals may not be available.
+ 183:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *         Refer to device datasheet for Peripheral availability.
+ 184:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @retval Frequency in Hz
+ 185:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 186:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
+ 187:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** {
+ 255              		.loc 1 187 1 is_stmt 1 view -0
+ 256              		.cfi_startproc
+ 257              		@ args = 0, pretend = 0, frame = 0
+ 258              		@ frame_needed = 0, uses_anonymous_args = 0
+ 259              		.loc 1 187 1 is_stmt 0 view .LVU63
+ 260 0000 10B5     		push	{r4, lr}
+ 261              	.LCFI1:
+ 262              		.cfi_def_cfa_offset 8
+ 263              		.cfi_offset 4, -8
+ 264              		.cfi_offset 14, -4
+ 188:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   uint32_t frequency = 0U;
+ 265              		.loc 1 188 3 is_stmt 1 view .LVU64
+ 266              	.LVL20:
+ 189:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   uint32_t srcclk;
+ 267              		.loc 1 189 3 view .LVU65
+ 190:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 191:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Check the parameters */
+ 192:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   assert_param(IS_RCC_PERIPHCLOCK(PeriphClk));
+ 268              		.loc 1 192 3 view .LVU66
+ 193:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 9
+
+
+ 194:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   switch (PeriphClk)
+ 269              		.loc 1 194 3 view .LVU67
+ 270 0002 2028     		cmp	r0, #32
+ 271 0004 26D0     		beq	.L14
+ 272 0006 8023     		movs	r3, #128
+ 273 0008 9B00     		lsls	r3, r3, #2
+ 274 000a 9842     		cmp	r0, r3
+ 275 000c 43D0     		beq	.L15
+ 276 000e 0228     		cmp	r0, #2
+ 277 0010 61D1     		bne	.L23
+ 195:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   {
+ 196:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 197:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP1SEL)
+ 198:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   case RCC_PERIPHCLK_COMP1:
+ 199:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Get the current COMP1 source */
+ 200:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     srcclk = __HAL_RCC_GET_COMP1_SOURCE();
+ 278              		.loc 1 200 5 view .LVU68
+ 279              		.loc 1 200 14 is_stmt 0 view .LVU69
+ 280 0012 384B     		ldr	r3, .L36
+ 281 0014 5B6D     		ldr	r3, [r3, #84]
+ 282              	.LVL21:
+ 201:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 202:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     if (srcclk == RCC_COMP1CLKSOURCE_PCLK)            /* PCLK1 */
+ 283              		.loc 1 202 5 is_stmt 1 view .LVU70
+ 284              		.loc 1 202 8 is_stmt 0 view .LVU71
+ 285 0016 5B05     		lsls	r3, r3, #21
+ 286 0018 19D5     		bpl	.L33
+ 287              	.LVL22:
+ 203:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 204:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = HAL_RCC_GetPCLK1Freq();
+ 205:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 206:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->CSR, RCC_CSR_LSIRDY)) && (HAL_IS_BIT_CLR(RCC->BDCR, RCC_BDCR_LSCO
+ 288              		.loc 1 206 10 is_stmt 1 view .LVU72
+ 289              		.loc 1 206 15 is_stmt 0 view .LVU73
+ 290 001a 364B     		ldr	r3, .L36
+ 291 001c 1B6E     		ldr	r3, [r3, #96]
+ 292              		.loc 1 206 13 view .LVU74
+ 293 001e 9B07     		lsls	r3, r3, #30
+ 294 0020 03D5     		bpl	.L18
+ 295              		.loc 1 206 61 discriminator 1 view .LVU75
+ 296 0022 344B     		ldr	r3, .L36
+ 297 0024 DB6D     		ldr	r3, [r3, #92]
+ 298              		.loc 1 206 57 discriminator 1 view .LVU76
+ 299 0026 9B01     		lsls	r3, r3, #6
+ 300 0028 57D5     		bpl	.L24
+ 301              	.L18:
+ 207:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****              && (srcclk == RCC_COMP1CLKSOURCE_LSC))
+ 208:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 209:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSI_VALUE;
+ 210:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 211:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->BDCR, RCC_BDCR_LSERDY)) && (HAL_IS_BIT_SET(RCC->BDCR, RCC_BDCR_LS
+ 302              		.loc 1 211 10 is_stmt 1 view .LVU77
+ 303              		.loc 1 211 15 is_stmt 0 view .LVU78
+ 304 002a 324B     		ldr	r3, .L36
+ 305 002c DB6D     		ldr	r3, [r3, #92]
+ 306 002e 0222     		movs	r2, #2
+ 307 0030 1000     		movs	r0, r2
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 10
+
+
+ 308              	.LVL23:
+ 309              		.loc 1 211 15 view .LVU79
+ 310 0032 1840     		ands	r0, r3
+ 311              		.loc 1 211 13 view .LVU80
+ 312 0034 1A42     		tst	r2, r3
+ 313 0036 4FD0     		beq	.L13
+ 314              		.loc 1 211 63 discriminator 1 view .LVU81
+ 315 0038 2E4B     		ldr	r3, .L36
+ 316 003a DA6D     		ldr	r2, [r3, #92]
+ 317 003c 8023     		movs	r3, #128
+ 318 003e 9B04     		lsls	r3, r3, #18
+ 319 0040 1000     		movs	r0, r2
+ 320 0042 1840     		ands	r0, r3
+ 321              		.loc 1 211 59 discriminator 1 view .LVU82
+ 322 0044 1A42     		tst	r2, r3
+ 323 0046 47D0     		beq	.L13
+ 212:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****              && (srcclk == RCC_COMP1CLKSOURCE_LSC))
+ 213:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 214:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSE_VALUE;
+ 324              		.loc 1 214 17 view .LVU83
+ 325 0048 8020     		movs	r0, #128
+ 326 004a 0002     		lsls	r0, r0, #8
+ 327 004c 44E0     		b	.L13
+ 328              	.LVL24:
+ 329              	.L33:
+ 204:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 330              		.loc 1 204 7 is_stmt 1 view .LVU84
+ 204:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 331              		.loc 1 204 19 is_stmt 0 view .LVU85
+ 332 004e FFF7FEFF 		bl	HAL_RCC_GetPCLK1Freq
+ 333              	.LVL25:
+ 204:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 334              		.loc 1 204 19 view .LVU86
+ 335 0052 41E0     		b	.L13
+ 336              	.LVL26:
+ 337              	.L14:
+ 215:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 216:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Clock not enabled for COMP1 */
+ 217:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else
+ 218:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 219:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       /* Nothing to do as frequency already initialized to 0U */
+ 220:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 221:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     break;
+ 222:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif
+ 223:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 224:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_COMP2SEL)
+ 225:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   case RCC_PERIPHCLK_COMP2:
+ 226:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Get the current COMP2 source */
+ 227:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     srcclk = __HAL_RCC_GET_COMP2_SOURCE();
+ 338              		.loc 1 227 5 is_stmt 1 view .LVU87
+ 339              		.loc 1 227 14 is_stmt 0 view .LVU88
+ 340 0054 274B     		ldr	r3, .L36
+ 341 0056 5B6D     		ldr	r3, [r3, #84]
+ 342              	.LVL27:
+ 228:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 229:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     if (srcclk == RCC_COMP2CLKSOURCE_PCLK)            /* PCLK1 */
+ 343              		.loc 1 229 5 is_stmt 1 view .LVU89
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 11
+
+
+ 344              		.loc 1 229 8 is_stmt 0 view .LVU90
+ 345 0058 1B05     		lsls	r3, r3, #20
+ 346 005a 19D5     		bpl	.L34
+ 347              	.LVL28:
+ 230:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 231:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = HAL_RCC_GetPCLK1Freq();
+ 232:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 233:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->CSR, RCC_CSR_LSIRDY)) && (HAL_IS_BIT_CLR(RCC->BDCR, RCC_BDCR_LSCO
+ 348              		.loc 1 233 10 is_stmt 1 view .LVU91
+ 349              		.loc 1 233 15 is_stmt 0 view .LVU92
+ 350 005c 254B     		ldr	r3, .L36
+ 351 005e 1B6E     		ldr	r3, [r3, #96]
+ 352              		.loc 1 233 13 view .LVU93
+ 353 0060 9B07     		lsls	r3, r3, #30
+ 354 0062 03D5     		bpl	.L20
+ 355              		.loc 1 233 61 discriminator 1 view .LVU94
+ 356 0064 234B     		ldr	r3, .L36
+ 357 0066 DB6D     		ldr	r3, [r3, #92]
+ 358              		.loc 1 233 57 discriminator 1 view .LVU95
+ 359 0068 9B01     		lsls	r3, r3, #6
+ 360 006a 39D5     		bpl	.L26
+ 361              	.L20:
+ 234:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****              && (srcclk == RCC_COMP2CLKSOURCE_LSC))
+ 235:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 236:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSI_VALUE;
+ 237:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 238:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->BDCR, RCC_BDCR_LSERDY)) && (HAL_IS_BIT_SET(RCC->BDCR, RCC_BDCR_LS
+ 362              		.loc 1 238 10 is_stmt 1 view .LVU96
+ 363              		.loc 1 238 15 is_stmt 0 view .LVU97
+ 364 006c 214B     		ldr	r3, .L36
+ 365 006e DB6D     		ldr	r3, [r3, #92]
+ 366 0070 0222     		movs	r2, #2
+ 367 0072 1000     		movs	r0, r2
+ 368              	.LVL29:
+ 369              		.loc 1 238 15 view .LVU98
+ 370 0074 1840     		ands	r0, r3
+ 371              		.loc 1 238 13 view .LVU99
+ 372 0076 1A42     		tst	r2, r3
+ 373 0078 2ED0     		beq	.L13
+ 374              		.loc 1 238 63 discriminator 1 view .LVU100
+ 375 007a 1E4B     		ldr	r3, .L36
+ 376 007c DA6D     		ldr	r2, [r3, #92]
+ 377 007e 8023     		movs	r3, #128
+ 378 0080 9B04     		lsls	r3, r3, #18
+ 379 0082 1000     		movs	r0, r2
+ 380 0084 1840     		ands	r0, r3
+ 381              		.loc 1 238 59 discriminator 1 view .LVU101
+ 382 0086 1A42     		tst	r2, r3
+ 383 0088 26D0     		beq	.L13
+ 239:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****              && (srcclk == RCC_COMP2CLKSOURCE_LSC))
+ 240:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 241:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSE_VALUE;
+ 384              		.loc 1 241 17 view .LVU102
+ 385 008a 8020     		movs	r0, #128
+ 386 008c 0002     		lsls	r0, r0, #8
+ 387 008e 23E0     		b	.L13
+ 388              	.LVL30:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 12
+
+
+ 389              	.L34:
+ 231:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 390              		.loc 1 231 7 is_stmt 1 view .LVU103
+ 231:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 391              		.loc 1 231 19 is_stmt 0 view .LVU104
+ 392 0090 FFF7FEFF 		bl	HAL_RCC_GetPCLK1Freq
+ 393              	.LVL31:
+ 231:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 394              		.loc 1 231 19 view .LVU105
+ 395 0094 20E0     		b	.L13
+ 396              	.LVL32:
+ 397              	.L15:
+ 242:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 243:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Clock not enabled for COMP2 */
+ 244:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else
+ 245:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 246:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       /* Nothing to do as frequency already initialized to 0U */
+ 247:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 248:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     break;
+ 249:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif
+ 250:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 251:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #if defined(RCC_CCIPR_LPTIMSEL)
+ 252:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   case RCC_PERIPHCLK_LPTIM:
+ 253:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Get the current LPTIM1 source */
+ 254:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     srcclk = __HAL_RCC_GET_LPTIM_SOURCE();
+ 398              		.loc 1 254 5 is_stmt 1 view .LVU106
+ 399              		.loc 1 254 14 is_stmt 0 view .LVU107
+ 400 0096 174B     		ldr	r3, .L36
+ 401 0098 5A6D     		ldr	r2, [r3, #84]
+ 402              		.loc 1 254 12 view .LVU108
+ 403 009a C023     		movs	r3, #192
+ 404 009c 1B03     		lsls	r3, r3, #12
+ 405 009e 1100     		movs	r1, r2
+ 406 00a0 1940     		ands	r1, r3
+ 407              	.LVL33:
+ 255:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 256:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     if (srcclk == RCC_LPTIMCLKSOURCE_PCLK)
+ 408              		.loc 1 256 5 is_stmt 1 view .LVU109
+ 409              		.loc 1 256 8 is_stmt 0 view .LVU110
+ 410 00a2 1A42     		tst	r2, r3
+ 411 00a4 14D0     		beq	.L35
+ 257:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 258:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = HAL_RCC_GetPCLK1Freq();
+ 259:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 260:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->CSR, RCC_CSR_LSIRDY)) && (srcclk == RCC_LPTIMCLKSOURCE_LSI))
+ 412              		.loc 1 260 10 is_stmt 1 view .LVU111
+ 413              		.loc 1 260 15 is_stmt 0 view .LVU112
+ 414 00a6 134B     		ldr	r3, .L36
+ 415 00a8 1B6E     		ldr	r3, [r3, #96]
+ 416              		.loc 1 260 13 view .LVU113
+ 417 00aa 9B07     		lsls	r3, r3, #30
+ 418 00ac 03D5     		bpl	.L22
+ 419              		.loc 1 260 57 discriminator 1 view .LVU114
+ 420 00ae 8023     		movs	r3, #128
+ 421 00b0 DB02     		lsls	r3, r3, #11
+ 422 00b2 9942     		cmp	r1, r3
+ 423 00b4 17D0     		beq	.L28
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 13
+
+
+ 424              	.L22:
+ 261:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 262:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSI_VALUE;
+ 263:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 264:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else if ((HAL_IS_BIT_SET(RCC->BDCR, RCC_BDCR_LSERDY)) && (srcclk == RCC_LPTIMCLKSOURCE_LSE))
+ 425              		.loc 1 264 10 is_stmt 1 view .LVU115
+ 426              		.loc 1 264 15 is_stmt 0 view .LVU116
+ 427 00b6 0F4B     		ldr	r3, .L36
+ 428 00b8 DB6D     		ldr	r3, [r3, #92]
+ 429 00ba 0222     		movs	r2, #2
+ 430 00bc 1000     		movs	r0, r2
+ 431              	.LVL34:
+ 432              		.loc 1 264 15 view .LVU117
+ 433 00be 1840     		ands	r0, r3
+ 434              		.loc 1 264 13 view .LVU118
+ 435 00c0 1A42     		tst	r2, r3
+ 436 00c2 09D0     		beq	.L13
+ 437              		.loc 1 264 59 discriminator 1 view .LVU119
+ 438 00c4 C023     		movs	r3, #192
+ 439 00c6 1B03     		lsls	r3, r3, #12
+ 440 00c8 9942     		cmp	r1, r3
+ 441 00ca 0FD0     		beq	.L29
+ 188:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   uint32_t srcclk;
+ 442              		.loc 1 188 12 view .LVU120
+ 443 00cc 0020     		movs	r0, #0
+ 444 00ce 03E0     		b	.L13
+ 445              	.LVL35:
+ 446              	.L35:
+ 258:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 447              		.loc 1 258 7 is_stmt 1 view .LVU121
+ 258:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 448              		.loc 1 258 19 is_stmt 0 view .LVU122
+ 449 00d0 FFF7FEFF 		bl	HAL_RCC_GetPCLK1Freq
+ 450              	.LVL36:
+ 258:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 451              		.loc 1 258 19 view .LVU123
+ 452 00d4 00E0     		b	.L13
+ 453              	.LVL37:
+ 454              	.L23:
+ 194:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   {
+ 455              		.loc 1 194 3 view .LVU124
+ 456 00d6 0020     		movs	r0, #0
+ 457              	.LVL38:
+ 458              	.L13:
+ 265:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 266:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       frequency = LSE_VALUE;
+ 267:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 268:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     /* Clock not enabled for LPTIM1 */
+ 269:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     else
+ 270:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     {
+ 271:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****       /* Nothing to do as frequency already initialized to 0U */
+ 272:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 273:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     break;
+ 274:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** #endif /* RCC_CCIPR_LPTIM1SEL */
+ 275:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 276:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   default:
+ 277:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     break;
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 14
+
+
+ 278:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   }
+ 279:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 280:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   return (frequency);
+ 281:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 459              		.loc 1 281 1 view .LVU125
+ 460              		@ sp needed
+ 461 00d8 10BD     		pop	{r4, pc}
+ 462              	.LVL39:
+ 463              	.L24:
+ 209:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 464              		.loc 1 209 17 view .LVU126
+ 465 00da 8020     		movs	r0, #128
+ 466              	.LVL40:
+ 209:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 467              		.loc 1 209 17 view .LVU127
+ 468 00dc 0002     		lsls	r0, r0, #8
+ 469 00de FBE7     		b	.L13
+ 470              	.LVL41:
+ 471              	.L26:
+ 236:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 472              		.loc 1 236 17 view .LVU128
+ 473 00e0 8020     		movs	r0, #128
+ 474              	.LVL42:
+ 236:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 475              		.loc 1 236 17 view .LVU129
+ 476 00e2 0002     		lsls	r0, r0, #8
+ 477 00e4 F8E7     		b	.L13
+ 478              	.LVL43:
+ 479              	.L28:
+ 262:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 480              		.loc 1 262 17 view .LVU130
+ 481 00e6 8020     		movs	r0, #128
+ 482              	.LVL44:
+ 262:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 483              		.loc 1 262 17 view .LVU131
+ 484 00e8 0002     		lsls	r0, r0, #8
+ 485 00ea F5E7     		b	.L13
+ 486              	.L29:
+ 266:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     }
+ 487              		.loc 1 266 17 view .LVU132
+ 488 00ec 8020     		movs	r0, #128
+ 489 00ee 0002     		lsls	r0, r0, #8
+ 490              	.LVL45:
+ 280:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 491              		.loc 1 280 3 is_stmt 1 view .LVU133
+ 280:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 492              		.loc 1 280 10 is_stmt 0 view .LVU134
+ 493 00f0 F2E7     		b	.L13
+ 494              	.L37:
+ 495 00f2 C046     		.align	2
+ 496              	.L36:
+ 497 00f4 00100240 		.word	1073876992
+ 498              		.cfi_endproc
+ 499              	.LFE39:
+ 501              		.section	.text.HAL_RCCEx_EnableLSCO,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	HAL_RCCEx_EnableLSCO
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 15
+
+
+ 504              		.syntax unified
+ 505              		.code	16
+ 506              		.thumb_func
+ 508              	HAL_RCCEx_EnableLSCO:
+ 509              	.LVL46:
+ 510              	.LFB40:
+ 282:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 283:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+ 284:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @}
+ 285:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 286:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 287:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /** @defgroup RCCEx_Exported_Functions_Group2 Extended Clock management functions
+ 288:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  *  @brief  Extended Clock management functions
+ 289:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  *
+ 290:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** @verbatim
+ 291:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  ===============================================================================
+ 292:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****                 ##### Extended clock management functions  #####
+ 293:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****  ===============================================================================
+ 294:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     [..]
+ 295:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     This subsection provides a set of functions allowing to control the
+ 296:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     activation or deactivation of LSE CSS, Low speed clock output and
+ 297:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****     clock after wake-up from STOP mode.
+ 298:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** @endverbatim
+ 299:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @{
+ 300:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 301:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 302:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+ 303:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief  Select the Low Speed clock source.
+ 304:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @param  LSCOSource  specifies the Low Speed clock source to output.
+ 305:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *          This parameter can be one of the following values:
+ 306:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_LSCOSOURCE_LSI  LSI clock selected as LSCO source
+ 307:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   *            @arg @ref RCC_LSCOSOURCE_LSE  LSE clock selected as LSCO source
+ 308:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @retval None
+ 309:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 310:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** void HAL_RCCEx_EnableLSCO(uint32_t LSCOSource)
+ 311:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** {
+ 511              		.loc 1 311 1 is_stmt 1 view -0
+ 512              		.cfi_startproc
+ 513              		@ args = 0, pretend = 0, frame = 0
+ 514              		@ frame_needed = 0, uses_anonymous_args = 0
+ 515              		@ link register save eliminated.
+ 312:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   /* Check the parameters */
+ 313:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   assert_param(IS_RCC_LSCOSOURCE(LSCOSource));
+ 516              		.loc 1 313 3 view .LVU136
+ 314:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 315:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   MODIFY_REG(RCC->BDCR, RCC_BDCR_LSCOSEL, LSCOSource);
+ 517              		.loc 1 315 3 view .LVU137
+ 518 0000 034A     		ldr	r2, .L39
+ 519 0002 D36D     		ldr	r3, [r2, #92]
+ 520 0004 0349     		ldr	r1, .L39+4
+ 521 0006 0B40     		ands	r3, r1
+ 522 0008 0343     		orrs	r3, r0
+ 523 000a D365     		str	r3, [r2, #92]
+ 316:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 524              		.loc 1 316 1 is_stmt 0 view .LVU138
+ 525              		@ sp needed
+ 526 000c 7047     		bx	lr
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 16
+
+
+ 527              	.L40:
+ 528 000e C046     		.align	2
+ 529              	.L39:
+ 530 0010 00100240 		.word	1073876992
+ 531 0014 FFFFFFFD 		.word	-33554433
+ 532              		.cfi_endproc
+ 533              	.LFE40:
+ 535              		.section	.text.HAL_RCCEx_DisableLSCO,"ax",%progbits
+ 536              		.align	1
+ 537              		.global	HAL_RCCEx_DisableLSCO
+ 538              		.syntax unified
+ 539              		.code	16
+ 540              		.thumb_func
+ 542              	HAL_RCCEx_DisableLSCO:
+ 543              	.LFB41:
+ 317:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** 
+ 318:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /**
+ 319:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @brief  Disable the Low Speed clock output.
+ 320:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   * @retval None
+ 321:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c ****   */
+ 322:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** void HAL_RCCEx_DisableLSCO(void)
+ 323:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** {
+ 544              		.loc 1 323 1 is_stmt 1 view -0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 0
+ 547              		@ frame_needed = 0, uses_anonymous_args = 0
+ 548              		@ link register save eliminated.
+ 324:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** /*  CLEAR_BIT(RCC->BDCR, RCC_BDCR_LSCOEN); */
+ 325:../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver/Src/py32f002b_hal_rcc_ex.c **** }
+ 549              		.loc 1 325 1 view .LVU140
+ 550              		@ sp needed
+ 551 0000 7047     		bx	lr
+ 552              		.cfi_endproc
+ 553              	.LFE41:
+ 555              		.text
+ 556              	.Letext0:
+ 557              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 558              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 559              		.file 4 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/CMSIS/Device/PY32F0x
+ 560              		.file 5 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+ 561              		.file 6 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+ 562              		.file 7 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 py32f002b_hal_rcc_ex.c
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:19     .text.HAL_RCCEx_PeriphCLKConfig:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:25     .text.HAL_RCCEx_PeriphCLKConfig:00000000 HAL_RCCEx_PeriphCLKConfig
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:171    .text.HAL_RCCEx_PeriphCLKConfig:0000007c $d
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:179    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:185    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 HAL_RCCEx_GetPeriphCLKConfig
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:240    .text.HAL_RCCEx_GetPeriphCLKConfig:00000034 $d
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:246    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:252    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 HAL_RCCEx_GetPeriphCLKFreq
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:497    .text.HAL_RCCEx_GetPeriphCLKFreq:000000f4 $d
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:502    .text.HAL_RCCEx_EnableLSCO:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:508    .text.HAL_RCCEx_EnableLSCO:00000000 HAL_RCCEx_EnableLSCO
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:530    .text.HAL_RCCEx_EnableLSCO:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:536    .text.HAL_RCCEx_DisableLSCO:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\cc9DnqJj.s:542    .text.HAL_RCCEx_DisableLSCO:00000000 HAL_RCCEx_DisableLSCO
+
+UNDEFINED SYMBOLS
+HAL_RCC_GetPCLK1Freq

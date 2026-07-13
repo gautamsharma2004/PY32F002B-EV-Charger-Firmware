@@ -1,0 +1,1331 @@
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"tm1637.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "../Src/tm1637.c"
+  18              		.section	.text.Delay,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	Delay:
+  25              	.LFB37:
+   1:../Src/tm1637.c **** #include "tm1637.h"
+   2:../Src/tm1637.c **** 
+   3:../Src/tm1637.c **** static uint8_t brightness = 7;
+   4:../Src/tm1637.c **** 
+   5:../Src/tm1637.c **** static const uint8_t segTable[10] =
+   6:../Src/tm1637.c **** {
+   7:../Src/tm1637.c ****     0x3F,   //0
+   8:../Src/tm1637.c ****     0x06,   //1
+   9:../Src/tm1637.c ****     0x5B,   //2
+  10:../Src/tm1637.c ****     0x4F,   //3
+  11:../Src/tm1637.c ****     0x66,   //4
+  12:../Src/tm1637.c ****     0x6D,   //5
+  13:../Src/tm1637.c ****     0x7D,   //6
+  14:../Src/tm1637.c ****     0x07,   //7
+  15:../Src/tm1637.c ****     0x7F,   //8
+  16:../Src/tm1637.c ****     0x6F    //9
+  17:../Src/tm1637.c **** };
+  18:../Src/tm1637.c **** 
+  19:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+  20:../Src/tm1637.c **** 
+  21:../Src/tm1637.c **** static void Delay(void)
+  22:../Src/tm1637.c **** {
+  26              		.loc 1 22 1 view -0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31 0000 82B0     		sub	sp, sp, #8
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  23:../Src/tm1637.c ****     for(volatile int i = 0; i < 20; i++);
+  34              		.loc 1 23 5 view .LVU1
+  35              	.LBB2:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 2
+
+
+  36              		.loc 1 23 9 view .LVU2
+  37              		.loc 1 23 22 is_stmt 0 view .LVU3
+  38 0002 0023     		movs	r3, #0
+  39 0004 0193     		str	r3, [sp, #4]
+  40              		.loc 1 23 5 view .LVU4
+  41 0006 02E0     		b	.L2
+  42              	.L3:
+  43              		.loc 1 23 38 is_stmt 1 discriminator 3 view .LVU5
+  44 0008 019B     		ldr	r3, [sp, #4]
+  45 000a 0133     		adds	r3, r3, #1
+  46 000c 0193     		str	r3, [sp, #4]
+  47              	.L2:
+  48              		.loc 1 23 31 discriminator 1 view .LVU6
+  49 000e 019B     		ldr	r3, [sp, #4]
+  50 0010 132B     		cmp	r3, #19
+  51 0012 F9DD     		ble	.L3
+  52              	.LBE2:
+  24:../Src/tm1637.c **** }
+  53              		.loc 1 24 1 is_stmt 0 view .LVU7
+  54 0014 02B0     		add	sp, sp, #8
+  55              		@ sp needed
+  56 0016 7047     		bx	lr
+  57              		.cfi_endproc
+  58              	.LFE37:
+  60              		.section	.text.CLK_HIGH,"ax",%progbits
+  61              		.align	1
+  62              		.syntax unified
+  63              		.code	16
+  64              		.thumb_func
+  66              	CLK_HIGH:
+  67              	.LFB38:
+  25:../Src/tm1637.c **** 
+  26:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+  27:../Src/tm1637.c **** 
+  28:../Src/tm1637.c **** static void CLK_HIGH(void)
+  29:../Src/tm1637.c **** {
+  68              		.loc 1 29 1 is_stmt 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72 0000 10B5     		push	{r4, lr}
+  73              	.LCFI1:
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 14, -4
+  30:../Src/tm1637.c ****     HAL_GPIO_WritePin(TM1637_CLK_PORT, TM1637_CLK_PIN, GPIO_PIN_SET);
+  77              		.loc 1 30 5 view .LVU9
+  78 0002 0122     		movs	r2, #1
+  79 0004 0421     		movs	r1, #4
+  80 0006 0248     		ldr	r0, .L5
+  81 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  82              	.LVL0:
+  31:../Src/tm1637.c **** }
+  83              		.loc 1 31 1 is_stmt 0 view .LVU10
+  84              		@ sp needed
+  85 000c 10BD     		pop	{r4, pc}
+  86              	.L6:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 3
+
+
+  87 000e C046     		.align	2
+  88              	.L5:
+  89 0010 00040050 		.word	1342178304
+  90              		.cfi_endproc
+  91              	.LFE38:
+  93              		.section	.text.DIO_HIGH,"ax",%progbits
+  94              		.align	1
+  95              		.syntax unified
+  96              		.code	16
+  97              		.thumb_func
+  99              	DIO_HIGH:
+ 100              	.LFB40:
+  32:../Src/tm1637.c **** 
+  33:../Src/tm1637.c **** static void CLK_LOW(void)
+  34:../Src/tm1637.c **** {
+  35:../Src/tm1637.c ****     HAL_GPIO_WritePin(TM1637_CLK_PORT, TM1637_CLK_PIN, GPIO_PIN_RESET);
+  36:../Src/tm1637.c **** }
+  37:../Src/tm1637.c **** 
+  38:../Src/tm1637.c **** static void DIO_HIGH(void)
+  39:../Src/tm1637.c **** {
+ 101              		.loc 1 39 1 is_stmt 1 view -0
+ 102              		.cfi_startproc
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 105 0000 10B5     		push	{r4, lr}
+ 106              	.LCFI2:
+ 107              		.cfi_def_cfa_offset 8
+ 108              		.cfi_offset 4, -8
+ 109              		.cfi_offset 14, -4
+  40:../Src/tm1637.c ****     HAL_GPIO_WritePin(TM1637_DIO_PORT, TM1637_DIO_PIN, GPIO_PIN_SET);
+ 110              		.loc 1 40 5 view .LVU12
+ 111 0002 0122     		movs	r2, #1
+ 112 0004 0221     		movs	r1, #2
+ 113 0006 0248     		ldr	r0, .L8
+ 114 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 115              	.LVL1:
+  41:../Src/tm1637.c **** }
+ 116              		.loc 1 41 1 is_stmt 0 view .LVU13
+ 117              		@ sp needed
+ 118 000c 10BD     		pop	{r4, pc}
+ 119              	.L9:
+ 120 000e C046     		.align	2
+ 121              	.L8:
+ 122 0010 00040050 		.word	1342178304
+ 123              		.cfi_endproc
+ 124              	.LFE40:
+ 126              		.section	.text.DIO_LOW,"ax",%progbits
+ 127              		.align	1
+ 128              		.syntax unified
+ 129              		.code	16
+ 130              		.thumb_func
+ 132              	DIO_LOW:
+ 133              	.LFB41:
+  42:../Src/tm1637.c **** 
+  43:../Src/tm1637.c **** static void DIO_LOW(void)
+  44:../Src/tm1637.c **** {
+ 134              		.loc 1 44 1 is_stmt 1 view -0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 4
+
+
+ 135              		.cfi_startproc
+ 136              		@ args = 0, pretend = 0, frame = 0
+ 137              		@ frame_needed = 0, uses_anonymous_args = 0
+ 138 0000 10B5     		push	{r4, lr}
+ 139              	.LCFI3:
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 4, -8
+ 142              		.cfi_offset 14, -4
+  45:../Src/tm1637.c ****     HAL_GPIO_WritePin(TM1637_DIO_PORT, TM1637_DIO_PIN, GPIO_PIN_RESET);
+ 143              		.loc 1 45 5 view .LVU15
+ 144 0002 0022     		movs	r2, #0
+ 145 0004 0221     		movs	r1, #2
+ 146 0006 0248     		ldr	r0, .L11
+ 147 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 148              	.LVL2:
+  46:../Src/tm1637.c **** }
+ 149              		.loc 1 46 1 is_stmt 0 view .LVU16
+ 150              		@ sp needed
+ 151 000c 10BD     		pop	{r4, pc}
+ 152              	.L12:
+ 153 000e C046     		.align	2
+ 154              	.L11:
+ 155 0010 00040050 		.word	1342178304
+ 156              		.cfi_endproc
+ 157              	.LFE41:
+ 159              		.section	.text.CLK_LOW,"ax",%progbits
+ 160              		.align	1
+ 161              		.syntax unified
+ 162              		.code	16
+ 163              		.thumb_func
+ 165              	CLK_LOW:
+ 166              	.LFB39:
+  34:../Src/tm1637.c ****     HAL_GPIO_WritePin(TM1637_CLK_PORT, TM1637_CLK_PIN, GPIO_PIN_RESET);
+ 167              		.loc 1 34 1 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171 0000 10B5     		push	{r4, lr}
+ 172              	.LCFI4:
+ 173              		.cfi_def_cfa_offset 8
+ 174              		.cfi_offset 4, -8
+ 175              		.cfi_offset 14, -4
+  35:../Src/tm1637.c **** }
+ 176              		.loc 1 35 5 view .LVU18
+ 177 0002 0022     		movs	r2, #0
+ 178 0004 0421     		movs	r1, #4
+ 179 0006 0248     		ldr	r0, .L14
+ 180 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 181              	.LVL3:
+  36:../Src/tm1637.c **** 
+ 182              		.loc 1 36 1 is_stmt 0 view .LVU19
+ 183              		@ sp needed
+ 184 000c 10BD     		pop	{r4, pc}
+ 185              	.L15:
+ 186 000e C046     		.align	2
+ 187              	.L14:
+ 188 0010 00040050 		.word	1342178304
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 5
+
+
+ 189              		.cfi_endproc
+ 190              	.LFE39:
+ 192              		.section	.text.Start,"ax",%progbits
+ 193              		.align	1
+ 194              		.syntax unified
+ 195              		.code	16
+ 196              		.thumb_func
+ 198              	Start:
+ 199              	.LFB42:
+  47:../Src/tm1637.c **** 
+  48:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+  49:../Src/tm1637.c **** 
+  50:../Src/tm1637.c **** static void Start(void)
+  51:../Src/tm1637.c **** {
+ 200              		.loc 1 51 1 is_stmt 1 view -0
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 0
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 204 0000 10B5     		push	{r4, lr}
+ 205              	.LCFI5:
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 4, -8
+ 208              		.cfi_offset 14, -4
+  52:../Src/tm1637.c ****     DIO_HIGH();
+ 209              		.loc 1 52 5 view .LVU21
+ 210 0002 FFF7FEFF 		bl	DIO_HIGH
+ 211              	.LVL4:
+  53:../Src/tm1637.c ****     CLK_HIGH();
+ 212              		.loc 1 53 5 view .LVU22
+ 213 0006 FFF7FEFF 		bl	CLK_HIGH
+ 214              	.LVL5:
+  54:../Src/tm1637.c ****     Delay();
+ 215              		.loc 1 54 5 view .LVU23
+ 216 000a FFF7FEFF 		bl	Delay
+ 217              	.LVL6:
+  55:../Src/tm1637.c **** 
+  56:../Src/tm1637.c ****     DIO_LOW();
+ 218              		.loc 1 56 5 view .LVU24
+ 219 000e FFF7FEFF 		bl	DIO_LOW
+ 220              	.LVL7:
+  57:../Src/tm1637.c ****     Delay();
+ 221              		.loc 1 57 5 view .LVU25
+ 222 0012 FFF7FEFF 		bl	Delay
+ 223              	.LVL8:
+  58:../Src/tm1637.c **** 
+  59:../Src/tm1637.c ****     CLK_LOW();
+ 224              		.loc 1 59 5 view .LVU26
+ 225 0016 FFF7FEFF 		bl	CLK_LOW
+ 226              	.LVL9:
+  60:../Src/tm1637.c **** }
+ 227              		.loc 1 60 1 is_stmt 0 view .LVU27
+ 228              		@ sp needed
+ 229 001a 10BD     		pop	{r4, pc}
+ 230              		.cfi_endproc
+ 231              	.LFE42:
+ 233              		.section	.text.WriteByte,"ax",%progbits
+ 234              		.align	1
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 6
+
+
+ 235              		.syntax unified
+ 236              		.code	16
+ 237              		.thumb_func
+ 239              	WriteByte:
+ 240              	.LVL10:
+ 241              	.LFB44:
+  61:../Src/tm1637.c **** 
+  62:../Src/tm1637.c **** static void Stop(void)
+  63:../Src/tm1637.c **** {
+  64:../Src/tm1637.c ****     CLK_LOW();
+  65:../Src/tm1637.c ****     Delay();
+  66:../Src/tm1637.c **** 
+  67:../Src/tm1637.c ****     DIO_LOW();
+  68:../Src/tm1637.c ****     Delay();
+  69:../Src/tm1637.c **** 
+  70:../Src/tm1637.c ****     CLK_HIGH();
+  71:../Src/tm1637.c ****     Delay();
+  72:../Src/tm1637.c **** 
+  73:../Src/tm1637.c ****     DIO_HIGH();
+  74:../Src/tm1637.c **** }
+  75:../Src/tm1637.c **** 
+  76:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+  77:../Src/tm1637.c **** 
+  78:../Src/tm1637.c **** static void WriteByte(uint8_t data)
+  79:../Src/tm1637.c **** {
+ 242              		.loc 1 79 1 is_stmt 1 view -0
+ 243              		.cfi_startproc
+ 244              		@ args = 0, pretend = 0, frame = 0
+ 245              		@ frame_needed = 0, uses_anonymous_args = 0
+ 246              		.loc 1 79 1 is_stmt 0 view .LVU29
+ 247 0000 70B5     		push	{r4, r5, r6, lr}
+ 248              	.LCFI6:
+ 249              		.cfi_def_cfa_offset 16
+ 250              		.cfi_offset 4, -16
+ 251              		.cfi_offset 5, -12
+ 252              		.cfi_offset 6, -8
+ 253              		.cfi_offset 14, -4
+ 254 0002 0500     		movs	r5, r0
+  80:../Src/tm1637.c ****     for(uint8_t i = 0; i < 8; i++)
+ 255              		.loc 1 80 5 is_stmt 1 view .LVU30
+ 256              	.LBB3:
+ 257              		.loc 1 80 9 view .LVU31
+ 258              	.LVL11:
+ 259              		.loc 1 80 17 is_stmt 0 view .LVU32
+ 260 0004 0024     		movs	r4, #0
+ 261              		.loc 1 80 5 view .LVU33
+ 262 0006 0AE0     		b	.L18
+ 263              	.LVL12:
+ 264              	.L19:
+  81:../Src/tm1637.c ****     {
+  82:../Src/tm1637.c ****         CLK_LOW();
+  83:../Src/tm1637.c **** 
+  84:../Src/tm1637.c ****         if(data & 0x01)
+  85:../Src/tm1637.c ****             DIO_HIGH();
+  86:../Src/tm1637.c ****         else
+  87:../Src/tm1637.c ****             DIO_LOW();
+ 265              		.loc 1 87 13 is_stmt 1 view .LVU34
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 7
+
+
+ 266 0008 FFF7FEFF 		bl	DIO_LOW
+ 267              	.LVL13:
+ 268              	.L20:
+  88:../Src/tm1637.c **** 
+  89:../Src/tm1637.c ****         Delay();
+ 269              		.loc 1 89 9 view .LVU35
+ 270 000c FFF7FEFF 		bl	Delay
+ 271              	.LVL14:
+  90:../Src/tm1637.c **** 
+  91:../Src/tm1637.c ****         CLK_HIGH();
+ 272              		.loc 1 91 9 view .LVU36
+ 273 0010 FFF7FEFF 		bl	CLK_HIGH
+ 274              	.LVL15:
+  92:../Src/tm1637.c ****         Delay();
+ 275              		.loc 1 92 9 view .LVU37
+ 276 0014 FFF7FEFF 		bl	Delay
+ 277              	.LVL16:
+  93:../Src/tm1637.c **** 
+  94:../Src/tm1637.c ****         data >>= 1;
+ 278              		.loc 1 94 9 view .LVU38
+ 279              		.loc 1 94 14 is_stmt 0 view .LVU39
+ 280 0018 6D08     		lsrs	r5, r5, #1
+ 281              	.LVL17:
+  80:../Src/tm1637.c ****     {
+ 282              		.loc 1 80 32 is_stmt 1 discriminator 2 view .LVU40
+ 283 001a 0134     		adds	r4, r4, #1
+ 284              	.LVL18:
+  80:../Src/tm1637.c ****     {
+ 285              		.loc 1 80 32 is_stmt 0 discriminator 2 view .LVU41
+ 286 001c E4B2     		uxtb	r4, r4
+ 287              	.LVL19:
+ 288              	.L18:
+  80:../Src/tm1637.c ****     {
+ 289              		.loc 1 80 26 is_stmt 1 discriminator 1 view .LVU42
+ 290 001e 072C     		cmp	r4, #7
+ 291 0020 06D8     		bhi	.L22
+  82:../Src/tm1637.c **** 
+ 292              		.loc 1 82 9 view .LVU43
+ 293 0022 FFF7FEFF 		bl	CLK_LOW
+ 294              	.LVL20:
+  84:../Src/tm1637.c ****             DIO_HIGH();
+ 295              		.loc 1 84 9 view .LVU44
+  84:../Src/tm1637.c ****             DIO_HIGH();
+ 296              		.loc 1 84 11 is_stmt 0 view .LVU45
+ 297 0026 EB07     		lsls	r3, r5, #31
+ 298 0028 EED5     		bpl	.L19
+  85:../Src/tm1637.c ****         else
+ 299              		.loc 1 85 13 is_stmt 1 view .LVU46
+ 300 002a FFF7FEFF 		bl	DIO_HIGH
+ 301              	.LVL21:
+ 302 002e EDE7     		b	.L20
+ 303              	.L22:
+ 304              	.LBE3:
+  95:../Src/tm1637.c ****     }
+  96:../Src/tm1637.c **** 
+  97:../Src/tm1637.c ****     CLK_LOW();
+ 305              		.loc 1 97 5 view .LVU47
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 8
+
+
+ 306 0030 FFF7FEFF 		bl	CLK_LOW
+ 307              	.LVL22:
+  98:../Src/tm1637.c **** 
+  99:../Src/tm1637.c ****     DIO_HIGH();
+ 308              		.loc 1 99 5 view .LVU48
+ 309 0034 FFF7FEFF 		bl	DIO_HIGH
+ 310              	.LVL23:
+ 100:../Src/tm1637.c **** 
+ 101:../Src/tm1637.c ****     Delay();
+ 311              		.loc 1 101 5 view .LVU49
+ 312 0038 FFF7FEFF 		bl	Delay
+ 313              	.LVL24:
+ 102:../Src/tm1637.c **** 
+ 103:../Src/tm1637.c ****     CLK_HIGH();
+ 314              		.loc 1 103 5 view .LVU50
+ 315 003c FFF7FEFF 		bl	CLK_HIGH
+ 316              	.LVL25:
+ 104:../Src/tm1637.c **** 
+ 105:../Src/tm1637.c ****     Delay();
+ 317              		.loc 1 105 5 view .LVU51
+ 318 0040 FFF7FEFF 		bl	Delay
+ 319              	.LVL26:
+ 106:../Src/tm1637.c **** 
+ 107:../Src/tm1637.c ****     CLK_LOW();
+ 320              		.loc 1 107 5 view .LVU52
+ 321 0044 FFF7FEFF 		bl	CLK_LOW
+ 322              	.LVL27:
+ 108:../Src/tm1637.c **** }
+ 323              		.loc 1 108 1 is_stmt 0 view .LVU53
+ 324              		@ sp needed
+ 325              	.LVL28:
+ 326              	.LVL29:
+ 327              		.loc 1 108 1 view .LVU54
+ 328 0048 70BD     		pop	{r4, r5, r6, pc}
+ 329              		.cfi_endproc
+ 330              	.LFE44:
+ 332              		.section	.text.Stop,"ax",%progbits
+ 333              		.align	1
+ 334              		.syntax unified
+ 335              		.code	16
+ 336              		.thumb_func
+ 338              	Stop:
+ 339              	.LFB43:
+  63:../Src/tm1637.c ****     CLK_LOW();
+ 340              		.loc 1 63 1 is_stmt 1 view -0
+ 341              		.cfi_startproc
+ 342              		@ args = 0, pretend = 0, frame = 0
+ 343              		@ frame_needed = 0, uses_anonymous_args = 0
+ 344 0000 10B5     		push	{r4, lr}
+ 345              	.LCFI7:
+ 346              		.cfi_def_cfa_offset 8
+ 347              		.cfi_offset 4, -8
+ 348              		.cfi_offset 14, -4
+  64:../Src/tm1637.c ****     Delay();
+ 349              		.loc 1 64 5 view .LVU56
+ 350 0002 FFF7FEFF 		bl	CLK_LOW
+ 351              	.LVL30:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 9
+
+
+  65:../Src/tm1637.c **** 
+ 352              		.loc 1 65 5 view .LVU57
+ 353 0006 FFF7FEFF 		bl	Delay
+ 354              	.LVL31:
+  67:../Src/tm1637.c ****     Delay();
+ 355              		.loc 1 67 5 view .LVU58
+ 356 000a FFF7FEFF 		bl	DIO_LOW
+ 357              	.LVL32:
+  68:../Src/tm1637.c **** 
+ 358              		.loc 1 68 5 view .LVU59
+ 359 000e FFF7FEFF 		bl	Delay
+ 360              	.LVL33:
+  70:../Src/tm1637.c ****     Delay();
+ 361              		.loc 1 70 5 view .LVU60
+ 362 0012 FFF7FEFF 		bl	CLK_HIGH
+ 363              	.LVL34:
+  71:../Src/tm1637.c **** 
+ 364              		.loc 1 71 5 view .LVU61
+ 365 0016 FFF7FEFF 		bl	Delay
+ 366              	.LVL35:
+  73:../Src/tm1637.c **** }
+ 367              		.loc 1 73 5 view .LVU62
+ 368 001a FFF7FEFF 		bl	DIO_HIGH
+ 369              	.LVL36:
+  74:../Src/tm1637.c **** 
+ 370              		.loc 1 74 1 is_stmt 0 view .LVU63
+ 371              		@ sp needed
+ 372 001e 10BD     		pop	{r4, pc}
+ 373              		.cfi_endproc
+ 374              	.LFE43:
+ 376              		.section	.text.TM1637_Init,"ax",%progbits
+ 377              		.align	1
+ 378              		.global	TM1637_Init
+ 379              		.syntax unified
+ 380              		.code	16
+ 381              		.thumb_func
+ 383              	TM1637_Init:
+ 384              	.LFB45:
+ 109:../Src/tm1637.c **** 
+ 110:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 111:../Src/tm1637.c **** 
+ 112:../Src/tm1637.c **** void TM1637_Init(void)
+ 113:../Src/tm1637.c **** {
+ 385              		.loc 1 113 1 is_stmt 1 view -0
+ 386              		.cfi_startproc
+ 387              		@ args = 0, pretend = 0, frame = 0
+ 388              		@ frame_needed = 0, uses_anonymous_args = 0
+ 389 0000 10B5     		push	{r4, lr}
+ 390              	.LCFI8:
+ 391              		.cfi_def_cfa_offset 8
+ 392              		.cfi_offset 4, -8
+ 393              		.cfi_offset 14, -4
+ 114:../Src/tm1637.c ****     CLK_HIGH();
+ 394              		.loc 1 114 5 view .LVU65
+ 395 0002 FFF7FEFF 		bl	CLK_HIGH
+ 396              	.LVL37:
+ 115:../Src/tm1637.c ****     DIO_HIGH();
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 10
+
+
+ 397              		.loc 1 115 5 view .LVU66
+ 398 0006 FFF7FEFF 		bl	DIO_HIGH
+ 399              	.LVL38:
+ 116:../Src/tm1637.c **** }
+ 400              		.loc 1 116 1 is_stmt 0 view .LVU67
+ 401              		@ sp needed
+ 402 000a 10BD     		pop	{r4, pc}
+ 403              		.cfi_endproc
+ 404              	.LFE45:
+ 406              		.section	.text.TM1637_SetBrightness,"ax",%progbits
+ 407              		.align	1
+ 408              		.global	TM1637_SetBrightness
+ 409              		.syntax unified
+ 410              		.code	16
+ 411              		.thumb_func
+ 413              	TM1637_SetBrightness:
+ 414              	.LVL39:
+ 415              	.LFB46:
+ 117:../Src/tm1637.c **** 
+ 118:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 119:../Src/tm1637.c **** 
+ 120:../Src/tm1637.c **** void TM1637_SetBrightness(uint8_t level)
+ 121:../Src/tm1637.c **** {
+ 416              		.loc 1 121 1 is_stmt 1 view -0
+ 417              		.cfi_startproc
+ 418              		@ args = 0, pretend = 0, frame = 0
+ 419              		@ frame_needed = 0, uses_anonymous_args = 0
+ 420              		@ link register save eliminated.
+ 122:../Src/tm1637.c ****     if(level > 7)
+ 421              		.loc 1 122 5 view .LVU69
+ 422              		.loc 1 122 7 is_stmt 0 view .LVU70
+ 423 0000 0728     		cmp	r0, #7
+ 424 0002 00D9     		bls	.L26
+ 123:../Src/tm1637.c ****         level = 7;
+ 425              		.loc 1 123 15 view .LVU71
+ 426 0004 0720     		movs	r0, #7
+ 427              	.LVL40:
+ 428              	.L26:
+ 124:../Src/tm1637.c **** 
+ 125:../Src/tm1637.c ****     brightness = level;
+ 429              		.loc 1 125 5 is_stmt 1 view .LVU72
+ 430              		.loc 1 125 16 is_stmt 0 view .LVU73
+ 431 0006 014B     		ldr	r3, .L28
+ 432 0008 1870     		strb	r0, [r3]
+ 126:../Src/tm1637.c **** }
+ 433              		.loc 1 126 1 view .LVU74
+ 434              		@ sp needed
+ 435 000a 7047     		bx	lr
+ 436              	.L29:
+ 437              		.align	2
+ 438              	.L28:
+ 439 000c 00000000 		.word	brightness
+ 440              		.cfi_endproc
+ 441              	.LFE46:
+ 443              		.section	.text.TM1637_Clear,"ax",%progbits
+ 444              		.align	1
+ 445              		.global	TM1637_Clear
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 11
+
+
+ 446              		.syntax unified
+ 447              		.code	16
+ 448              		.thumb_func
+ 450              	TM1637_Clear:
+ 451              	.LFB47:
+ 127:../Src/tm1637.c **** 
+ 128:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 129:../Src/tm1637.c **** 
+ 130:../Src/tm1637.c **** void TM1637_Clear(void)
+ 131:../Src/tm1637.c **** {
+ 452              		.loc 1 131 1 is_stmt 1 view -0
+ 453              		.cfi_startproc
+ 454              		@ args = 0, pretend = 0, frame = 0
+ 455              		@ frame_needed = 0, uses_anonymous_args = 0
+ 456 0000 10B5     		push	{r4, lr}
+ 457              	.LCFI9:
+ 458              		.cfi_def_cfa_offset 8
+ 459              		.cfi_offset 4, -8
+ 460              		.cfi_offset 14, -4
+ 132:../Src/tm1637.c ****     Start();
+ 461              		.loc 1 132 5 view .LVU76
+ 462 0002 FFF7FEFF 		bl	Start
+ 463              	.LVL41:
+ 133:../Src/tm1637.c ****     WriteByte(0x40);
+ 464              		.loc 1 133 5 view .LVU77
+ 465 0006 4020     		movs	r0, #64
+ 466 0008 FFF7FEFF 		bl	WriteByte
+ 467              	.LVL42:
+ 134:../Src/tm1637.c ****     Stop();
+ 468              		.loc 1 134 5 view .LVU78
+ 469 000c FFF7FEFF 		bl	Stop
+ 470              	.LVL43:
+ 135:../Src/tm1637.c **** 
+ 136:../Src/tm1637.c ****     Start();
+ 471              		.loc 1 136 5 view .LVU79
+ 472 0010 FFF7FEFF 		bl	Start
+ 473              	.LVL44:
+ 137:../Src/tm1637.c ****     WriteByte(0xC0);
+ 474              		.loc 1 137 5 view .LVU80
+ 475 0014 C020     		movs	r0, #192
+ 476 0016 FFF7FEFF 		bl	WriteByte
+ 477              	.LVL45:
+ 138:../Src/tm1637.c **** 
+ 139:../Src/tm1637.c ****     for(uint8_t i = 0; i < 4; i++)
+ 478              		.loc 1 139 5 view .LVU81
+ 479              	.LBB4:
+ 480              		.loc 1 139 9 view .LVU82
+ 481              		.loc 1 139 17 is_stmt 0 view .LVU83
+ 482 001a 0024     		movs	r4, #0
+ 483              		.loc 1 139 5 view .LVU84
+ 484 001c 04E0     		b	.L31
+ 485              	.LVL46:
+ 486              	.L32:
+ 140:../Src/tm1637.c ****         WriteByte(0x00);
+ 487              		.loc 1 140 9 is_stmt 1 view .LVU85
+ 488 001e 0020     		movs	r0, #0
+ 489 0020 FFF7FEFF 		bl	WriteByte
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 12
+
+
+ 490              	.LVL47:
+ 139:../Src/tm1637.c ****         WriteByte(0x00);
+ 491              		.loc 1 139 32 discriminator 3 view .LVU86
+ 492 0024 0134     		adds	r4, r4, #1
+ 493              	.LVL48:
+ 139:../Src/tm1637.c ****         WriteByte(0x00);
+ 494              		.loc 1 139 32 is_stmt 0 discriminator 3 view .LVU87
+ 495 0026 E4B2     		uxtb	r4, r4
+ 496              	.LVL49:
+ 497              	.L31:
+ 139:../Src/tm1637.c ****         WriteByte(0x00);
+ 498              		.loc 1 139 26 is_stmt 1 discriminator 1 view .LVU88
+ 499 0028 032C     		cmp	r4, #3
+ 500 002a F8D9     		bls	.L32
+ 501              	.LBE4:
+ 141:../Src/tm1637.c **** 
+ 142:../Src/tm1637.c ****     Stop();
+ 502              		.loc 1 142 5 view .LVU89
+ 503 002c FFF7FEFF 		bl	Stop
+ 504              	.LVL50:
+ 143:../Src/tm1637.c **** 
+ 144:../Src/tm1637.c ****     Start();
+ 505              		.loc 1 144 5 view .LVU90
+ 506 0030 FFF7FEFF 		bl	Start
+ 507              	.LVL51:
+ 145:../Src/tm1637.c ****     WriteByte(0x88 | brightness);
+ 508              		.loc 1 145 5 view .LVU91
+ 509 0034 054B     		ldr	r3, .L33
+ 510 0036 1B78     		ldrb	r3, [r3]
+ 511 0038 7820     		movs	r0, #120
+ 512 003a 4042     		rsbs	r0, r0, #0
+ 513 003c 1843     		orrs	r0, r3
+ 514 003e C0B2     		uxtb	r0, r0
+ 515 0040 FFF7FEFF 		bl	WriteByte
+ 516              	.LVL52:
+ 146:../Src/tm1637.c ****     Stop();
+ 517              		.loc 1 146 5 view .LVU92
+ 518 0044 FFF7FEFF 		bl	Stop
+ 519              	.LVL53:
+ 147:../Src/tm1637.c **** }
+ 520              		.loc 1 147 1 is_stmt 0 view .LVU93
+ 521              		@ sp needed
+ 522              	.LVL54:
+ 523              		.loc 1 147 1 view .LVU94
+ 524 0048 10BD     		pop	{r4, pc}
+ 525              	.L34:
+ 526 004a C046     		.align	2
+ 527              	.L33:
+ 528 004c 00000000 		.word	brightness
+ 529              		.cfi_endproc
+ 530              	.LFE47:
+ 532              		.section	.text.TM1637_DisplayRaw,"ax",%progbits
+ 533              		.align	1
+ 534              		.global	TM1637_DisplayRaw
+ 535              		.syntax unified
+ 536              		.code	16
+ 537              		.thumb_func
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 13
+
+
+ 539              	TM1637_DisplayRaw:
+ 540              	.LVL55:
+ 541              	.LFB48:
+ 148:../Src/tm1637.c **** 
+ 149:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 150:../Src/tm1637.c **** /* Display raw segment data                                         */
+ 151:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 152:../Src/tm1637.c **** 
+ 153:../Src/tm1637.c **** void TM1637_DisplayRaw(uint8_t data[4])
+ 154:../Src/tm1637.c **** {
+ 542              		.loc 1 154 1 is_stmt 1 view -0
+ 543              		.cfi_startproc
+ 544              		@ args = 0, pretend = 0, frame = 0
+ 545              		@ frame_needed = 0, uses_anonymous_args = 0
+ 546              		.loc 1 154 1 is_stmt 0 view .LVU96
+ 547 0000 70B5     		push	{r4, r5, r6, lr}
+ 548              	.LCFI10:
+ 549              		.cfi_def_cfa_offset 16
+ 550              		.cfi_offset 4, -16
+ 551              		.cfi_offset 5, -12
+ 552              		.cfi_offset 6, -8
+ 553              		.cfi_offset 14, -4
+ 554 0002 0500     		movs	r5, r0
+ 155:../Src/tm1637.c ****     Start();
+ 555              		.loc 1 155 5 is_stmt 1 view .LVU97
+ 556 0004 FFF7FEFF 		bl	Start
+ 557              	.LVL56:
+ 156:../Src/tm1637.c ****     WriteByte(0x40);
+ 558              		.loc 1 156 5 view .LVU98
+ 559 0008 4020     		movs	r0, #64
+ 560 000a FFF7FEFF 		bl	WriteByte
+ 561              	.LVL57:
+ 157:../Src/tm1637.c ****     Stop();
+ 562              		.loc 1 157 5 view .LVU99
+ 563 000e FFF7FEFF 		bl	Stop
+ 564              	.LVL58:
+ 158:../Src/tm1637.c **** 
+ 159:../Src/tm1637.c ****     Start();
+ 565              		.loc 1 159 5 view .LVU100
+ 566 0012 FFF7FEFF 		bl	Start
+ 567              	.LVL59:
+ 160:../Src/tm1637.c ****     WriteByte(0xC0);
+ 568              		.loc 1 160 5 view .LVU101
+ 569 0016 C020     		movs	r0, #192
+ 570 0018 FFF7FEFF 		bl	WriteByte
+ 571              	.LVL60:
+ 161:../Src/tm1637.c **** 
+ 162:../Src/tm1637.c ****     for(uint8_t i = 0; i < 4; i++)
+ 572              		.loc 1 162 5 view .LVU102
+ 573              	.LBB5:
+ 574              		.loc 1 162 9 view .LVU103
+ 575              		.loc 1 162 17 is_stmt 0 view .LVU104
+ 576 001c 0024     		movs	r4, #0
+ 577              		.loc 1 162 5 view .LVU105
+ 578 001e 04E0     		b	.L36
+ 579              	.LVL61:
+ 580              	.L37:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 14
+
+
+ 163:../Src/tm1637.c ****         WriteByte(data[i]);
+ 581              		.loc 1 163 9 is_stmt 1 view .LVU106
+ 582 0020 285D     		ldrb	r0, [r5, r4]
+ 583 0022 FFF7FEFF 		bl	WriteByte
+ 584              	.LVL62:
+ 162:../Src/tm1637.c ****         WriteByte(data[i]);
+ 585              		.loc 1 162 32 discriminator 3 view .LVU107
+ 586 0026 0134     		adds	r4, r4, #1
+ 587              	.LVL63:
+ 162:../Src/tm1637.c ****         WriteByte(data[i]);
+ 588              		.loc 1 162 32 is_stmt 0 discriminator 3 view .LVU108
+ 589 0028 E4B2     		uxtb	r4, r4
+ 590              	.LVL64:
+ 591              	.L36:
+ 162:../Src/tm1637.c ****         WriteByte(data[i]);
+ 592              		.loc 1 162 26 is_stmt 1 discriminator 1 view .LVU109
+ 593 002a 032C     		cmp	r4, #3
+ 594 002c F8D9     		bls	.L37
+ 595              	.LBE5:
+ 164:../Src/tm1637.c **** 
+ 165:../Src/tm1637.c ****     Stop();
+ 596              		.loc 1 165 5 view .LVU110
+ 597 002e FFF7FEFF 		bl	Stop
+ 598              	.LVL65:
+ 166:../Src/tm1637.c **** 
+ 167:../Src/tm1637.c ****     Start();
+ 599              		.loc 1 167 5 view .LVU111
+ 600 0032 FFF7FEFF 		bl	Start
+ 601              	.LVL66:
+ 168:../Src/tm1637.c ****     WriteByte(0x88 | brightness);
+ 602              		.loc 1 168 5 view .LVU112
+ 603 0036 054B     		ldr	r3, .L38
+ 604 0038 1B78     		ldrb	r3, [r3]
+ 605 003a 7820     		movs	r0, #120
+ 606 003c 4042     		rsbs	r0, r0, #0
+ 607 003e 1843     		orrs	r0, r3
+ 608 0040 C0B2     		uxtb	r0, r0
+ 609 0042 FFF7FEFF 		bl	WriteByte
+ 610              	.LVL67:
+ 169:../Src/tm1637.c ****     Stop();
+ 611              		.loc 1 169 5 view .LVU113
+ 612 0046 FFF7FEFF 		bl	Stop
+ 613              	.LVL68:
+ 170:../Src/tm1637.c **** }
+ 614              		.loc 1 170 1 is_stmt 0 view .LVU114
+ 615              		@ sp needed
+ 616              	.LVL69:
+ 617              	.LVL70:
+ 618              		.loc 1 170 1 view .LVU115
+ 619 004a 70BD     		pop	{r4, r5, r6, pc}
+ 620              	.L39:
+ 621              		.align	2
+ 622              	.L38:
+ 623 004c 00000000 		.word	brightness
+ 624              		.cfi_endproc
+ 625              	.LFE48:
+ 627              		.section	.text.TM1637_DisplayNumber,"ax",%progbits
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 15
+
+
+ 628              		.align	1
+ 629              		.global	TM1637_DisplayNumber
+ 630              		.syntax unified
+ 631              		.code	16
+ 632              		.thumb_func
+ 634              	TM1637_DisplayNumber:
+ 635              	.LVL71:
+ 636              	.LFB49:
+ 171:../Src/tm1637.c **** 
+ 172:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 173:../Src/tm1637.c **** /* Display normal integer                                            */
+ 174:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 175:../Src/tm1637.c **** 
+ 176:../Src/tm1637.c **** void TM1637_DisplayNumber(uint16_t number)
+ 177:../Src/tm1637.c **** {
+ 637              		.loc 1 177 1 is_stmt 1 view -0
+ 638              		.cfi_startproc
+ 639              		@ args = 0, pretend = 0, frame = 8
+ 640              		@ frame_needed = 0, uses_anonymous_args = 0
+ 641              		.loc 1 177 1 is_stmt 0 view .LVU117
+ 642 0000 70B5     		push	{r4, r5, r6, lr}
+ 643              	.LCFI11:
+ 644              		.cfi_def_cfa_offset 16
+ 645              		.cfi_offset 4, -16
+ 646              		.cfi_offset 5, -12
+ 647              		.cfi_offset 6, -8
+ 648              		.cfi_offset 14, -4
+ 649 0002 82B0     		sub	sp, sp, #8
+ 650              	.LCFI12:
+ 651              		.cfi_def_cfa_offset 24
+ 652 0004 0400     		movs	r4, r0
+ 178:../Src/tm1637.c ****     uint8_t seg[4];
+ 653              		.loc 1 178 5 is_stmt 1 view .LVU118
+ 179:../Src/tm1637.c **** 
+ 180:../Src/tm1637.c ****     seg[0] = segTable[(number / 1000) % 10];
+ 654              		.loc 1 180 5 view .LVU119
+ 655              		.loc 1 180 39 is_stmt 0 view .LVU120
+ 656 0006 FA21     		movs	r1, #250
+ 657 0008 8900     		lsls	r1, r1, #2
+ 658 000a FFF7FEFF 		bl	__aeabi_uidiv
+ 659              	.LVL72:
+ 660              		.loc 1 180 39 view .LVU121
+ 661 000e 80B2     		uxth	r0, r0
+ 662 0010 0A21     		movs	r1, #10
+ 663 0012 FFF7FEFF 		bl	__aeabi_uidivmod
+ 664              	.LVL73:
+ 665 0016 89B2     		uxth	r1, r1
+ 666              		.loc 1 180 22 view .LVU122
+ 667 0018 124E     		ldr	r6, .L41
+ 668 001a 735C     		ldrb	r3, [r6, r1]
+ 669              		.loc 1 180 12 view .LVU123
+ 670 001c 01AD     		add	r5, sp, #4
+ 671 001e 2B70     		strb	r3, [r5]
+ 181:../Src/tm1637.c ****     seg[1] = segTable[(number / 100) % 10];
+ 672              		.loc 1 181 5 is_stmt 1 view .LVU124
+ 673              		.loc 1 181 38 is_stmt 0 view .LVU125
+ 674 0020 6421     		movs	r1, #100
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 16
+
+
+ 675 0022 2000     		movs	r0, r4
+ 676 0024 FFF7FEFF 		bl	__aeabi_uidiv
+ 677              	.LVL74:
+ 678 0028 80B2     		uxth	r0, r0
+ 679 002a 0A21     		movs	r1, #10
+ 680 002c FFF7FEFF 		bl	__aeabi_uidivmod
+ 681              	.LVL75:
+ 682 0030 89B2     		uxth	r1, r1
+ 683              		.loc 1 181 22 view .LVU126
+ 684 0032 735C     		ldrb	r3, [r6, r1]
+ 685              		.loc 1 181 12 view .LVU127
+ 686 0034 6B70     		strb	r3, [r5, #1]
+ 182:../Src/tm1637.c ****     seg[2] = segTable[(number / 10) % 10];
+ 687              		.loc 1 182 5 is_stmt 1 view .LVU128
+ 688              		.loc 1 182 37 is_stmt 0 view .LVU129
+ 689 0036 0A21     		movs	r1, #10
+ 690 0038 2000     		movs	r0, r4
+ 691 003a FFF7FEFF 		bl	__aeabi_uidiv
+ 692              	.LVL76:
+ 693 003e 80B2     		uxth	r0, r0
+ 694 0040 0A21     		movs	r1, #10
+ 695 0042 FFF7FEFF 		bl	__aeabi_uidivmod
+ 696              	.LVL77:
+ 697 0046 89B2     		uxth	r1, r1
+ 698              		.loc 1 182 22 view .LVU130
+ 699 0048 735C     		ldrb	r3, [r6, r1]
+ 700              		.loc 1 182 12 view .LVU131
+ 701 004a AB70     		strb	r3, [r5, #2]
+ 183:../Src/tm1637.c ****     seg[3] = segTable[number % 10];
+ 702              		.loc 1 183 5 is_stmt 1 view .LVU132
+ 703              		.loc 1 183 30 is_stmt 0 view .LVU133
+ 704 004c 0A21     		movs	r1, #10
+ 705 004e 2000     		movs	r0, r4
+ 706 0050 FFF7FEFF 		bl	__aeabi_uidivmod
+ 707              	.LVL78:
+ 708 0054 89B2     		uxth	r1, r1
+ 709              		.loc 1 183 22 view .LVU134
+ 710 0056 735C     		ldrb	r3, [r6, r1]
+ 711              		.loc 1 183 12 view .LVU135
+ 712 0058 EB70     		strb	r3, [r5, #3]
+ 184:../Src/tm1637.c **** 
+ 185:../Src/tm1637.c ****     TM1637_DisplayRaw(seg);
+ 713              		.loc 1 185 5 is_stmt 1 view .LVU136
+ 714 005a 2800     		movs	r0, r5
+ 715 005c FFF7FEFF 		bl	TM1637_DisplayRaw
+ 716              	.LVL79:
+ 186:../Src/tm1637.c **** }
+ 717              		.loc 1 186 1 is_stmt 0 view .LVU137
+ 718 0060 02B0     		add	sp, sp, #8
+ 719              		@ sp needed
+ 720              	.LVL80:
+ 721              		.loc 1 186 1 view .LVU138
+ 722 0062 70BD     		pop	{r4, r5, r6, pc}
+ 723              	.L42:
+ 724              		.align	2
+ 725              	.L41:
+ 726 0064 00000000 		.word	segTable
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 17
+
+
+ 727              		.cfi_endproc
+ 728              	.LFE49:
+ 730              		.section	.text.TM1637_DisplayVoltage,"ax",%progbits
+ 731              		.align	1
+ 732              		.global	TM1637_DisplayVoltage
+ 733              		.syntax unified
+ 734              		.code	16
+ 735              		.thumb_func
+ 737              	TM1637_DisplayVoltage:
+ 738              	.LVL81:
+ 739              	.LFB50:
+ 187:../Src/tm1637.c **** 
+ 188:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 189:../Src/tm1637.c **** /* Display Voltage                                                   */
+ 190:../Src/tm1637.c **** /* Input : 5460 -> 54.6                                              */
+ 191:../Src/tm1637.c **** /*         6735 -> 67.3                                              */
+ 192:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 193:../Src/tm1637.c **** 
+ 194:../Src/tm1637.c **** void TM1637_DisplayVoltage(uint16_t value)
+ 195:../Src/tm1637.c **** {
+ 740              		.loc 1 195 1 is_stmt 1 view -0
+ 741              		.cfi_startproc
+ 742              		@ args = 0, pretend = 0, frame = 8
+ 743              		@ frame_needed = 0, uses_anonymous_args = 0
+ 744              		.loc 1 195 1 is_stmt 0 view .LVU140
+ 745 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 746              	.LCFI13:
+ 747              		.cfi_def_cfa_offset 20
+ 748              		.cfi_offset 4, -20
+ 749              		.cfi_offset 5, -16
+ 750              		.cfi_offset 6, -12
+ 751              		.cfi_offset 7, -8
+ 752              		.cfi_offset 14, -4
+ 753 0002 83B0     		sub	sp, sp, #12
+ 754              	.LCFI14:
+ 755              		.cfi_def_cfa_offset 32
+ 756 0004 0400     		movs	r4, r0
+ 196:../Src/tm1637.c ****     uint8_t seg[4];
+ 757              		.loc 1 196 5 is_stmt 1 view .LVU141
+ 197:../Src/tm1637.c **** 
+ 198:../Src/tm1637.c ****     uint8_t d1 = value / 1000;
+ 758              		.loc 1 198 5 view .LVU142
+ 759              		.loc 1 198 13 is_stmt 0 view .LVU143
+ 760 0006 FA21     		movs	r1, #250
+ 761 0008 8900     		lsls	r1, r1, #2
+ 762 000a FFF7FEFF 		bl	__aeabi_uidiv
+ 763              	.LVL82:
+ 764              		.loc 1 198 13 view .LVU144
+ 765 000e C7B2     		uxtb	r7, r0
+ 766              	.LVL83:
+ 199:../Src/tm1637.c ****     uint8_t d2 = (value / 100) % 10;
+ 767              		.loc 1 199 5 is_stmt 1 view .LVU145
+ 768              		.loc 1 199 13 is_stmt 0 view .LVU146
+ 769 0010 6421     		movs	r1, #100
+ 770 0012 2000     		movs	r0, r4
+ 771 0014 FFF7FEFF 		bl	__aeabi_uidiv
+ 772              	.LVL84:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 18
+
+
+ 773 0018 80B2     		uxth	r0, r0
+ 774 001a 0A21     		movs	r1, #10
+ 775 001c FFF7FEFF 		bl	__aeabi_uidivmod
+ 776              	.LVL85:
+ 777 0020 CEB2     		uxtb	r6, r1
+ 778              	.LVL86:
+ 200:../Src/tm1637.c ****     uint8_t d3 = (value / 10) % 10;
+ 779              		.loc 1 200 5 is_stmt 1 view .LVU147
+ 780              		.loc 1 200 13 is_stmt 0 view .LVU148
+ 781 0022 0A21     		movs	r1, #10
+ 782 0024 2000     		movs	r0, r4
+ 783 0026 FFF7FEFF 		bl	__aeabi_uidiv
+ 784              	.LVL87:
+ 785 002a 80B2     		uxth	r0, r0
+ 786 002c 0A21     		movs	r1, #10
+ 787 002e FFF7FEFF 		bl	__aeabi_uidivmod
+ 788              	.LVL88:
+ 789 0032 CDB2     		uxtb	r5, r1
+ 790              	.LVL89:
+ 201:../Src/tm1637.c ****     uint8_t d4 = value % 10;
+ 791              		.loc 1 201 5 is_stmt 1 view .LVU149
+ 792              		.loc 1 201 13 is_stmt 0 view .LVU150
+ 793 0034 0A21     		movs	r1, #10
+ 794 0036 2000     		movs	r0, r4
+ 795 0038 FFF7FEFF 		bl	__aeabi_uidivmod
+ 796              	.LVL90:
+ 797 003c CAB2     		uxtb	r2, r1
+ 798              	.LVL91:
+ 202:../Src/tm1637.c **** 
+ 203:../Src/tm1637.c ****     seg[0] = segTable[d1];
+ 799              		.loc 1 203 5 is_stmt 1 view .LVU151
+ 800              		.loc 1 203 22 is_stmt 0 view .LVU152
+ 801 003e 084B     		ldr	r3, .L44
+ 802 0040 D95D     		ldrb	r1, [r3, r7]
+ 803              		.loc 1 203 12 view .LVU153
+ 804 0042 01A8     		add	r0, sp, #4
+ 805 0044 0170     		strb	r1, [r0]
+ 204:../Src/tm1637.c ****     seg[1] = segTable[d2] | 0x80;     // Decimal point
+ 806              		.loc 1 204 5 is_stmt 1 view .LVU154
+ 807              		.loc 1 204 22 is_stmt 0 view .LVU155
+ 808 0046 9C5D     		ldrb	r4, [r3, r6]
+ 809              	.LVL92:
+ 810              		.loc 1 204 12 view .LVU156
+ 811 0048 8021     		movs	r1, #128
+ 812 004a 4942     		rsbs	r1, r1, #0
+ 813 004c 2143     		orrs	r1, r4
+ 814 004e 4170     		strb	r1, [r0, #1]
+ 205:../Src/tm1637.c ****     seg[2] = segTable[d3];
+ 815              		.loc 1 205 5 is_stmt 1 view .LVU157
+ 816              		.loc 1 205 22 is_stmt 0 view .LVU158
+ 817 0050 595D     		ldrb	r1, [r3, r5]
+ 818              		.loc 1 205 12 view .LVU159
+ 819 0052 8170     		strb	r1, [r0, #2]
+ 206:../Src/tm1637.c ****     seg[3] = segTable[d4];
+ 820              		.loc 1 206 5 is_stmt 1 view .LVU160
+ 821              		.loc 1 206 22 is_stmt 0 view .LVU161
+ 822 0054 9B5C     		ldrb	r3, [r3, r2]
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 19
+
+
+ 823              		.loc 1 206 12 view .LVU162
+ 824 0056 C370     		strb	r3, [r0, #3]
+ 207:../Src/tm1637.c **** 
+ 208:../Src/tm1637.c ****     TM1637_DisplayRaw(seg);
+ 825              		.loc 1 208 5 is_stmt 1 view .LVU163
+ 826 0058 FFF7FEFF 		bl	TM1637_DisplayRaw
+ 827              	.LVL93:
+ 209:../Src/tm1637.c **** }
+ 828              		.loc 1 209 1 is_stmt 0 view .LVU164
+ 829 005c 03B0     		add	sp, sp, #12
+ 830              		@ sp needed
+ 831              	.LVL94:
+ 832              	.LVL95:
+ 833              	.LVL96:
+ 834              		.loc 1 209 1 view .LVU165
+ 835 005e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 836              	.L45:
+ 837              		.align	2
+ 838              	.L44:
+ 839 0060 00000000 		.word	segTable
+ 840              		.cfi_endproc
+ 841              	.LFE50:
+ 843              		.section	.text.TM1637_DisplayCurrent,"ax",%progbits
+ 844              		.align	1
+ 845              		.global	TM1637_DisplayCurrent
+ 846              		.syntax unified
+ 847              		.code	16
+ 848              		.thumb_func
+ 850              	TM1637_DisplayCurrent:
+ 851              	.LVL97:
+ 852              	.LFB51:
+ 210:../Src/tm1637.c **** 
+ 211:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 212:../Src/tm1637.c **** /* Display Current                                                   */
+ 213:../Src/tm1637.c **** /* Input : 62  -> 6.2                                                */
+ 214:../Src/tm1637.c **** /*         102 ->10.2                                                */
+ 215:../Src/tm1637.c **** /*------------------------------------------------------------------*/
+ 216:../Src/tm1637.c **** 
+ 217:../Src/tm1637.c **** void TM1637_DisplayCurrent(uint16_t value)
+ 218:../Src/tm1637.c **** {
+ 853              		.loc 1 218 1 is_stmt 1 view -0
+ 854              		.cfi_startproc
+ 855              		@ args = 0, pretend = 0, frame = 8
+ 856              		@ frame_needed = 0, uses_anonymous_args = 0
+ 857              		.loc 1 218 1 is_stmt 0 view .LVU167
+ 858 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 859              	.LCFI15:
+ 860              		.cfi_def_cfa_offset 20
+ 861              		.cfi_offset 4, -20
+ 862              		.cfi_offset 5, -16
+ 863              		.cfi_offset 6, -12
+ 864              		.cfi_offset 7, -8
+ 865              		.cfi_offset 14, -4
+ 866 0002 83B0     		sub	sp, sp, #12
+ 867              	.LCFI16:
+ 868              		.cfi_def_cfa_offset 32
+ 869 0004 0400     		movs	r4, r0
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 20
+
+
+ 219:../Src/tm1637.c ****     uint8_t seg[4];
+ 870              		.loc 1 219 5 is_stmt 1 view .LVU168
+ 220:../Src/tm1637.c **** 
+ 221:../Src/tm1637.c ****     if(value < 100)
+ 871              		.loc 1 221 5 view .LVU169
+ 872              		.loc 1 221 7 is_stmt 0 view .LVU170
+ 873 0006 6328     		cmp	r0, #99
+ 874 0008 19D8     		bhi	.L47
+ 222:../Src/tm1637.c ****     {
+ 223:../Src/tm1637.c ****         seg[0] = 0x00;                            // Blank
+ 875              		.loc 1 223 9 is_stmt 1 view .LVU171
+ 876              		.loc 1 223 16 is_stmt 0 view .LVU172
+ 877 000a 01AD     		add	r5, sp, #4
+ 878 000c 0026     		movs	r6, #0
+ 879 000e 2E70     		strb	r6, [r5]
+ 224:../Src/tm1637.c ****         seg[1] = segTable[value / 10] | 0x80;     // Decimal point
+ 880              		.loc 1 224 9 is_stmt 1 view .LVU173
+ 881              		.loc 1 224 33 is_stmt 0 view .LVU174
+ 882 0010 0A21     		movs	r1, #10
+ 883 0012 FFF7FEFF 		bl	__aeabi_uidiv
+ 884              	.LVL98:
+ 885              		.loc 1 224 33 view .LVU175
+ 886 0016 80B2     		uxth	r0, r0
+ 887              		.loc 1 224 26 view .LVU176
+ 888 0018 104F     		ldr	r7, .L49
+ 889 001a 3A5C     		ldrb	r2, [r7, r0]
+ 890              		.loc 1 224 16 view .LVU177
+ 891 001c 8023     		movs	r3, #128
+ 892 001e 5B42     		rsbs	r3, r3, #0
+ 893 0020 1343     		orrs	r3, r2
+ 894 0022 6B70     		strb	r3, [r5, #1]
+ 225:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 895              		.loc 1 225 9 is_stmt 1 view .LVU178
+ 896              		.loc 1 225 33 is_stmt 0 view .LVU179
+ 897 0024 0A21     		movs	r1, #10
+ 898 0026 2000     		movs	r0, r4
+ 899 0028 FFF7FEFF 		bl	__aeabi_uidivmod
+ 900              	.LVL99:
+ 901 002c 89B2     		uxth	r1, r1
+ 902              		.loc 1 225 26 view .LVU180
+ 903 002e 7B5C     		ldrb	r3, [r7, r1]
+ 904              		.loc 1 225 16 view .LVU181
+ 905 0030 AB70     		strb	r3, [r5, #2]
+ 226:../Src/tm1637.c ****         seg[3] = 0x00;                            // Blank
+ 906              		.loc 1 226 9 is_stmt 1 view .LVU182
+ 907              		.loc 1 226 16 is_stmt 0 view .LVU183
+ 908 0032 EE70     		strb	r6, [r5, #3]
+ 909              	.L48:
+ 227:../Src/tm1637.c ****     }
+ 228:../Src/tm1637.c ****     else
+ 229:../Src/tm1637.c ****     {
+ 230:../Src/tm1637.c ****         seg[0] = segTable[1];
+ 231:../Src/tm1637.c ****         seg[1] = segTable[0] | 0x80;
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 233:../Src/tm1637.c ****         seg[3] = 0x00;
+ 234:../Src/tm1637.c ****     }
+ 235:../Src/tm1637.c **** 
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 21
+
+
+ 236:../Src/tm1637.c ****     TM1637_DisplayRaw(seg);
+ 910              		.loc 1 236 5 is_stmt 1 view .LVU184
+ 911 0034 01A8     		add	r0, sp, #4
+ 912 0036 FFF7FEFF 		bl	TM1637_DisplayRaw
+ 913              	.LVL100:
+ 237:../Src/tm1637.c **** }...
+ 914              		.loc 1 237 1 is_stmt 0 view .LVU185
+ 915 003a 03B0     		add	sp, sp, #12
+ 916              		@ sp needed
+ 917              	.LVL101:
+ 918              		.loc 1 237 1 view .LVU186
+ 919 003c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 920              	.LVL102:
+ 921              	.L47:
+ 230:../Src/tm1637.c ****         seg[0] = segTable[1];
+ 922              		.loc 1 230 9 is_stmt 1 view .LVU187
+ 230:../Src/tm1637.c ****         seg[0] = segTable[1];
+ 923              		.loc 1 230 16 is_stmt 0 view .LVU188
+ 924 003e 01AD     		add	r5, sp, #4
+ 925 0040 0623     		movs	r3, #6
+ 926 0042 2B70     		strb	r3, [r5]
+ 231:../Src/tm1637.c ****         seg[1] = segTable[0] | 0x80;
+ 927              		.loc 1 231 9 is_stmt 1 view .LVU189
+ 231:../Src/tm1637.c ****         seg[1] = segTable[0] | 0x80;
+ 928              		.loc 1 231 16 is_stmt 0 view .LVU190
+ 929 0044 B933     		adds	r3, r3, #185
+ 930 0046 6B70     		strb	r3, [r5, #1]
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 931              		.loc 1 232 9 is_stmt 1 view .LVU191
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 932              		.loc 1 232 33 is_stmt 0 view .LVU192
+ 933 0048 0A21     		movs	r1, #10
+ 934 004a FFF7FEFF 		bl	__aeabi_uidivmod
+ 935              	.LVL103:
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 936              		.loc 1 232 33 view .LVU193
+ 937 004e 89B2     		uxth	r1, r1
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 938              		.loc 1 232 26 view .LVU194
+ 939 0050 024B     		ldr	r3, .L49
+ 940 0052 5B5C     		ldrb	r3, [r3, r1]
+ 232:../Src/tm1637.c ****         seg[2] = segTable[value % 10];
+ 941              		.loc 1 232 16 view .LVU195
+ 942 0054 AB70     		strb	r3, [r5, #2]
+ 233:../Src/tm1637.c ****         seg[3] = 0x00;
+ 943              		.loc 1 233 9 is_stmt 1 view .LVU196
+ 233:../Src/tm1637.c ****         seg[3] = 0x00;
+ 944              		.loc 1 233 16 is_stmt 0 view .LVU197
+ 945 0056 0023     		movs	r3, #0
+ 946 0058 EB70     		strb	r3, [r5, #3]
+ 947 005a EBE7     		b	.L48
+ 948              	.L50:
+ 949              		.align	2
+ 950              	.L49:
+ 951 005c 00000000 		.word	segTable
+ 952              		.cfi_endproc
+ 953              	.LFE51:
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 22
+
+
+ 955              		.section	.rodata.segTable,"a"
+ 956              		.align	2
+ 959              	segTable:
+ 960 0000 3F065B4F 		.ascii	"?\006[Ofm}\007\177o"
+ 960      666D7D07 
+ 960      7F6F
+ 961              		.section	.data.brightness,"aw"
+ 964              	brightness:
+ 965 0000 07       		.byte	7
+ 966              		.text
+ 967              	.Letext0:
+ 968              		.file 2 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/ma
+ 969              		.file 3 "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/arm-none-eabi/include/sy
+ 970              		.file 4 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/CMSIS/Device/PY32F0x
+ 971              		.file 5 "../../../PY32F002B_Firmware_V1.2.1/PY32F002B_Firmware_V1.2.1/Drivers/PY32F002B_HAL_Driver
+ARM GAS  C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 tm1637.c
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:19     .text.Delay:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:24     .text.Delay:00000000 Delay
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:61     .text.CLK_HIGH:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:66     .text.CLK_HIGH:00000000 CLK_HIGH
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:89     .text.CLK_HIGH:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:94     .text.DIO_HIGH:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:99     .text.DIO_HIGH:00000000 DIO_HIGH
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:122    .text.DIO_HIGH:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:127    .text.DIO_LOW:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:132    .text.DIO_LOW:00000000 DIO_LOW
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:155    .text.DIO_LOW:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:160    .text.CLK_LOW:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:165    .text.CLK_LOW:00000000 CLK_LOW
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:188    .text.CLK_LOW:00000010 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:193    .text.Start:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:198    .text.Start:00000000 Start
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:234    .text.WriteByte:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:239    .text.WriteByte:00000000 WriteByte
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:333    .text.Stop:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:338    .text.Stop:00000000 Stop
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:377    .text.TM1637_Init:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:383    .text.TM1637_Init:00000000 TM1637_Init
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:407    .text.TM1637_SetBrightness:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:413    .text.TM1637_SetBrightness:00000000 TM1637_SetBrightness
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:439    .text.TM1637_SetBrightness:0000000c $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:964    .data.brightness:00000000 brightness
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:444    .text.TM1637_Clear:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:450    .text.TM1637_Clear:00000000 TM1637_Clear
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:528    .text.TM1637_Clear:0000004c $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:533    .text.TM1637_DisplayRaw:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:539    .text.TM1637_DisplayRaw:00000000 TM1637_DisplayRaw
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:623    .text.TM1637_DisplayRaw:0000004c $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:628    .text.TM1637_DisplayNumber:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:634    .text.TM1637_DisplayNumber:00000000 TM1637_DisplayNumber
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:726    .text.TM1637_DisplayNumber:00000064 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:959    .rodata.segTable:00000000 segTable
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:731    .text.TM1637_DisplayVoltage:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:737    .text.TM1637_DisplayVoltage:00000000 TM1637_DisplayVoltage
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:839    .text.TM1637_DisplayVoltage:00000060 $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:844    .text.TM1637_DisplayCurrent:00000000 $t
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:850    .text.TM1637_DisplayCurrent:00000000 TM1637_DisplayCurrent
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:951    .text.TM1637_DisplayCurrent:0000005c $d
+C:\Users\Gautam\AppData\Local\Temp\ccfgtLqa.s:956    .rodata.segTable:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+__aeabi_uidiv
+__aeabi_uidivmod
