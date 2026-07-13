@@ -130,16 +130,10 @@ Supported VSET presets:
 84.0 V
 87.6 V
 ```
-
-Supported CSET presets:
+Supported CSET range:
 
 ```text
-6.2 A
-7.2 A
-8.2 A
-9.2 A
-10.2 A
-```
+0.0 A to 6.2 A
 
 ### `tm1637`
 Provides the display driver, including functions for:
